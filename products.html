@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Сравнение товаров</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Сравнение товаров Казахстан</h1>
+    <nav>
+      <ul>
+        <li><a href="index.html">Главная</a></li>
+        <li><a href="products.html">Сравнение товаров</a></li>
+        <li><a href="#">Контакты</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <h2>Поиск товара</h2>
+
+    <label>Название товара:</label>
+    <input type="text" id="productInput" placeholder="Например: iPhone 15 Pro">
+
+    <h3>Выберите маркетплейсы:</h3>
+    <label><input type="checkbox" class="marketplace" value="Kaspi" checked> Kaspi</label>
+    <label><input type="checkbox" class="marketplace" value="Wildberries" checked> Wildberries</label>
+    <label><input type="checkbox" class="marketplace" value="Ozon" checked> Ozon</label>
+    <label><input type="checkbox" class="marketplace" value="Technodom" checked> Technodom</label>
+    <label><input type="checkbox" class="marketplace" value="Sulpak" checked> Sulpak</label>
+
+    <br><br>
+    <button onclick="searchProducts()">Искать</button>
+
+    <table id="comparisonTable">
+      <thead>
+        <tr>
+          <th>Товар</th>
+          <th>Маркетплейс</th>
+          <th>Продавец</th>
+          <th>Цена (₸)</th>
+          <th>Доставка (₸)</th>
+          <th>Срок</th>
+          <th>Итог</th>
+          <th>Ссылка</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- результаты поиска будут вставляться здесь через JS -->
+      </tbody>
+    </table>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
