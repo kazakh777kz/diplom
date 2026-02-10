@@ -62,3 +62,84 @@ nav a:hover {
   color: #6b7280;
   margin-top: 40px;
 }
+
+/* HERO */
+.hero {
+  background: linear-gradient(135deg, #2563eb, #1e40af);
+  color: white;
+  padding: 80px 20px;
+}
+
+.hero-inner {
+  max-width: 900px;
+  margin: auto;
+}
+
+.hero h1 {
+  font-size: 40px;
+  margin-bottom: 20px;
+}
+
+.hero p {
+  font-size: 18px;
+  opacity: 0.9;
+  margin-bottom: 30px;
+}
+
+.hero-btn {
+  display: inline-block;
+  background: #22c55e;
+  color: white;
+  padding: 14px 28px;
+  border-radius: 14px;
+  font-weight: 700;
+}
+
+/* STEPS */
+.steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.step {
+  background: white;
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+}
+
+.step span {
+  display: inline-block;
+  background: #2563eb;
+  color: white;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 32px;
+  font-weight: 700;
+}
+
+/* ADVANTAGES */
+.advantages {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.adv {
+  background: #f9fafb;
+  padding: 20px;
+  border-radius: 16px;
+}
+
+/* CTA */
+.cta {
+  background: #111827;
+  color: white;
+  text-align: center;
+  padding: 60px 20px;
+}
