@@ -1,60 +1,60 @@
 <!DOCTYPE html>
-<link rel="stylesheet" href="css/main.css">
-<link rel="stylesheet" href="css/marketplace.css">
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
   <title>Сравнение товаров</title>
-  <link rel="stylesheet" href="style.css">
+
+  <!-- СТИЛИ -->
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/marketplace.css">
 </head>
 <body>
-  <header>
-    <h1>Сравнение товаров Казахстан</h1>
-    <nav>
-      <ul>
-        <li><a href="index.html">Главная</a></li>
-        <li><a href="products.html">Сравнение товаров</a></li>
-        <li><a href="#">Контакты</a></li>
-      </ul>
-    </nav>
-  </header>
 
-  <main>
+<div class="header">
+  <div class="header-inner">
+    <div class="logo">PriceCompare KZ</div>
+    <nav>
+      <a href="index.html">Главная</a>
+      <a href="products.html">Сравнение</a>
+      <a href="contacts.html">Контакты</a>
+    </nav>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="search-box">
     <h2>Поиск товара</h2>
 
-    <label>Название товара:</label>
-    <input type="text" id="productInput" placeholder="Например: iPhone 15 Pro">
+    <input
+      type="text"
+      id="productInput"
+      placeholder="Например: iPhone 15 Pro"
+    >
 
-    <h3>Выберите маркетплейсы:</h3>
-    <label><input type="checkbox" class="marketplace" value="Kaspi" checked> Kaspi</label>
-    <label><input type="checkbox" class="marketplace" value="Wildberries" checked> Wildberries</label>
-    <label><input type="checkbox" class="marketplace" value="Ozon" checked> Ozon</label>
-    <label><input type="checkbox" class="marketplace" value="Technodom" checked> Technodom</label>
-    <label><input type="checkbox" class="marketplace" value="Sulpak" checked> Sulpak</label>
+    <div class="filters">
+      <label><input type="checkbox" class="marketplace" value="Kaspi" checked> Kaspi</label>
+      <label><input type="checkbox" class="marketplace" value="Wildberries" checked> Wildberries</label>
+      <label><input type="checkbox" class="marketplace" value="Ozon" checked> Ozon</label>
+      <label><input type="checkbox" class="marketplace" value="Technodom" checked> Technodom</label>
+      <label><input type="checkbox" class="marketplace" value="Sulpak" checked> Sulpak</label>
+    </div>
 
-    <br><br>
     <button onclick="searchProducts()">Искать</button>
+  </div>
 
-    <table id="comparisonTable">
-      <thead>
-        <tr>
-          <th>Товар</th>
-          <th>Маркетплейс</th>
-          <th>Продавец</th>
-          <th>Цена (₸)</th>
-          <th>Доставка (₸)</th>
-          <th>Срок</th>
-          <th>Итог</th>
-          <th>Ссылка</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- результаты поиска будут вставляться здесь через JS -->
-      </tbody>
-    </table>
-  </main>
-  <script src="script.js"></script>
-</body>
-</html>
+  <!-- РЕЗУЛЬТАТЫ -->
+  <div id="results" class="cards"></div>
+
+</div>
+
+<div class="footer">
+  © 2026 PriceCompare KZ
+</div>
+
+<!-- JS (СТРОГО ТУТ И В ТАКОМ ПОРЯДКЕ) -->
 <script src="js/data.js"></script>
 <script src="js/script.js"></script>
+
+</body>
+</html>
