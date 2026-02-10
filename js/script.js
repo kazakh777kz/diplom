@@ -61,41 +61,44 @@ function normalize(text) {
 }
 
 function searchProducts() {
-  const query = normalize(document.getElementById("productInput").value);
-  const selectedMarkets = [...document.querySelectorAll(".marketplace:checked")].map(c => c.value);
-  const container = document.getElementById("results");
+  const query = document.getElementById("productInput").value.toLowerCase();
+  const tbody = document.getElementById("results");
+  tbody.innerHTML = "";
 
-  container.innerHTML = "";
-
-  let results = productsDB.filter(p =>
-    normalize(p.name).includes(query) &&
-    selectedMarkets.includes(p.marketplace)
-  );
-
-  if (!results.length) {
-    container.innerHTML = "<p>Ничего не найдено</p>";
+  if (!query) {
+    alert("Введите название товара");
     return;
   }
 
-  const minTotal = Math.min(...results.map(p => p.price + p.delivery));
+  const selectedMarkets = Array.from(
+    document.querySelectorAll(".marketplace:checked")
+  ).map(el => el.value);
 
-  results.forEach(p => {
-    const card = document.createElement("div");
-    card.className = "card";
+  const filtered = products.filter(p =>
+    p.name.toLowerCase().includes(query) &&
+    selectedMarkets.includes(p.marketplace)
+  );
 
-    const isBest = (p.price + p.delivery) === minTotal;
+  if (filtered.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="8">Ничего не найдено</td></tr>`;
+    return;
+  }
 
-    card.innerHTML = `
-      ${isBest ? `<div class="badge">Самое выгодное</div>` : ""}
-      <h3>${p.name}</h3>
-      <div class="marketplace">${p.marketplace} · ${p.seller}</div>
-      <div class="price">${p.price.toLocaleString()} ₸</div>
-      <div class="delivery">Доставка: ${p.delivery} ₸ · ${p.term}</div>
-      <div class="total">Итого: ${(p.price + p.delivery).toLocaleString()} ₸</div>
-      <a href="${p.url}" target="_blank">Перейти в магазин</a>
+  filtered.forEach(p => {
+    const total = p.price + p.delivery;
+
+    tbody.innerHTML += `
+      <tr>
+        <td>${p.name}</td>
+        <td>${p.marketplace}</td>
+        <td>${p.seller}</td>
+        <td>${p.price.toLocaleString()}</td>
+        <td>${p.delivery.toLocaleString()}</td>
+        <td>${p.days}</td>
+        <td><b>${total.toLocaleString()}</b></td>
+        <td><a href="${p.link}" target="_blank">Купить</a></td>
+      </tr>
     `;
-
-    container.appendChild(card);
   });
 }
 
