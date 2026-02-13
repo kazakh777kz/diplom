@@ -6,127 +6,289 @@
   <link rel="stylesheet" href="css/main.css">
   <style>
     .search-section {
-      background: white;
-      padding: 24px;
-      border-radius: 16px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.06);
-      margin-bottom: 30px;
+      background: var(--glass);
+      backdrop-filter: blur(20px);
+      padding: 40px;
+      border-radius: 32px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      margin-bottom: 40px;
+      box-shadow: var(--shadow);
     }
     
-    .search-hints {
-      margin-bottom: 15px;
-      padding: 12px;
-      background: #f0f9ff;
-      border-radius: 8px;
-      font-size: 13px;
-      color: #0369a1;
+    .input-wrapper {
+      position: relative;
+      margin-bottom: 25px;
     }
     
-    .search-hints strong {
-      color: #0284c7;
-    }
-    
-    .hint-tag {
-      display: inline-block;
-      background: #e0f2fe;
-      padding: 2px 8px;
-      border-radius: 4px;
-      margin: 2px;
-      cursor: pointer;
-    }
-    
-    .hint-tag:hover {
-      background: #bae6fd;
+    .input-wrapper::before {
+      content: '🔍';
+      position: absolute;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 20px;
+      opacity: 0.5;
     }
     
     #productInput {
       width: 100%;
-      padding: 14px 16px;
-      font-size: 16px;
-      border-radius: 10px;
-      border: 1px solid #d1d5db;
-      margin-bottom: 15px;
+      padding: 20px 20px 20px 55px;
+      font-size: 18px;
+      border-radius: 16px;
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      background: rgba(0, 0, 0, 0.2);
+      color: white;
       font-family: inherit;
+      transition: all 0.3s ease;
+    }
+    
+    #productInput::placeholder {
+      color: rgba(255, 255, 255, 0.5);
     }
     
     #productInput:focus {
       outline: none;
-      border-color: #2563eb;
-      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+      border-color: var(--primary);
+      box-shadow: 0 0 30px rgba(99, 102, 241, 0.3);
+      background: rgba(0, 0, 0, 0.3);
+    }
+    
+    .search-hints {
+      margin-bottom: 25px;
+    }
+    
+    .search-hints strong {
+      color: rgba(255, 255, 255, 0.8);
+      display: block;
+      margin-bottom: 12px;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .hint-tag {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 20px;
+      margin: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .hint-tag:hover {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
+      border-color: transparent;
     }
     
     .filters {
       display: flex;
       gap: 15px;
       flex-wrap: wrap;
-      margin-bottom: 15px;
+      margin-bottom: 25px;
     }
     
     .filters label {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
       cursor: pointer;
-      padding: 6px 12px;
-      background: #f3f4f6;
-      border-radius: 8px;
+      padding: 12px 20px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      color: rgba(255, 255, 255, 0.9);
       font-size: 14px;
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
+    }
+    
+    .filters label:hover {
+      background: rgba(255, 255, 255, 0.1);
     }
     
     .filters input[type="checkbox"] {
-      width: 16px;
-      height: 16px;
+      width: 18px;
+      height: 18px;
       cursor: pointer;
+      accent-color: var(--primary);
+    }
+    
+    .filters label:has(input:checked) {
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(236, 72, 153, 0.2));
+      border-color: var(--primary);
+      color: white;
     }
     
     .search-btn {
-      background: linear-gradient(135deg, #2563eb, #1e40af);
+      width: 100%;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
       color: white;
       border: none;
-      padding: 12px 28px;
-      border-radius: 10px;
-      font-weight: 600;
-      font-size: 16px;
+      padding: 18px;
+      border-radius: 16px;
+      font-weight: 700;
+      font-size: 18px;
       cursor: pointer;
-      transition: opacity 0.2s;
+      transition: all 0.3s ease;
+      box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .search-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      transition: left 0.5s;
+    }
+    
+    .search-btn:hover::before {
+      left: 100%;
     }
     
     .search-btn:hover {
-      opacity: 0.9;
+      transform: translateY(-2px);
+      box-shadow: 0 20px 40px rgba(99, 102, 241, 0.4);
+    }
+    
+    .results-container {
+      background: var(--glass);
+      backdrop-filter: blur(20px);
+      border-radius: 32px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      overflow: hidden;
+      box-shadow: var(--shadow);
     }
     
     table {
       width: 100%;
       border-collapse: collapse;
-      background: white;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
     }
     
     th {
-      background: #f3f4f6;
-      padding: 14px 12px;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 20px;
       text-align: left;
       font-weight: 600;
-      color: #374151;
-      font-size: 14px;
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 12px;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 1px;
     }
     
     td {
-      padding: 14px 12px;
-      border-bottom: 1px solid #e5e7eb;
-      font-size: 14px;
+      padding: 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 15px;
+    }
+    
+    tr {
+      transition: all 0.3s ease;
     }
     
     tr:hover {
-      background: #f9fafb;
+      background: rgba(255, 255, 255, 0.05);
     }
     
-    tr:last-child td {
-      border-bottom: none;
+    tr.best-price {
+      background: linear-gradient(90deg, rgba(16, 185, 129, 0.2), rgba(5, 150, 105, 0.1));
+      position: relative;
+    }
+    
+    tr.best-price::before {
+      content: '👑';
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 20px;
+    }
+    
+    tr.best-price td {
+      color: white;
+      font-weight: 600;
+    }
+    
+    .price-cell {
+      font-size: 18px;
+      font-weight: 700;
+      color: white;
+    }
+    
+    .best-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--success), #059669);
+      color: white;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-left: 8px;
+      animation: pulse 2s infinite;
+    }
+    
+    .buy-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      padding: 10px 20px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 14px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+    }
+    
+    .buy-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+    }
+    
+    .no-results {
+      text-align: center;
+      padding: 60px 20px;
+      color: rgba(255, 255, 255, 0.6);
+    }
+    
+    .no-results strong {
+      display: block;
+      font-size: 24px;
+      color: white;
+      margin-bottom: 10px;
+    }
+    
+    .loading {
+      display: none;
+      text-align: center;
+      padding: 40px;
+    }
+    
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 3px solid rgba(255, 255, 255, 0.1);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 20px;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
     }
   </style>
 </head>
@@ -144,66 +306,93 @@
 </div>
 
 <div class="container">
-  <h2>Поиск товара</h2>
+  <h2>🔍 Найди лучшую цену</h2>
   
-  <div class="search-section">
-    <div class="search-hints">
-      <strong>💡 Искать можно на русском:</strong> 
-      <span class="hint-tag" onclick="setSearch('айфон')">айфон</span>
-      <span class="hint-tag" onclick="setSearch('самсунг')">самсунг</span>
-      <span class="hint-tag" onclick="setSearch('сяоми')">сяоми</span>
-      <span class="hint-tag" onclick="setSearch('макбук')">макбук</span>
-      <span class="hint-tag" onclick="setSearch('пс5')">пс5</span>
-      <span class="hint-tag" onclick="setSearch('соня')">соня</span>
-      <span class="hint-tag" onclick="setSearch('асус')">асус</span>
-      <span class="hint-tag" onclick="setSearch('хп')">хп</span>
+  <div class="search-section floating">
+    <div class="input-wrapper">
+      <input
+        type="text"
+        id="productInput"
+        placeholder="Что ищем? (например: айфон, самсунг, макбук...)"
+        autocomplete="off"
+      >
     </div>
-    
-    <input
-      type="text"
-      id="productInput"
-      placeholder="Введите название товара (например: iPhone 15 Pro, айфон, самсунг...)"
-      autocomplete="off"
-    >
+
+    <div class="search-hints">
+      <strong>Популярные запросы:</strong>
+      <span class="hint-tag" onclick="setSearch('айфон')">📱 айфон</span>
+      <span class="hint-tag" onclick="setSearch('самсунг')">📱 самсунг</span>
+      <span class="hint-tag" onclick="setSearch('сяоми')">📱 сяоми</span>
+      <span class="hint-tag" onclick="setSearch('макбук')">💻 макбук</span>
+      <span class="hint-tag" onclick="setSearch('пс5')">🎮 пс5</span>
+      <span class="hint-tag" onclick="setSearch('соня')">🎧 соня</span>
+      <span class="hint-tag" onclick="setSearch('асус')">💻 асус</span>
+      <span class="hint-tag" onclick="setSearch('хп')">💻 хп</span>
+    </div>
 
     <div class="filters">
-      <label><input type="checkbox" class="marketplace" value="Kaspi" checked> Kaspi</label>
-      <label><input type="checkbox" class="marketplace" value="Wildberries" checked> Wildberries</label>
-      <label><input type="checkbox" class="marketplace" value="Ozon" checked> Ozon</label>
-      <label><input type="checkbox" class="marketplace" value="Technodom" checked> Technodom</label>
-      <label><input type="checkbox" class="marketplace" value="Sulpak" checked> Sulpak</label>
+      <label><input type="checkbox" class="marketplace" value="Kaspi" checked> 🟠 Kaspi</label>
+      <label><input type="checkbox" class="marketplace" value="Wildberries" checked> 🟣 Wildberries</label>
+      <label><input type="checkbox" class="marketplace" value="Ozon" checked> 🔵 Ozon</label>
+      <label><input type="checkbox" class="marketplace" value="Technodom" checked> 🟡 Technodom</label>
+      <label><input type="checkbox" class="marketplace" value="Sulpak" checked> 🟢 Sulpak</label>
     </div>
 
-    <button class="search-btn" onclick="searchProducts()">🔍 Искать</button>
+    <button class="search-btn" onclick="searchProducts()">
+      Начать поиск
+    </button>
+    
+    <div class="loading" id="loading">
+      <div class="spinner"></div>
+      <p style="color: rgba(255,255,255,0.8);">Ищем лучшие предложения...</p>
+    </div>
   </div>
 
-  <table>
-    <thead>
-      <tr>
-        <th>Товар</th>
-        <th>Площадка</th>
-        <th>Продавец</th>
-        <th>Цена</th>
-        <th>Доставка</th>
-        <th>Срок</th>
-        <th>Итого</th>
-        <th>Действие</th>
-      </tr>
-    </thead>
-    <tbody id="results"></tbody>
-  </table>
+  <div class="results-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Товар</th>
+          <th>Магазин</th>
+          <th>Продавец</th>
+          <th>Цена</th>
+          <th>Доставка</th>
+          <th>Срок</th>
+          <th>Итого</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="results"></tbody>
+    </table>
+  </div>
 </div>
 
 <div class="footer">
-  © 2026 PriceCompare KZ — дипломный проект
+  <p>© 2026 PriceCompare KZ — находим лучшие цены в Казахстане ⚡</p>
 </div>
 
 <script src="js/script.js"></script>
 <script>
 function setSearch(text) {
   document.getElementById('productInput').value = text;
-  searchProducts();
+  document.getElementById('productInput').focus();
 }
+
+// Добавляем анимацию загрузки
+const originalSearch = searchProducts;
+searchProducts = function() {
+  const loading = document.getElementById('loading');
+  const btn = document.querySelector('.search-btn');
+  
+  loading.style.display = 'block';
+  btn.style.display = 'none';
+  
+  setTimeout(() => {
+    originalSearch();
+    loading.style.display = 'none';
+    btn.style.display = 'block';
+  }, 600);
+};
 </script>
 
 </body>
