@@ -2,61 +2,164 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>Сравнение товаров</title>
-
-  <!-- Стили -->
+  <title>Сравнение товаров — PriceCompare KZ</title>
   <link rel="stylesheet" href="css/main.css">
+  <style>
+    .search-section {
+      background: white;
+      padding: 24px;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+      margin-bottom: 30px;
+    }
+    
+    #productInput {
+      width: 100%;
+      padding: 14px 16px;
+      font-size: 16px;
+      border-radius: 10px;
+      border: 1px solid #d1d5db;
+      margin-bottom: 15px;
+      font-family: inherit;
+    }
+    
+    #productInput:focus {
+      outline: none;
+      border-color: #2563eb;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+    
+    .filters {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      margin-bottom: 15px;
+    }
+    
+    .filters label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      padding: 6px 12px;
+      background: #f3f4f6;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+    
+    .filters input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+    }
+    
+    .search-btn {
+      background: linear-gradient(135deg, #2563eb, #1e40af);
+      color: white;
+      border: none;
+      padding: 12px 28px;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 16px;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    
+    .search-btn:hover {
+      opacity: 0.9;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    }
+    
+    th {
+      background: #f3f4f6;
+      padding: 14px 12px;
+      text-align: left;
+      font-weight: 600;
+      color: #374151;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    td {
+      padding: 14px 12px;
+      border-bottom: 1px solid #e5e7eb;
+      font-size: 14px;
+    }
+    
+    tr:hover {
+      background: #f9fafb;
+    }
+    
+    tr:last-child td {
+      border-bottom: none;
+    }
+  </style>
 </head>
 <body>
 
-<header>
-  <h1>Сравнение товаров Казахстан</h1>
-  <nav>
-    <a href="index.html">Главная</a> |
-    <a href="products.html">Сравнение</a> |
-    <a href="contacts.html">Контакты</a>
-  </nav>
-</header>
+<div class="header">
+  <div class="header-inner">
+    <div class="logo">PriceCompare KZ</div>
+    <nav>
+      <a href="index.html">Главная</a>
+      <a href="products.html">Сравнение</a>
+      <a href="contacts.html">Контакты</a>
+    </nav>
+  </div>
+</div>
 
-<main>
+<div class="container">
   <h2>Поиск товара</h2>
+  
+  <div class="search-section">
+    <input
+      type="text"
+      id="productInput"
+      placeholder="Введите название товара (например: iPhone 15 Pro)"
+      autocomplete="off"
+    >
 
-  <input
-    type="text"
-    id="productInput"
-    placeholder="Введите название товара (например: iPhone)"
-  >
+    <div class="filters">
+      <label><input type="checkbox" class="marketplace" value="Kaspi" checked> Kaspi</label>
+      <label><input type="checkbox" class="marketplace" value="Wildberries" checked> Wildberries</label>
+      <label><input type="checkbox" class="marketplace" value="Ozon" checked> Ozon</label>
+      <label><input type="checkbox" class="marketplace" value="Technodom" checked> Technodom</label>
+      <label><input type="checkbox" class="marketplace" value="Sulpak" checked> Sulpak</label>
+    </div>
 
-  <div>
-    <label><input type="checkbox" class="marketplace" value="Kaspi" checked> Kaspi</label>
-    <label><input type="checkbox" class="marketplace" value="Wildberries" checked> Wildberries</label>
-    <label><input type="checkbox" class="marketplace" value="Ozon" checked> Ozon</label>
-    <label><input type="checkbox" class="marketplace" value="Technodom" checked> Technodom</label>
-    <label><input type="checkbox" class="marketplace" value="Sulpak" checked> Sulpak</label>
+    <button class="search-btn" onclick="searchProducts()">🔍 Искать</button>
   </div>
 
-  <br>
-  <button onclick="searchProducts()">Искать</button>
-
-  <table border="1" width="100%" style="margin-top:20px;">
+  <table>
     <thead>
       <tr>
         <th>Товар</th>
         <th>Площадка</th>
         <th>Продавец</th>
-        <th>Цена ₸</th>
-        <th>Доставка ₸</th>
+        <th>Цена</th>
+        <th>Доставка</th>
         <th>Срок</th>
-        <th>Итого ₸</th>
-        <th>Ссылка</th>
+        <th>Итого</th>
+        <th>Действие</th>
       </tr>
     </thead>
     <tbody id="results"></tbody>
   </table>
-</main>
+</div>
 
-<!-- JS ВАЖНО: ТОЛЬКО ТАК И ВНИЗУ -->
-<script src="js/data.js"></script>
+<div class="footer">
+  © 2026 PriceCompare KZ — дипломный проект
+</div>
+
 <script src="js/script.js"></script>
 
 </body>
