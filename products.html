@@ -4,298 +4,172 @@
   <meta charset="UTF-8">
   <title>Сравнение товаров — PriceCompare KZ</title>
   <link rel="stylesheet" href="css/main.css">
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
   <style>
-    .search-section {
-      background: rgba(15, 23, 42, 0.95);
-      backdrop-filter: blur(20px);
-      padding: 40px;
-      border-radius: 32px;
-      border: 1px solid rgba(99, 102, 241, 0.3);
-      margin-bottom: 40px;
-      box-shadow: var(--shadow);
-    }
-    
-    .input-wrapper {
-      position: relative;
-      margin-bottom: 25px;
-    }
-    
-    .input-wrapper::before {
-      content: '🔍';
-      position: absolute;
-      left: 20px;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 20px;
-      opacity: 0.5;
-    }
-    
-    #productInput {
-      width: 100%;
-      padding: 20px 20px 20px 55px;
-      font-size: 18px;
-      border-radius: 16px;
-      border: 2px solid rgba(99, 102, 241, 0.3);
-      background: rgba(30, 41, 59, 0.8);
-      color: white;
-      font-family: inherit;
-      transition: all 0.3s ease;
-    }
-    
-    #productInput::placeholder {
-      color: #64748b;
-    }
-    
-    #productInput:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 30px rgba(99, 102, 241, 0.2);
-      background: rgba(30, 41, 59, 1);
-    }
-    
-    .search-hints {
-      margin-bottom: 25px;
-    }
-    
-    .search-hints strong {
-      color: #94a3b8;
-      display: block;
-      margin-bottom: 12px;
-      font-size: 14px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-    
-    .hint-tag {
-      display: inline-block;
-      background: rgba(99, 102, 241, 0.2);
-      color: #e2e8f0;
-      padding: 8px 16px;
-      border-radius: 20px;
-      margin: 4px;
-      cursor: pointer;
-      font-size: 14px;
-      transition: all 0.3s ease;
-      border: 1px solid rgba(99, 102, 241, 0.3);
-    }
-    
-    .hint-tag:hover {
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
-      transform: translateY(-2px);
-      box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
-      border-color: transparent;
-      color: white;
-    }
-    
-    .filters {
-      display: flex;
-      gap: 15px;
-      flex-wrap: wrap;
-      margin-bottom: 25px;
-    }
-    
-    .filters label {
-      display: flex;
+    /* Стили для модалки авторизации */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 1000;
+      justify-content: center;
       align-items: center;
-      gap: 8px;
-      cursor: pointer;
-      padding: 12px 20px;
+    }
+    
+    .modal-overlay.active {
+      display: flex;
+    }
+    
+    .modal {
+      background: rgba(15, 23, 42, 0.98);
+      padding: 40px;
+      border-radius: 24px;
+      width: 90%;
+      max-width: 400px;
+      border: 1px solid rgba(99, 102, 241, 0.3);
+    }
+    
+    .modal h3 {
+      color: white;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    
+    .modal input {
+      width: 100%;
+      padding: 14px;
+      margin-bottom: 12px;
       background: rgba(30, 41, 59, 0.8);
-      border-radius: 12px;
-      color: #94a3b8;
-      font-size: 14px;
-      transition: all 0.3s ease;
-      border: 2px solid transparent;
-    }
-    
-    .filters label:hover {
-      background: rgba(51, 65, 85, 0.8);
-      color: #e2e8f0;
-    }
-    
-    .filters input[type="checkbox"] {
-      width: 18px;
-      height: 18px;
-      cursor: pointer;
-      accent-color: var(--primary);
-    }
-    
-    .filters label:has(input:checked) {
-      background: linear-gradient(135deg, rgba(99, 102, 241, 0.3), rgba(236, 72, 153, 0.2));
-      border-color: var(--primary);
+      border: 2px solid rgba(99, 102, 241, 0.3);
+      border-radius: 10px;
       color: white;
     }
     
-    .search-btn {
+    .modal button {
       width: 100%;
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      padding: 14px;
+      background: linear-gradient(135deg, #6366f1, #4f46e5);
       color: white;
       border: none;
-      padding: 18px;
-      border-radius: 16px;
-      font-weight: 700;
-      font-size: 18px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
-      position: relative;
-      overflow: hidden;
-    }
-    
-    .search-btn::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-      transition: left 0.5s;
-    }
-    
-    .search-btn:hover::before {
-      left: 100%;
-    }
-    
-    .search-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 20px 40px rgba(99, 102, 241, 0.4);
-    }
-    
-    .results-container {
-      background: rgba(15, 23, 42, 0.95);
-      backdrop-filter: blur(20px);
-      border-radius: 32px;
-      border: 1px solid rgba(99, 102, 241, 0.3);
-      overflow: hidden;
-      box-shadow: var(--shadow);
-    }
-    
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-    
-    th {
-      background: rgba(30, 41, 59, 0.9);
-      padding: 20px;
-      text-align: left;
-      font-weight: 600;
-      color: #94a3b8;
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      border-bottom: 1px solid rgba(99, 102, 241, 0.2);
-    }
-    
-    td {
-      padding: 20px;
-      border-bottom: 1px solid rgba(99, 102, 241, 0.1);
-      color: #e2e8f0;
-      font-size: 15px;
-    }
-    
-    tr {
-      transition: all 0.3s ease;
-    }
-    
-    tr:hover {
-      background: rgba(99, 102, 241, 0.05);
-    }
-    
-    tr.best-price {
-      background: linear-gradient(90deg, rgba(16, 185, 129, 0.15), rgba(5, 150, 105, 0.05));
-      position: relative;
-    }
-    
-    tr.best-price::before {
-      content: '👑';
-      position: absolute;
-      left: 10px;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 20px;
-    }
-    
-    tr.best-price td {
-      color: white;
-      font-weight: 600;
-    }
-    
-    .price-cell {
-      font-size: 18px;
-      font-weight: 700;
-      color: white;
-    }
-    
-    .best-badge {
-      display: inline-block;
-      background: linear-gradient(135deg, var(--success), #059669);
-      color: white;
-      padding: 4px 12px;
-      border-radius: 20px;
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      margin-left: 8px;
-      animation: pulse 2s infinite;
-    }
-    
-    .buy-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-      color: white;
-      padding: 10px 20px;
       border-radius: 10px;
-      text-decoration: none;
       font-weight: 600;
-      font-size: 14px;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
-    }
-    
-    .buy-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
-    }
-    
-    .no-results {
-      text-align: center;
-      padding: 60px 20px;
-      color: #64748b;
-    }
-    
-    .no-results strong {
-      display: block;
-      font-size: 24px;
-      color: #e2e8f0;
+      cursor: pointer;
       margin-bottom: 10px;
     }
     
-    .loading {
-      display: none;
+    .modal .switch {
       text-align: center;
-      padding: 40px;
+      color: #64748b;
+      cursor: pointer;
     }
     
-    .spinner {
-      width: 50px;
-      height: 50px;
-      border: 3px solid rgba(99, 102, 241, 0.2);
-      border-top-color: var(--primary);
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-      margin: 0 auto 20px;
+    .modal .switch:hover {
+      color: #818cf8;
     }
     
-    @keyframes spin {
-      to { transform: rotate(360deg); }
+    /* Сайдбар пользователя */
+    .user-sidebar {
+      position: fixed;
+      right: -400px;
+      top: 0;
+      width: 380px;
+      height: 100vh;
+      background: rgba(15, 23, 42, 0.98);
+      backdrop-filter: blur(20px);
+      border-left: 1px solid rgba(99, 102, 241, 0.3);
+      padding: 30px;
+      transition: right 0.3s ease;
+      z-index: 200;
+      overflow-y: auto;
+    }
+    
+    .user-sidebar.active {
+      right: 0;
+    }
+    
+    .user-sidebar h3 {
+      color: white;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .close-sidebar {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: none;
+      border: none;
+      color: #64748b;
+      font-size: 24px;
+      cursor: pointer;
+    }
+    
+    /* Кнопки в таблице */
+    .action-btns {
+      display: flex;
+      gap: 8px;
+    }
+    
+    .fav-btn {
+      background: rgba(236, 72, 153, 0.2);
+      border: 1px solid rgba(236, 72, 153, 0.3);
+      color: #ec4899;
+      padding: 8px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .fav-btn:hover {
+      background: rgba(236, 72, 153, 0.3);
+    }
+    
+    .fav-btn.active {
+      background: #ec4899;
+      color: white;
     }
   </style>
 </head>
 <body>
+
+<!-- Модальное окно авторизации -->
+<div class="modal-overlay" id="authModal">
+  <div class="modal">
+    <h3 id="modalTitle">Вход</h3>
+    <input type="text" id="authName" placeholder="Имя" style="display: none;">
+    <input type="email" id="authEmail" placeholder="Email">
+    <input type="password" id="authPassword" placeholder="Пароль">
+    <button onclick="handleAuth()" id="authBtn">Войти</button>
+    <div class="switch" onclick="toggleAuthMode()">
+      <span id="switchText">Нет аккаунта? Зарегистрироваться</span>
+    </div>
+  </div>
+</div>
+
+<!-- Сайдбар пользователя -->
+<div class="user-sidebar" id="userSidebar">
+  <button class="close-sidebar" onclick="toggleSidebar()">✕</button>
+  <h3>👤 Личный кабинет</h3>
+  <p style="color: #64748b; margin-bottom: 30px;" id="sidebarEmail"></p>
+  
+  <h3>⭐ Избранное</h3>
+  <div id="favoritesList" style="margin-bottom: 30px;">
+    <p style="color: #64748b;">Загрузка...</p>
+  </div>
+  
+  <h3>🕐 История поиска</h3>
+  <div id="historyList">
+    <p style="color: #64748b;">Загрузка...</p>
+  </div>
+  
+  <button onclick="logout()" style="width: 100%; margin-top: 30px; padding: 14px; background: #ef4444; color: white; border: none; border-radius: 10px; cursor: pointer;">Выйти</button>
+</div>
 
 <div class="header">
   <div class="header-inner">
@@ -305,6 +179,15 @@
       <a href="products.html">Сравнение</a>
       <a href="contacts.html">Контакты</a>
     </nav>
+    <div style="display: flex; gap: 15px; align-items: center;">
+      <div id="authSection">
+        <button onclick="openAuthModal()" style="background: linear-gradient(135deg, #6366f1, #4f46e5); color: white; border: none; padding: 10px 20px; border-radius: 10px; cursor: pointer;">Войти</button>
+      </div>
+      <div id="userSection" style="display: none; align-items: center; gap: 10px;">
+        <span id="userName" style="color: #e2e8f0;"></span>
+        <button onclick="toggleSidebar()" style="background: rgba(99, 102, 241, 0.2); border: 1px solid rgba(99, 102, 241, 0.3); color: #818cf8; padding: 10px 15px; border-radius: 10px; cursor: pointer;">👤 Кабинет</button>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -313,12 +196,7 @@
   
   <div class="search-section floating">
     <div class="input-wrapper">
-      <input
-        type="text"
-        id="productInput"
-        placeholder="Что ищем? (например: айфон, самсунг, макбук...)"
-        autocomplete="off"
-      >
+      <input type="text" id="productInput" placeholder="Что ищем? (например: айфон, самсунг, макбук...)" autocomplete="off">
     </div>
 
     <div class="search-hints">
@@ -328,9 +206,7 @@
       <span class="hint-tag" onclick="setSearch('сяоми')">📱 сяоми</span>
       <span class="hint-tag" onclick="setSearch('макбук')">💻 макбук</span>
       <span class="hint-tag" onclick="setSearch('пс5')">🎮 пс5</span>
-      <span class="hint-tag" onclick="setSearch('соня')">🎧 соня</span>
-      <span class="hint-tag" onclick="setSearch('асус')">💻 асус</span>
-      <span class="hint-tag" onclick="setSearch('хп')">💻 хп</span>
+      <span class="hint-tag" onclick="setSearch('робот пылесос')">🤖 робот пылесос</span>
     </div>
 
     <div class="filters">
@@ -341,14 +217,7 @@
       <label><input type="checkbox" class="marketplace" value="Sulpak" checked> 🟢 Sulpak</label>
     </div>
 
-    <button class="search-btn" onclick="searchProducts()">
-      Начать поиск
-    </button>
-    
-    <div class="loading" id="loading">
-      <div class="spinner"></div>
-      <p style="color: #94a3b8;">Ищем лучшие предложения...</p>
-    </div>
+    <button class="search-btn" onclick="searchWithSave()">Начать поиск</button>
   </div>
 
   <div class="results-container">
@@ -362,7 +231,7 @@
           <th>Доставка</th>
           <th>Срок</th>
           <th>Итого</th>
-          <th></th>
+          <th>Действия</th>
         </tr>
       </thead>
       <tbody id="results"></tbody>
@@ -371,31 +240,138 @@
 </div>
 
 <div class="footer">
-  <p>© 2026 PriceCompare KZ — находим лучшие цены в Казахстане ⚡</p>
+  <p>© 2026 PriceCompare KZ — дипломный проект</p>
 </div>
 
+<script src="js/firebase-config.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/user-data.js"></script>
 <script src="js/script.js"></script>
 <script>
-function setSearch(text) {
-  document.getElementById('productInput').value = text;
-  document.getElementById('productInput').focus();
+// Переменные для модалки
+let isLoginMode = true;
+
+function openAuthModal() {
+  document.getElementById('authModal').classList.add('active');
 }
 
-// Добавляем анимацию загрузки
+function closeAuthModal() {
+  document.getElementById('authModal').classList.remove('active');
+}
+
+function toggleAuthMode() {
+  isLoginMode = !isLoginMode;
+  document.getElementById('modalTitle').textContent = isLoginMode ? 'Вход' : 'Регистрация';
+  document.getElementById('authBtn').textContent = isLoginMode ? 'Войти' : 'Зарегистрироваться';
+  document.getElementById('switchText').textContent = isLoginMode ? 'Нет аккаунта? Зарегистрироваться' : 'Уже есть аккаунт? Войти';
+  document.getElementById('authName').style.display = isLoginMode ? 'none' : 'block';
+}
+
+async function handleAuth() {
+  const email = document.getElementById('authEmail').value;
+  const password = document.getElementById('authPassword').value;
+  const name = document.getElementById('authName').value;
+  
+  let result;
+  if (isLoginMode) {
+    result = await login(email, password);
+  } else {
+    result = await register(email, password, name);
+  }
+  
+  if (result.success) {
+    closeAuthModal();
+    document.getElementById('authEmail').value = '';
+    document.getElementById('authPassword').value = '';
+  } else {
+    alert(result.error);
+  }
+}
+
+function toggleSidebar() {
+  const sidebar = document.getElementById('userSidebar');
+  sidebar.classList.toggle('active');
+  
+  const user = auth.currentUser;
+  if (user && sidebar.classList.contains('active')) {
+    document.getElementById('sidebarEmail').textContent = user.email;
+  }
+}
+
+// Переопределяем searchProducts для сохранения истории
+function searchWithSave() {
+  const query = document.getElementById('productInput').value;
+  searchProducts();
+  saveSearch(query);
+}
+
+// Добавляем кнопку избранного в таблицу
 const originalSearch = searchProducts;
 searchProducts = function() {
-  const loading = document.getElementById('loading');
-  const btn = document.querySelector('.search-btn');
-  
-  loading.style.display = 'block';
-  btn.style.display = 'none';
-  
-  setTimeout(() => {
-    originalSearch();
-    loading.style.display = 'none';
-    btn.style.display = 'block';
-  }, 600);
+  const query = document.getElementById("productInput").value.trim().toLowerCase();
+  const tbody = document.getElementById("results");
+  tbody.innerHTML = "";
+
+  if (!query) {
+    alert("Введите название товара");
+    return;
+  }
+
+  const selectedMarkets = Array.from(
+    document.querySelectorAll(".marketplace:checked")
+  ).map(el => el.value);
+
+  const filtered = productsDB.filter(p => {
+    const nameEn = normalize(p.name);
+    const nameRu = p.nameRu.join(' ');
+    return (nameEn.includes(query) || normalize(nameRu).includes(query)) && 
+           selectedMarkets.includes(p.marketplace);
+  });
+
+  if (filtered.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:20px;color:#64748b;">
+      Ничего не найдено по запросу "${query}"
+    </td></tr>`;
+    return;
+  }
+
+  filtered.sort((a, b) => (a.price + a.delivery) - (b.price + b.delivery));
+
+  filtered.forEach((p, index) => {
+    const total = p.price + p.delivery;
+    const isBestPrice = index === 0;
+    
+    const rowStyle = isBestPrice ? 'background: linear-gradient(90deg, rgba(16, 185, 129, 0.15), transparent); border-left: 3px solid #10b981;' : '';
+    const priceStyle = isBestPrice ? 'color: #10b981; font-weight: 800;' : 'color: #e2e8f0;';
+
+    tbody.innerHTML += `
+      <tr style="${rowStyle}">
+        <td style="padding: 16px; color: #e2e8f0; border-bottom: 1px solid rgba(99, 102, 241, 0.1);">
+          ${isBestPrice ? '👑 ' : ''}${p.name}
+        </td>
+        <td style="padding: 16px; color: #94a3b8; border-bottom: 1px solid rgba(99, 102, 241, 0.1);">${p.marketplace}</td>
+        <td style="padding: 16px; color: #94a3b8; border-bottom: 1px solid rgba(99, 102, 241, 0.1);">${p.seller}</td>
+        <td style="padding: 16px; color: #e2e8f0; border-bottom: 1px solid rgba(99, 102, 241, 0.1);">${p.price.toLocaleString()} ₸</td>
+        <td style="padding: 16px; color: #94a3b8; border-bottom: 1px solid rgba(99, 102, 241, 0.1);">${p.delivery === 0 ? 'Бесплатно' : p.delivery.toLocaleString() + ' ₸'}</td>
+        <td style="padding: 16px; color: #94a3b8; border-bottom: 1px solid rgba(99, 102, 241, 0.1);">${p.term}</td>
+        <td style="padding: 16px; ${priceStyle}; border-bottom: 1px solid rgba(99, 102, 241, 0.1);">
+          ${total.toLocaleString()} ₸
+          ${isBestPrice ? '<span style="background: #10b981; color: white; padding: 2px 8px; border-radius: 10px; font-size: 10px; margin-left: 5px;">ЛУЧШАЯ</span>' : ''}
+        </td>
+        <td style="padding: 16px; border-bottom: 1px solid rgba(99, 102, 241, 0.1);">
+          <div class="action-btns">
+            <button class="fav-btn" onclick='addToFavorites(${JSON.stringify(p).replace(/'/g, "&apos;")})'>♥</button>
+            <a href="${p.url}" target="_blank" class="buy-btn">Купить →</a>
+          </div>
+        </td>
+      </tr>
+    `;
+  });
 };
+
+function setSearch(text) {
+  document.getElementById('productInput').value = text;
+}
 </script>
 
 </body>
