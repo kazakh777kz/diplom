@@ -74,7 +74,7 @@ function searchProducts() {
     document.querySelectorAll(".marketplace:checked")
   ).map(el => el.value);
 
-  const filtered = products.filter(p =>
+  const filtered = productsDB.filter(p =>
     p.name.toLowerCase().includes(query) &&
     selectedMarkets.includes(p.marketplace)
   );
