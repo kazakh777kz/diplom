@@ -805,7 +805,7 @@ function searchProducts() {
   }).filter(p => selectedMarkets.includes(p.marketplace));
 
   if (filtered.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:20px;color:#6b7280;">
+    tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:20px;color:#64748b;">
       Ничего не найдено по запросу "${rawQuery}"<br>
       <small>Попробуйте: айфон, самсунг, макбук, пс5, сони, дрон, робот пылесос, дайсон</small>
     </td></tr>`;
@@ -819,19 +819,29 @@ function searchProducts() {
     const total = p.price + p.delivery;
     const isBestPrice = index === 0;
 
+    // Исправленные стили для лучшей цены — тёмный текст на светлом фоне
+    const rowStyle = isBestPrice ? 'background: linear-gradient(90deg, rgba(16, 185, 129, 0.2), rgba(5, 150, 105, 0.1)); border-left: 4px solid #10b981;' : '';
+    const priceStyle = isBestPrice ? 'color: #10b981; font-weight: 800; font-size: 18px;' : 'color: #e2e8f0; font-weight: 700;';
+    const nameStyle = isBestPrice ? 'color: #0f172a; font-weight: 700;' : 'color: #e2e8f0;';
+    const cellStyle = isBestPrice ? 'color: #334155; font-weight: 600;' : 'color: #94a3b8;';
+
     tbody.innerHTML += `
-      <tr style="${isBestPrice ? 'background:#dcfce7;' : ''}">
-        <td><strong>${p.name}</strong></td>
-        <td>${p.marketplace}</td>
-        <td>${p.seller}</td>
-        <td>${p.price.toLocaleString()} ₸</td>
-        <td>${p.delivery === 0 ? 'Бесплатно' : p.delivery.toLocaleString() + ' ₸'}</td>
-        <td>${p.term}</td>
-        <td style="color:${isBestPrice ? '#16a34a' : '#111827'};font-weight:700;">
-          ${total.toLocaleString()} ₸
-          ${isBestPrice ? ' <span style="background:#22c55e;color:white;padding:2px 8px;border-radius:12px;font-size:12px;">ЛУЧШАЯ ЦЕНА</span>' : ''}
+      <tr style="${rowStyle}">
+        <td style="${nameStyle} padding: 20px; border-bottom: 1px solid rgba(99, 102, 241, 0.1);">
+          ${isBestPrice ? '👑 ' : ''}${p.name}
         </td>
-        <td><a href="${p.url}" target="_blank" style="display:inline-block;background:#2563eb;color:white;padding:8px 16px;border-radius:8px;text-decoration:none;font-weight:500;">Купить →</a></td>
+        <td style="${cellStyle} padding: 20px; border-bottom: 1px solid rgba(99, 102, 241, 0.1);">${p.marketplace}</td>
+        <td style="${cellStyle} padding: 20px; border-bottom: 1px solid rgba(99, 102, 241, 0.1);">${p.seller}</td>
+        <td style="${cellStyle} padding: 20px; border-bottom: 1px solid rgba(99, 102, 241, 0.1);">${p.price.toLocaleString()} ₸</td>
+        <td style="${cellStyle} padding: 20px; border-bottom: 1px solid rgba(99, 102, 241, 0.1);">${p.delivery === 0 ? 'Бесплатно' : p.delivery.toLocaleString() + ' ₸'}</td>
+        <td style="${cellStyle} padding: 20px; border-bottom: 1px solid rgba(99, 102, 241, 0.1);">${p.term}</td>
+        <td style="${priceStyle} padding: 20px; border-bottom: 1px solid rgba(99, 102, 241, 0.1);">
+          ${total.toLocaleString()} ₸
+          ${isBestPrice ? ' <span style="background: #10b981; color: white; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 700; text-transform: uppercase; margin-left: 8px;">Лучшая цена</span>' : ''}
+        </td>
+        <td style="padding: 20px; border-bottom: 1px solid rgba(99, 102, 241, 0.1);">
+          <a href="${p.url}" target="_blank" style="display: inline-flex; align-items: center; gap: 6px; background: linear-gradient(135deg, #6366f1, #4f46e5); color: white; padding: 10px 20px; border-radius: 10px; text-decoration: none; font-weight: 600; font-size: 14px; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);">Купить →</a>
+        </td>
       </tr>
     `;
   });
