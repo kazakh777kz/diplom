@@ -13,6 +13,32 @@
       margin-bottom: 30px;
     }
     
+    .search-hints {
+      margin-bottom: 15px;
+      padding: 12px;
+      background: #f0f9ff;
+      border-radius: 8px;
+      font-size: 13px;
+      color: #0369a1;
+    }
+    
+    .search-hints strong {
+      color: #0284c7;
+    }
+    
+    .hint-tag {
+      display: inline-block;
+      background: #e0f2fe;
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin: 2px;
+      cursor: pointer;
+    }
+    
+    .hint-tag:hover {
+      background: #bae6fd;
+    }
+    
     #productInput {
       width: 100%;
       padding: 14px 16px;
@@ -121,10 +147,22 @@
   <h2>Поиск товара</h2>
   
   <div class="search-section">
+    <div class="search-hints">
+      <strong>💡 Искать можно на русском:</strong> 
+      <span class="hint-tag" onclick="setSearch('айфон')">айфон</span>
+      <span class="hint-tag" onclick="setSearch('самсунг')">самсунг</span>
+      <span class="hint-tag" onclick="setSearch('сяоми')">сяоми</span>
+      <span class="hint-tag" onclick="setSearch('макбук')">макбук</span>
+      <span class="hint-tag" onclick="setSearch('пс5')">пс5</span>
+      <span class="hint-tag" onclick="setSearch('соня')">соня</span>
+      <span class="hint-tag" onclick="setSearch('асус')">асус</span>
+      <span class="hint-tag" onclick="setSearch('хп')">хп</span>
+    </div>
+    
     <input
       type="text"
       id="productInput"
-      placeholder="Введите название товара (например: iPhone 15 Pro)"
+      placeholder="Введите название товара (например: iPhone 15 Pro, айфон, самсунг...)"
       autocomplete="off"
     >
 
@@ -161,6 +199,12 @@
 </div>
 
 <script src="js/script.js"></script>
+<script>
+function setSearch(text) {
+  document.getElementById('productInput').value = text;
+  searchProducts();
+}
+</script>
 
 </body>
 </html>
