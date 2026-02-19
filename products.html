@@ -96,6 +96,12 @@
       50% { transform: translateY(-10px); }
     }
 
+    .nav-section {
+      display: flex;
+      align-items: center;
+      gap: 30px;
+    }
+
     nav {
       display: flex;
       gap: 10px;
@@ -130,6 +136,24 @@
     nav a:hover {
       color: white;
       transform: translateY(-2px);
+    }
+
+    /* КНОПКА ВОЙТИ В ХЕДЕРЕ */
+    .auth-btn {
+      background: linear-gradient(135deg, #6366f1, #4f46e5);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+
+    .auth-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
     }
 
     /* CONTAINER */
@@ -402,6 +426,11 @@
         flex-direction: column;
         gap: 20px;
       }
+
+      .nav-section {
+        flex-direction: column;
+        gap: 20px;
+      }
       
       nav {
         flex-wrap: wrap;
@@ -420,39 +449,24 @@
         font-size: 28px;
       }
     }
-
-    /* AUTH BUTTON */
-    #authSection button, #userSection button {
-      background: linear-gradient(135deg, #6366f1, #4f46e5);
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 10px;
-      cursor: pointer;
-      font-weight: 600;
-      transition: all 0.3s ease;
-    }
-
-    #authSection button:hover, #userSection button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
-    }
   </style>
 </head>
 <body>
 
+<!-- HEADER с кнопкой Войти -->
 <div class="header">
   <div class="header-inner">
     <div class="logo">PriceCompare KZ</div>
-    <nav>
-      <a href="index.html">Главная</a>
-      <a href="products.html">Сравнение</a>
-      <a href="contacts.html">Контакты</a>
-    </nav>
-    <div style="display: flex; gap: 15px; align-items: center;">
-      <div id="authSection">
-        <button onclick="alert('Функция входа в разработке')">Войти</button>
-      </div>
+    
+    <div class="nav-section">
+      <nav>
+        <a href="index.html">Главная</a>
+        <a href="products.html">Сравнение</a>
+        <a href="contacts.html">Контакты</a>
+      </nav>
+      
+      <!-- КНОПКА ВОЙТИ В ГЛАВНОМ МЕНЮ -->
+      <button class="auth-btn" onclick="openAuthModal()">Войти</button>
     </div>
   </div>
 </div>
@@ -578,6 +592,10 @@ function normalize(text) {
 
 function setSearch(text) {
   document.getElementById('productInput').value = text;
+}
+
+function openAuthModal() {
+  alert('Модальное окно авторизации будет здесь');
 }
 
 function searchProducts() {
