@@ -3,173 +3,443 @@
 <head>
   <meta charset="UTF-8">
   <title>Сравнение товаров — PriceCompare KZ</title>
-  <link rel="stylesheet" href="css/main.css">
-  <!-- Firebase -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    /* Стили для модалки авторизации */
-    .modal-overlay {
-      display: none;
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --primary: #6366f1;
+      --primary-dark: #4f46e5;
+      --secondary: #ec4899;
+      --accent: #06b6d4;
+      --dark: #0f172a;
+      --light: #f8fafc;
+      --gray: #64748b;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --glass: rgba(15, 23, 42, 0.85);
+      --shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #1e1b4b 100%);
+      background-attachment: fixed;
+      color: #e2e8f0;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    body::before {
+      content: '';
       position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.8);
-      z-index: 1000;
-      justify-content: center;
-      align-items: center;
-    }
-    
-    .modal-overlay.active {
-      display: flex;
-    }
-    
-    .modal {
-      background: rgba(15, 23, 42, 0.98);
-      padding: 40px;
-      border-radius: 24px;
-      width: 90%;
-      max-width: 400px;
-      border: 1px solid rgba(99, 102, 241, 0.3);
-    }
-    
-    .modal h3 {
-      color: white;
-      margin-bottom: 20px;
-      text-align: center;
-    }
-    
-    .modal input {
-      width: 100%;
-      padding: 14px;
-      margin-bottom: 12px;
-      background: rgba(30, 41, 59, 0.8);
-      border: 2px solid rgba(99, 102, 241, 0.3);
-      border-radius: 10px;
-      color: white;
-    }
-    
-    .modal button {
-      width: 100%;
-      padding: 14px;
-      background: linear-gradient(135deg, #6366f1, #4f46e5);
-      color: white;
-      border: none;
-      border-radius: 10px;
-      font-weight: 600;
-      cursor: pointer;
-      margin-bottom: 10px;
-    }
-    
-    .modal .switch {
-      text-align: center;
-      color: #64748b;
-      cursor: pointer;
-    }
-    
-    .modal .switch:hover {
-      color: #818cf8;
-    }
-    
-    /* Сайдбар пользователя */
-    .user-sidebar {
-      position: fixed;
-      right: -400px;
       top: 0;
-      width: 380px;
-      height: 100vh;
-      background: rgba(15, 23, 42, 0.98);
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        radial-gradient(circle at 20% 80%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(236, 72, 153, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(6, 182, 212, 0.1) 0%, transparent 50%);
+      z-index: -1;
+      animation: pulse 15s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.5; transform: scale(1); }
+      50% { opacity: 0.8; transform: scale(1.1); }
+    }
+
+    /* HEADER */
+    .header {
+      background: rgba(15, 23, 42, 0.95);
       backdrop-filter: blur(20px);
-      border-left: 1px solid rgba(99, 102, 241, 0.3);
-      padding: 30px;
-      transition: right 0.3s ease;
-      z-index: 200;
-      overflow-y: auto;
+      border-bottom: 1px solid rgba(99, 102, 241, 0.2);
+      position: sticky;
+      top: 0;
+      z-index: 100;
     }
-    
-    .user-sidebar.active {
-      right: 0;
-    }
-    
-    .user-sidebar h3 {
-      color: white;
-      margin-bottom: 20px;
+
+    .header-inner {
+      max-width: 1200px;
+      margin: auto;
+      padding: 20px;
       display: flex;
+      justify-content: space-between;
       align-items: center;
+    }
+
+    .logo {
+      font-size: 28px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #818cf8 0%, #c084fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      position: relative;
+    }
+
+    .logo::after {
+      content: '⚡';
+      position: absolute;
+      right: -30px;
+      top: -5px;
+      font-size: 20px;
+      animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    nav {
+      display: flex;
       gap: 10px;
     }
-    
-    .close-sidebar {
+
+    nav a {
+      padding: 10px 20px;
+      border-radius: 12px;
+      font-weight: 600;
+      color: #94a3b8;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    nav a::before {
+      content: '';
       position: absolute;
-      top: 20px;
-      right: 20px;
-      background: none;
-      border: none;
+      inset: 0;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      opacity: 0;
+      transition: opacity 0.3s;
+      z-index: -1;
+      border-radius: 12px;
+    }
+
+    nav a:hover::before {
+      opacity: 1;
+    }
+
+    nav a:hover {
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    /* CONTAINER */
+    .container {
+      max-width: 1200px;
+      margin: auto;
+      padding: 40px 20px;
+    }
+
+    h2 {
+      font-size: 36px;
+      font-weight: 800;
+      color: white;
+      margin-bottom: 40px;
+      text-align: center;
+      position: relative;
+      display: inline-block;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    h2::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      border-radius: 2px;
+    }
+
+    /* SEARCH SECTION */
+    .search-section {
+      background: var(--glass);
+      backdrop-filter: blur(20px);
+      padding: 40px;
+      border-radius: 24px;
+      border: 1px solid rgba(99, 102, 241, 0.2);
+      margin-bottom: 40px;
+      animation: float 6s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .input-wrapper {
+      position: relative;
+      margin-bottom: 20px;
+    }
+
+    .input-wrapper input {
+      width: 100%;
+      padding: 20px 24px;
+      font-size: 18px;
+      border: 2px solid rgba(99, 102, 241, 0.3);
+      border-radius: 16px;
+      background: rgba(30, 41, 59, 0.8);
+      color: white;
+      transition: all 0.3s ease;
+    }
+
+    .input-wrapper input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 30px rgba(99, 102, 241, 0.2);
+    }
+
+    .input-wrapper input::placeholder {
       color: #64748b;
-      font-size: 24px;
+    }
+
+    .search-hints {
+      margin-bottom: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .search-hints strong {
+      color: #94a3b8;
+      font-size: 14px;
+    }
+
+    .hint-tag {
+      background: rgba(99, 102, 241, 0.2);
+      color: #818cf8;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(99, 102, 241, 0.3);
+    }
+
+    .hint-tag:hover {
+      background: rgba(99, 102, 241, 0.4);
+      transform: translateY(-2px);
+    }
+
+    .filters {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .filters label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(30, 41, 59, 0.8);
+      padding: 12px 16px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(99, 102, 241, 0.2);
+      color: #e2e8f0;
+      font-size: 14px;
+    }
+
+    .filters label:hover {
+      border-color: rgba(99, 102, 241, 0.4);
+    }
+
+    .filters input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--primary);
       cursor: pointer;
     }
-    
-    /* Кнопки в таблице */
+
+    .search-btn {
+      width: 100%;
+      padding: 18px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .search-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
+    }
+
+    /* RESULTS TABLE */
+    .results-container {
+      background: var(--glass);
+      backdrop-filter: blur(20px);
+      border-radius: 24px;
+      border: 1px solid rgba(99, 102, 241, 0.2);
+      overflow: hidden;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 800px;
+    }
+
+    thead {
+      background: rgba(30, 41, 59, 0.8);
+    }
+
+    th {
+      padding: 20px;
+      text-align: left;
+      color: #94a3b8;
+      font-weight: 600;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    td {
+      padding: 16px 20px;
+      border-bottom: 1px solid rgba(99, 102, 241, 0.1);
+      color: #e2e8f0;
+    }
+
+    tr:hover {
+      background: rgba(99, 102, 241, 0.05);
+    }
+
+    .buy-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: linear-gradient(135deg, var(--success), #059669);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 14px;
+      transition: all 0.3s ease;
+      border: none;
+      cursor: pointer;
+    }
+
+    .buy-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+    }
+
     .action-btns {
       display: flex;
       gap: 8px;
     }
-    
+
     .fav-btn {
       background: rgba(236, 72, 153, 0.2);
       border: 1px solid rgba(236, 72, 153, 0.3);
       color: #ec4899;
-      padding: 8px 12px;
-      border-radius: 8px;
+      padding: 10px;
+      border-radius: 10px;
       cursor: pointer;
       transition: all 0.3s;
+      font-size: 16px;
     }
-    
+
     .fav-btn:hover {
       background: rgba(236, 72, 153, 0.3);
     }
-    
+
     .fav-btn.active {
       background: #ec4899;
       color: white;
     }
+
+    /* FOOTER */
+    .footer {
+      background: rgba(15, 23, 42, 0.95);
+      backdrop-filter: blur(20px);
+      border-top: 1px solid rgba(99, 102, 241, 0.2);
+      padding: 40px 20px;
+      text-align: center;
+      color: #64748b;
+      margin-top: 80px;
+    }
+
+    /* SCROLLBAR */
+    ::-webkit-scrollbar {
+      width: 10px;
+      height: 10px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: rgba(15, 23, 42, 0.5);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      border-radius: 5px;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      .header-inner {
+        flex-direction: column;
+        gap: 20px;
+      }
+      
+      nav {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .search-section {
+        padding: 20px;
+      }
+
+      .filters {
+        justify-content: center;
+      }
+
+      h2 {
+        font-size: 28px;
+      }
+    }
+
+    /* AUTH BUTTON */
+    #authSection button, #userSection button {
+      background: linear-gradient(135deg, #6366f1, #4f46e5);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    #authSection button:hover, #userSection button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
+    }
   </style>
 </head>
 <body>
-
-<!-- Модальное окно авторизации -->
-<div class="modal-overlay" id="authModal">
-  <div class="modal">
-    <h3 id="modalTitle">Вход</h3>
-    <input type="text" id="authName" placeholder="Имя" style="display: none;">
-    <input type="email" id="authEmail" placeholder="Email">
-    <input type="password" id="authPassword" placeholder="Пароль">
-    <button onclick="handleAuth()" id="authBtn">Войти</button>
-    <div class="switch" onclick="toggleAuthMode()">
-      <span id="switchText">Нет аккаунта? Зарегистрироваться</span>
-    </div>
-  </div>
-</div>
-
-<!-- Сайдбар пользователя -->
-<div class="user-sidebar" id="userSidebar">
-  <button class="close-sidebar" onclick="toggleSidebar()">✕</button>
-  <h3>👤 Личный кабинет</h3>
-  <p style="color: #64748b; margin-bottom: 30px;" id="sidebarEmail"></p>
-  
-  <h3>⭐ Избранное</h3>
-  <div id="favoritesList" style="margin-bottom: 30px;">
-    <p style="color: #64748b;">Загрузка...</p>
-  </div>
-  
-  <h3>🕐 История поиска</h3>
-  <div id="historyList">
-    <p style="color: #64748b;">Загрузка...</p>
-  </div>
-  
-  <button onclick="logout()" style="width: 100%; margin-top: 30px; padding: 14px; background: #ef4444; color: white; border: none; border-radius: 10px; cursor: pointer;">Выйти</button>
-</div>
 
 <div class="header">
   <div class="header-inner">
@@ -181,11 +451,7 @@
     </nav>
     <div style="display: flex; gap: 15px; align-items: center;">
       <div id="authSection">
-        <button onclick="openAuthModal()" style="background: linear-gradient(135deg, #6366f1, #4f46e5); color: white; border: none; padding: 10px 20px; border-radius: 10px; cursor: pointer;">Войти</button>
-      </div>
-      <div id="userSection" style="display: none; align-items: center; gap: 10px;">
-        <span id="userName" style="color: #e2e8f0;"></span>
-        <button onclick="toggleSidebar()" style="background: rgba(99, 102, 241, 0.2); border: 1px solid rgba(99, 102, 241, 0.3); color: #818cf8; padding: 10px 15px; border-radius: 10px; cursor: pointer;">👤 Кабинет</button>
+        <button onclick="alert('Функция входа в разработке')">Войти</button>
       </div>
     </div>
   </div>
@@ -194,7 +460,7 @@
 <div class="container">
   <h2>🔍 Найди лучшую цену</h2>
   
-  <div class="search-section floating">
+  <div class="search-section">
     <div class="input-wrapper">
       <input type="text" id="productInput" placeholder="Что ищем? (например: айфон, самсунг, макбук...)" autocomplete="off">
     </div>
@@ -217,7 +483,7 @@
       <label><input type="checkbox" class="marketplace" value="Sulpak" checked> 🟢 Sulpak</label>
     </div>
 
-    <button class="search-btn" onclick="searchWithSave()">Начать поиск</button>
+    <button class="search-btn" onclick="searchProducts()">Начать поиск</button>
   </div>
 
   <div class="results-container">
@@ -243,72 +509,80 @@
   <p>© 2026 PriceCompare KZ — дипломный проект</p>
 </div>
 
-<script src="js/firebase-config.js"></script>
-<script src="js/auth.js"></script>
-<script src="js/user-data.js"></script>
-<script src="js/script.js"></script>
 <script>
-// Переменные для модалки
-let isLoginMode = true;
-
-function openAuthModal() {
-  document.getElementById('authModal').classList.add('active');
-}
-
-function closeAuthModal() {
-  document.getElementById('authModal').classList.remove('active');
-}
-
-function toggleAuthMode() {
-  isLoginMode = !isLoginMode;
-  document.getElementById('modalTitle').textContent = isLoginMode ? 'Вход' : 'Регистрация';
-  document.getElementById('authBtn').textContent = isLoginMode ? 'Войти' : 'Зарегистрироваться';
-  document.getElementById('switchText').textContent = isLoginMode ? 'Нет аккаунта? Зарегистрироваться' : 'Уже есть аккаунт? Войти';
-  document.getElementById('authName').style.display = isLoginMode ? 'none' : 'block';
-}
-
-async function handleAuth() {
-  const email = document.getElementById('authEmail').value;
-  const password = document.getElementById('authPassword').value;
-  const name = document.getElementById('authName').value;
+const productsDB = [
+  { name:"iPhone 15 Pro Max", nameRu:["айфон 15 про макс", "айфон 15 pro max", "айфон"], marketplace:"Kaspi", seller:"Apple Store KZ", price:780000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"iPhone 15 Pro Max", nameRu:["айфон 15 про макс", "айфон 15 pro max", "айфон"], marketplace:"Wildberries", seller:"WB Apple", price:765000, delivery:2500, term:"3 дня", url:"https://wildberries.kz" },
+  { name:"iPhone 15 Pro Max", nameRu:["айфон 15 про макс", "айфон 15 pro max", "айфон"], marketplace:"Ozon", seller:"Ozon Apple", price:770000, delivery:3000, term:"4 дня", url:"https://ozon.kz" },
   
-  let result;
-  if (isLoginMode) {
-    result = await login(email, password);
-  } else {
-    result = await register(email, password, name);
-  }
-  
-  if (result.success) {
-    closeAuthModal();
-    document.getElementById('authEmail').value = '';
-    document.getElementById('authPassword').value = '';
-  } else {
-    alert(result.error);
-  }
+  { name:"iPhone 15 Pro", nameRu:["айфон 15 про", "айфон 15 pro", "айфон"], marketplace:"Kaspi", seller:"Kaspi Official", price:629000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"iPhone 15 Pro", nameRu:["айфон 15 про", "айфон 15 pro", "айфон"], marketplace:"Wildberries", seller:"WB Store", price:615000, delivery:2000, term:"4 дня", url:"https://wildberries.kz" },
+  { name:"iPhone 15 Pro", nameRu:["айфон 15 про", "айфон 15 pro", "айфон"], marketplace:"Ozon", seller:"Ozon Seller", price:610000, delivery:3000, term:"5 дней", url:"https://ozon.kz" },
+  { name:"iPhone 15 Pro", nameRu:["айфон 15 про", "айфон 15 pro", "айфон"], marketplace:"Technodom", seller:"Technodom", price:635000, delivery:0, term:"Самовывоз", url:"https://technodom.kz" },
+
+  { name:"iPhone 15", nameRu:["айфон 15", "айфон"], marketplace:"Kaspi", seller:"Kaspi Store", price:485000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"iPhone 15", nameRu:["айфон 15", "айфон"], marketplace:"Wildberries", seller:"WB Mobile", price:470000, delivery:2000, term:"3 дня", url:"https://wildberries.kz" },
+  { name:"iPhone 15", nameRu:["айфон 15", "айфон"], marketplace:"Ozon", seller:"Ozon Mobile", price:475000, delivery:2500, term:"4 дня", url:"https://ozon.kz" },
+
+  { name:"iPhone 14", nameRu:["айфон 14", "айфон"], marketplace:"Kaspi", seller:"Kaspi Store", price:420000, delivery:4000, term:"1-2 дня", url:"https://kaspi.kz" },
+  { name:"iPhone 14", nameRu:["айфон 14", "айфон"], marketplace:"Technodom", seller:"Technodom", price:435000, delivery:0, term:"Самовывоз", url:"https://technodom.kz" },
+  { name:"iPhone 14", nameRu:["айфон 14", "айфон"], marketplace:"Wildberries", seller:"WB Official", price:410000, delivery:1500, term:"3 дня", url:"https://wildberries.kz" },
+
+  { name:"Samsung Galaxy S24 Ultra", nameRu:["самсунг с24 ультра", "самсунг s24 ultra", "самсунг"], marketplace:"Kaspi", seller:"Samsung Official", price:890000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"Samsung Galaxy S24 Ultra", nameRu:["самсунг с24 ультра", "самсунг s24 ultra", "самсунг"], marketplace:"Ozon", seller:"Ozon", price:865000, delivery:4000, term:"5 дней", url:"https://ozon.kz" },
+
+  { name:"Samsung Galaxy S24", nameRu:["самсунг с24", "самсунг s24", "самсунг"], marketplace:"Sulpak", seller:"Sulpak", price:485000, delivery:6000, term:"2-3 дня", url:"https://sulpak.kz" },
+  { name:"Samsung Galaxy S24", nameRu:["самсунг с24", "самсунг s24", "самсунг"], marketplace:"Ozon", seller:"Ozon Tech", price:478000, delivery:6500, term:"3-5 дней", url:"https://ozon.kz" },
+  { name:"Samsung Galaxy S24", nameRu:["самсунг с24", "самсунг s24", "самсунг"], marketplace:"Kaspi", seller:"Mobile Store", price:490000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+
+  { name:"Samsung Galaxy A55", nameRu:["самсунг а55", "самсунг a55", "самсунг"], marketplace:"Kaspi", seller:"Mobile Market", price:210000, delivery:3500, term:"1-2 дня", url:"https://kaspi.kz" },
+  { name:"Samsung Galaxy A55", nameRu:["самсунг а55", "самсунг a55", "самсунг"], marketplace:"Wildberries", seller:"WB Seller", price:205000, delivery:5000, term:"3-6 дней", url:"https://wildberries.kz" },
+  { name:"Samsung Galaxy A55", nameRu:["самсунг а55", "самсунг a55", "самсунг"], marketplace:"Ozon", seller:"Ozon Mobile", price:208000, delivery:4000, term:"4 дня", url:"https://ozon.kz" },
+
+  { name:"Xiaomi 14", nameRu:["сяоми 14", "ксяоми 14", "сяоми"], marketplace:"Kaspi", seller:"Xiaomi Official", price:480000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"Xiaomi 14", nameRu:["сяоми 14", "ксяоми 14", "сяоми"], marketplace:"Wildberries", seller:"WB Xiaomi", price:465000, delivery:2500, term:"4 дня", url:"https://wildberries.kz" },
+
+  { name:"Xiaomi 13", nameRu:["сяоми 13", "ксяоми 13", "сяоми"], marketplace:"Kaspi", seller:"Xiaomi Official", price:320000, delivery:4000, term:"1-3 дня", url:"https://kaspi.kz" },
+  { name:"Xiaomi 13", nameRu:["сяоми 13", "ксяоми 13", "сяоми"], marketplace:"Ozon", seller:"Ozon Xiaomi", price:315000, delivery:6000, term:"2-4 дня", url:"https://ozon.kz" },
+
+  { name:"MacBook Air M2", nameRu:["макбук эйр м2", "macbook air m2", "макбук"], marketplace:"Kaspi", seller:"Apple Store", price:820000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"MacBook Air M2", nameRu:["макбук эйр м2", "macbook air m2", "макбук"], marketplace:"Sulpak", seller:"Sulpak", price:835000, delivery:3000, term:"2 дня", url:"https://sulpak.kz" },
+  { name:"MacBook Air M2", nameRu:["макбук эйр м2", "macbook air m2", "макбук"], marketplace:"Ozon", seller:"Ozon Tech", price:810000, delivery:4000, term:"5 дней", url:"https://ozon.kz" },
+
+  { name:"PlayStation 5 Slim", nameRu:["плейстейшн 5 слим", "playstation 5 slim", "пс5", "консоль"], marketplace:"Kaspi", seller:"Sony Official", price:320000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"PlayStation 5 Slim", nameRu:["плейстейшн 5 слим", "playstation 5 slim", "пс5", "консоль"], marketplace:"Technodom", seller:"Technodom", price:330000, delivery:2000, term:"2 дня", url:"https://technodom.kz" },
+  { name:"PlayStation 5 Slim", nameRu:["плейстейшн 5 слим", "playstation 5 slim", "пс5", "консоль"], marketplace:"Ozon", seller:"Ozon Games", price:315000, delivery:3500, term:"4 дня", url:"https://ozon.kz" },
+  { name:"PlayStation 5 Slim", nameRu:["плейстейшн 5 слим", "playstation 5 slim", "пс5", "консоль"], marketplace:"Sulpak", seller:"Sulpak", price:325000, delivery:2500, term:"2 дня", url:"https://sulpak.kz" },
+
+  { name:"Roborock S8 Pro Ultra", nameRu:["роборок с8 про ультра", "roborock s8 pro ultra", "робот пылесос", "пылесос"], marketplace:"Kaspi", seller:"Roborock Store", price:485000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"Roborock S8 Pro Ultra", nameRu:["роборок с8 про ультра", "roborock s8 pro ultra", "робот пылесос", "пылесос"], marketplace:"Ozon", seller:"Ozon", price:465000, delivery:4000, term:"5 дней", url:"https://ozon.kz" },
+
+  { name:"Xiaomi Robot Vacuum X20+", nameRu:["сяоми робот вакуум икс20 плюс", "xiaomi robot vacuum x20 plus", "робот пылесос", "пылесос"], marketplace:"Kaspi", seller:"Xiaomi", price:285000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"Xiaomi Robot Vacuum X20+", nameRu:["сяоми робот вакуум икс20 плюс", "xiaomi robot vacuum x20 plus", "робот пылесос", "пылесос"], marketplace:"Ozon", seller:"Ozon", price:268000, delivery:2500, term:"4 дня", url:"https://ozon.kz" },
+
+  { name:"AirPods Pro 2 USB-C", nameRu:["эрподс про 2 юсб си", "airpods pro 2 usb-c", "наушники"], marketplace:"Kaspi", seller:"Apple Official", price:145000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"AirPods Pro 2 USB-C", nameRu:["эрподс про 2 юсб си", "airpods pro 2 usb-c", "наушники"], marketplace:"Wildberries", seller:"WB Audio", price:139000, delivery:1500, term:"3 дня", url:"https://wildberries.kz" },
+  { name:"AirPods Pro 2 USB-C", nameRu:["эрподс про 2 юсб си", "airpods pro 2 usb-c", "наушники"], marketplace:"Ozon", seller:"Ozon", price:142000, delivery:2000, term:"4 дня", url:"https://ozon.kz" },
+
+  { name:"Dyson Supersonic", nameRu:["дайсон суперсоник", "dyson supersonic", "фен"], marketplace:"Kaspi", seller:"Dyson Store", price:285000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"Dyson Supersonic", nameRu:["дайсон суперсоник", "dyson supersonic", "фен"], marketplace:"Ozon", seller:"Ozon", price:268000, delivery:2500, term:"4 дня", url:"https://ozon.kz" },
+  { name:"Dyson Supersonic", nameRu:["дайсон суперсоник", "dyson supersonic", "фен"], marketplace:"Technodom", seller:"Technodom", price:295000, delivery:0, term:"Самовывоз", url:"https://technodom.kz" },
+];
+
+function normalize(text) {
+  return text.toLowerCase()
+    .replace(/ё/g, "е")
+    .replace(/[ъь]/g, "")
+    .trim();
 }
 
-function toggleSidebar() {
-  const sidebar = document.getElementById('userSidebar');
-  sidebar.classList.toggle('active');
-  
-  const user = auth.currentUser;
-  if (user && sidebar.classList.contains('active')) {
-    document.getElementById('sidebarEmail').textContent = user.email;
-  }
+function setSearch(text) {
+  document.getElementById('productInput').value = text;
 }
 
-// Переопределяем searchProducts для сохранения истории
-function searchWithSave() {
-  const query = document.getElementById('productInput').value;
-  searchProducts();
-  saveSearch(query);
-}
-
-// Добавляем кнопку избранного в таблицу
-const originalSearch = searchProducts;
-searchProducts = function() {
-  const query = document.getElementById("productInput").value.trim().toLowerCase();
+function searchProducts() {
+  const rawQuery = document.getElementById("productInput").value.trim();
+  const query = normalize(rawQuery);
   const tbody = document.getElementById("results");
   tbody.innerHTML = "";
 
@@ -329,8 +603,10 @@ searchProducts = function() {
   });
 
   if (filtered.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:20px;color:#64748b;">
-      Ничего не найдено по запросу "${query}"
+    tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:40px;color:#64748b;">
+      <div style="font-size: 48px; margin-bottom: 16px;">🔍</div>
+      Ничего не найдено по запросу "${rawQuery}"<br>
+      <small style="color: #94a3b8;">Попробуйте: айфон, самсунг, макбук, пс5, робот пылесос</small>
     </td></tr>`;
     return;
   }
@@ -346,32 +622,42 @@ searchProducts = function() {
 
     tbody.innerHTML += `
       <tr style="${rowStyle}">
-        <td style="padding: 16px; color: #e2e8f0; border-bottom: 1px solid rgba(99, 102, 241, 0.1);">
+        <td style="padding: 16px; color: #e2e8f0; border-bottom: 1px solid rgba(99, 102, 241, 0.1); font-weight: 600;">
           ${isBestPrice ? '👑 ' : ''}${p.name}
         </td>
         <td style="padding: 16px; color: #94a3b8; border-bottom: 1px solid rgba(99, 102, 241, 0.1);">${p.marketplace}</td>
         <td style="padding: 16px; color: #94a3b8; border-bottom: 1px solid rgba(99, 102, 241, 0.1);">${p.seller}</td>
-        <td style="padding: 16px; color: #e2e8f0; border-bottom: 1px solid rgba(99, 102, 241, 0.1);">${p.price.toLocaleString()} ₸</td>
+        <td style="padding: 16px; color: #e2e8f0; border-bottom: 1px solid rgba(99, 102, 241, 0.1); font-weight: 600;">${p.price.toLocaleString()} ₸</td>
         <td style="padding: 16px; color: #94a3b8; border-bottom: 1px solid rgba(99, 102, 241, 0.1);">${p.delivery === 0 ? 'Бесплатно' : p.delivery.toLocaleString() + ' ₸'}</td>
         <td style="padding: 16px; color: #94a3b8; border-bottom: 1px solid rgba(99, 102, 241, 0.1);">${p.term}</td>
-        <td style="padding: 16px; ${priceStyle}; border-bottom: 1px solid rgba(99, 102, 241, 0.1);">
+        <td style="padding: 16px; ${priceStyle}; border-bottom: 1px solid rgba(99, 102, 241, 0.1); font-size: 16px;">
           ${total.toLocaleString()} ₸
-          ${isBestPrice ? '<span style="background: #10b981; color: white; padding: 2px 8px; border-radius: 10px; font-size: 10px; margin-left: 5px;">ЛУЧШАЯ</span>' : ''}
+          ${isBestPrice ? '<span style="background: #10b981; color: white; padding: 4px 10px; border-radius: 12px; font-size: 10px; font-weight: 700; text-transform: uppercase; margin-left: 8px; display: inline-block;">ЛУЧШАЯ ЦЕНА</span>' : ''}
         </td>
         <td style="padding: 16px; border-bottom: 1px solid rgba(99, 102, 241, 0.1);">
           <div class="action-btns">
-            <button class="fav-btn" onclick='addToFavorites(${JSON.stringify(p).replace(/'/g, "&apos;")})'>♥</button>
+            <button class="fav-btn" onclick="toggleFavorite('${p.name}', '${p.marketplace}')" title="В избранное">♥</button>
             <a href="${p.url}" target="_blank" class="buy-btn">Купить →</a>
           </div>
         </td>
       </tr>
     `;
   });
-};
-
-function setSearch(text) {
-  document.getElementById('productInput').value = text;
 }
+
+function toggleFavorite(name, marketplace) {
+  alert('Функция избранного требует авторизации');
+}
+
+// Поиск по нажатию Enter
+document.addEventListener('DOMContentLoaded', () => {
+  const input = document.getElementById("productInput");
+  if (input) {
+    input.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') searchProducts();
+    });
+  }
+});
 </script>
 
 </body>
