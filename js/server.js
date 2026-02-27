@@ -9,17 +9,29 @@ const wildberriesParser = require('./parsers/wildberries');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middleware
-app.use(cors());
+// CORS - разрешаем все источники
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
+  credentials: true
+}));
+
 app.use(express.json());
 
-// Логирование запросов
+// Дополнительные заголовки для всех ответов
 app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(200);
+  }
+  
   console.log(`${new Date().toLocaleTimeString()} ${req.method} ${req.url}`);
   next();
 });
-
-// ======== API МАРШРУТЫ ========
 
 // Главная страница API
 app.get('/', (req, res) => {
@@ -36,7 +48,7 @@ app.get('/', (req, res) => {
   });
 });
 
-// Универсальный поиск по всем выбранным магазинам
+// Универсальный поиск
 app.get('/api/search', async (req, res) => {
   const { query, markets = 'kaspi,ozon,wildberries' } = req.query;
   
@@ -52,10 +64,8 @@ app.get('/api/search', async (req, res) => {
   const errors = [];
 
   console.log(`\n🔍 ПОИСК: "${query}" в [${marketList.join(', ')}]`);
-
   const startTime = Date.now();
 
-  // Параллельный парсинг всех магазинов
   const promises = marketList.map(async (market) => {
     try {
       let products = [];
@@ -75,7 +85,6 @@ app.get('/api/search', async (req, res) => {
           throw new Error(`Неизвестный магазин: ${market}`);
       }
       
-      // Добавляем marketplace к каждому товару
       const withMeta = products.map(p => ({
         ...p,
         marketplace: market === 'wb' ? 'wildberries' : market,
@@ -94,7 +103,6 @@ app.get('/api/search', async (req, res) => {
 
   await Promise.all(promises);
 
-  // Сортировка по итоговой цене
   results.sort((a, b) => {
     const totalA = (a.price || 0) + (a.delivery || 0);
     const totalB = (b.price || 0) + (b.delivery || 0);
@@ -116,61 +124,38 @@ app.get('/api/search', async (req, res) => {
   });
 });
 
-// Отдельный парсер Kaspi
+// Отдельные эндпоинты
 app.get('/api/parse/kaspi', async (req, res) => {
   try {
     const { query } = req.query;
-    if (!query) {
-      return res.status(400).json({ success: false, error: 'Укажите параметр query' });
-    }
+    if (!query) return res.status(400).json({ success: false, error: 'Укажите query' });
     
     const products = await kaspiParser.search(query);
-    res.json({ 
-      success: true, 
-      marketplace: 'kaspi', 
-      count: products.length, 
-      results: products 
-    });
+    res.json({ success: true, marketplace: 'kaspi', count: products.length, results: products });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }
 });
 
-// Отдельный парсер Ozon
 app.get('/api/parse/ozon', async (req, res) => {
   try {
     const { query } = req.query;
-    if (!query) {
-      return res.status(400).json({ success: false, error: 'Укажите параметр query' });
-    }
+    if (!query) return res.status(400).json({ success: false, error: 'Укажите query' });
     
     const products = await ozonParser.search(query);
-    res.json({ 
-      success: true, 
-      marketplace: 'ozon', 
-      count: products.length, 
-      results: products 
-    });
+    res.json({ success: true, marketplace: 'ozon', count: products.length, results: products });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }
 });
 
-// Отдельный парсер Wildberries
 app.get('/api/parse/wildberries', async (req, res) => {
   try {
     const { query } = req.query;
-    if (!query) {
-      return res.status(400).json({ success: false, error: 'Укажите параметр query' });
-    }
+    if (!query) return res.status(400).json({ success: false, error: 'Укажите query' });
     
     const products = await wildberriesParser.search(query);
-    res.json({ 
-      success: true, 
-      marketplace: 'wildberries', 
-      count: products.length, 
-      results: products 
-    });
+    res.json({ success: true, marketplace: 'wildberries', count: products.length, results: products });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }
@@ -179,29 +164,19 @@ app.get('/api/parse/wildberries', async (req, res) => {
 // Статические файлы фронтенда
 app.use(express.static(path.join(__dirname, '../frontend')));
 
-// 404 обработчик
+// 404
 app.use((req, res) => {
   res.status(404).json({ error: 'Not found', path: req.url });
 });
 
-// Запуск сервера
 app.listen(PORT, () => {
   console.log(`
 ╔════════════════════════════════════════════════╗
 ║                                                ║
 ║     🚀 PriceCompare KZ API v1.0.0               ║
 ║                                                ║
-║     Сервер запущен: http://localhost:${PORT}      ║
+║     Сервер: http://localhost:${PORT}              ║
 ║                                                ║
 ╚════════════════════════════════════════════════╝
-
-API Endpoints:
-• GET /api/search?query=iphone&markets=kaspi,ozon,wildberries
-• GET /api/parse/kaspi?query=iphone
-• GET /api/parse/ozon?query=iphone  
-• GET /api/parse/wildberries?query=iphone
-
-Пример запроса:
-curl "http://localhost:${PORT}/api/search?query=iphone%2015&markets=kaspi,ozon,wildberries"
 `);
 });
