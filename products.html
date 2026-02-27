@@ -2,44 +2,505 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>Сравнение цен — PriceCompare KZ</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Сравнение товаров — PriceCompare KZ</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    /* ... (стили остаются теми же) ... */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     
+    :root {
+      --primary: #6366f1;
+      --primary-dark: #4f46e5;
+      --secondary: #ec4899;
+      --accent: #06b6d4;
+      --dark: #0f172a;
+      --light: #f8fafc;
+      --gray: #64748b;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --glass: rgba(15, 23, 42, 0.85);
+      --shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #1e1b4b 100%);
+      background-attachment: fixed;
+      color: #e2e8f0;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: 
+        radial-gradient(circle at 20% 80%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(236, 72, 153, 0.15) 0%, transparent 50%);
+      z-index: -1;
+      animation: pulse 15s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.5; transform: scale(1); }
+      50% { opacity: 0.8; transform: scale(1.1); }
+    }
+
+    .header {
+      background: rgba(15, 23, 42, 0.95);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(99, 102, 241, 0.2);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-inner {
+      max-width: 1200px;
+      margin: auto;
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 28px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #818cf8 0%, #c084fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      position: relative;
+    }
+
+    .logo::after {
+      content: '⚡';
+      position: absolute;
+      right: -30px;
+      top: -5px;
+      font-size: 20px;
+      animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .nav-section {
+      display: flex;
+      align-items: center;
+      gap: 30px;
+    }
+
+    nav {
+      display: flex;
+      gap: 10px;
+    }
+
+    nav a {
+      padding: 10px 20px;
+      border-radius: 12px;
+      font-weight: 600;
+      color: #94a3b8;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    nav a::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      opacity: 0;
+      transition: opacity 0.3s;
+      z-index: -1;
+      border-radius: 12px;
+    }
+
+    nav a:hover::before {
+      opacity: 1;
+    }
+
+    nav a:hover {
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    .auth-btn {
+      background: linear-gradient(135deg, #6366f1, #4f46e5);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+
+    .auth-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: auto;
+      padding: 40px 20px;
+    }
+
+    h2 {
+      font-size: 36px;
+      font-weight: 800;
+      color: white;
+      margin-bottom: 40px;
+      text-align: center;
+      position: relative;
+      display: inline-block;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    h2::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      border-radius: 2px;
+    }
+
+    .search-section {
+      background: var(--glass);
+      backdrop-filter: blur(20px);
+      padding: 40px;
+      border-radius: 24px;
+      border: 1px solid rgba(99, 102, 241, 0.2);
+      margin-bottom: 40px;
+    }
+
+    .input-wrapper {
+      position: relative;
+      margin-bottom: 20px;
+    }
+
+    .input-wrapper input {
+      width: 100%;
+      padding: 20px 24px;
+      font-size: 18px;
+      border: 2px solid rgba(99, 102, 241, 0.3);
+      border-radius: 16px;
+      background: rgba(30, 41, 59, 0.8);
+      color: white;
+      transition: all 0.3s ease;
+    }
+
+    .input-wrapper input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 30px rgba(99, 102, 241, 0.2);
+    }
+
+    .input-wrapper input::placeholder {
+      color: #64748b;
+    }
+
+    .search-hints {
+      margin-bottom: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .search-hints strong {
+      color: #94a3b8;
+      font-size: 14px;
+    }
+
+    .hint-tag {
+      background: rgba(99, 102, 241, 0.2);
+      color: #818cf8;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(99, 102, 241, 0.3);
+    }
+
+    .hint-tag:hover {
+      background: rgba(99, 102, 241, 0.4);
+      transform: translateY(-2px);
+    }
+
+    .filters {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .filters label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(30, 41, 59, 0.8);
+      padding: 12px 16px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(99, 102, 241, 0.2);
+      color: #e2e8f0;
+      font-size: 14px;
+    }
+
+    .filters label:hover {
+      border-color: rgba(99, 102, 241, 0.4);
+    }
+
+    .filters input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--primary);
+      cursor: pointer;
+    }
+
+    .search-btn {
+      width: 100%;
+      padding: 18px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .search-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
+    }
+
+    .search-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
     .loading {
       text-align: center;
-      padding: 40px;
+      padding: 60px 20px;
       color: #94a3b8;
     }
-    
+
     .spinner {
-      width: 40px;
-      height: 40px;
-      border: 3px solid rgba(99, 102, 241, 0.3);
+      width: 50px;
+      height: 50px;
+      border: 4px solid rgba(99, 102, 241, 0.3);
       border-top-color: var(--primary);
       border-radius: 50%;
       animation: spin 1s linear infinite;
       margin: 0 auto 20px;
     }
-    
+
     @keyframes spin {
       to { transform: rotate(360deg); }
     }
-    
+
+    .results-container {
+      background: var(--glass);
+      backdrop-filter: blur(20px);
+      border-radius: 24px;
+      border: 1px solid rgba(99, 102, 241, 0.2);
+      overflow: hidden;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 900px;
+    }
+
+    thead {
+      background: rgba(30, 41, 59, 0.8);
+    }
+
+    th {
+      padding: 20px;
+      text-align: left;
+      color: #94a3b8;
+      font-weight: 600;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    td {
+      padding: 16px 20px;
+      border-bottom: 1px solid rgba(99, 102, 241, 0.1);
+      color: #e2e8f0;
+    }
+
+    tr:hover {
+      background: rgba(99, 102, 241, 0.05);
+    }
+
+    .product-name {
+      font-weight: 600;
+      color: #e2e8f0;
+    }
+
+    .market-badge {
+      display: inline-block;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .market-kaspi { background: #f97316; color: white; }
+    .market-ozon { background: #3b82f6; color: white; }
+    .market-wildberries { background: #a855f7; color: white; }
+
+    .price {
+      font-weight: 700;
+      font-size: 16px;
+    }
+
+    .best-price {
+      color: #10b981;
+      font-weight: 800;
+      font-size: 18px;
+    }
+
+    .best-badge {
+      display: inline-block;
+      background: #10b981;
+      color: white;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-left: 8px;
+    }
+
+    .buy-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: linear-gradient(135deg, var(--success), #059669);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 14px;
+      transition: all 0.3s ease;
+      border: none;
+      cursor: pointer;
+    }
+
+    .buy-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+    }
+
     .error-message {
       background: rgba(239, 68, 68, 0.1);
       border: 1px solid #ef4444;
       color: #fca5a5;
-      padding: 20px;
+      padding: 30px;
+      border-radius: 16px;
+      text-align: center;
+      margin: 20px;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: #64748b;
+    }
+
+    .empty-state-icon {
+      font-size: 64px;
+      margin-bottom: 20px;
+    }
+
+    .stats {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .stat {
+      background: rgba(30, 41, 59, 0.8);
+      padding: 12px 24px;
       border-radius: 12px;
       text-align: center;
+    }
+
+    .stat-value {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: #94a3b8;
+      text-transform: uppercase;
+    }
+
+    .footer {
+      background: rgba(15, 23, 42, 0.95);
+      backdrop-filter: blur(20px);
+      border-top: 1px solid rgba(99, 102, 241, 0.2);
+      padding: 40px 20px;
+      text-align: center;
+      color: #64748b;
+      margin-top: 80px;
+    }
+
+    ::-webkit-scrollbar {
+      width: 10px;
+      height: 10px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: rgba(15, 23, 42, 0.5);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      border-radius: 5px;
+    }
+
+    @media (max-width: 768px) {
+      .header-inner { flex-direction: column; gap: 20px; }
+      .nav-section { flex-direction: column; gap: 20px; }
+      nav { flex-wrap: wrap; justify-content: center; }
+      .search-section { padding: 20px; }
+      .filters { justify-content: center; }
+      h2 { font-size: 28px; }
     }
   </style>
 </head>
 <body>
 
-<!-- HEADER -->
 <div class="header">
   <div class="header-inner">
     <div class="logo">PriceCompare KZ</div>
@@ -49,7 +510,7 @@
         <a href="products.html">Сравнение</a>
         <a href="contacts.html">Контакты</a>
       </nav>
-      <button class="auth-btn" onclick="openAuthModal()">Войти</button>
+      <button class="auth-btn" onclick="alert('Авторизация в разработке')">Войти</button>
     </div>
   </div>
 </div>
@@ -59,40 +520,58 @@
   
   <div class="search-section">
     <div class="input-wrapper">
-      <input type="text" id="productInput" placeholder="Что ищем? (например: iPhone 15 Pro)" autocomplete="off">
+      <input type="text" id="productInput" placeholder="Что ищем? (например: iPhone 15 Pro, Samsung Galaxy, MacBook...)" autocomplete="off">
     </div>
 
     <div class="search-hints">
-      <strong>Быстрый поиск:</strong>
+      <strong>Популярные запросы:</strong>
       <span class="hint-tag" onclick="setSearch('iPhone 15 Pro')">📱 iPhone</span>
       <span class="hint-tag" onclick="setSearch('Samsung Galaxy S24')">📱 Samsung</span>
+      <span class="hint-tag" onclick="setSearch('Xiaomi 14')">📱 Xiaomi</span>
       <span class="hint-tag" onclick="setSearch('MacBook Air')">💻 MacBook</span>
       <span class="hint-tag" onclick="setSearch('PlayStation 5')">🎮 PS5</span>
+      <span class="hint-tag" onclick="setSearch('AirPods Pro')">🎧 AirPods</span>
     </div>
 
     <div class="filters">
       <label><input type="checkbox" class="marketplace" value="kaspi" checked> 🟠 Kaspi</label>
       <label><input type="checkbox" class="marketplace" value="ozon" checked> 🔵 Ozon</label>
       <label><input type="checkbox" class="marketplace" value="wildberries" checked> 🟣 Wildberries</label>
-      <label><input type="checkbox" class="marketplace" value="technodom" checked> 🟡 Technodom</label>
     </div>
 
-    <button class="search-btn" onclick="searchRealProducts()" id="searchBtn">
+    <button class="search-btn" onclick="searchProducts()" id="searchBtn">
       🔍 Найти лучшие цены
     </button>
   </div>
 
-  <div class="results-container" id="resultsContainer">
-    <div id="loadingState" class="loading" style="display: none;">
-      <div class="spinner"></div>
-      <p>Собираем цены с магазинов...</p>
+  <div id="statsContainer" class="stats" style="display: none;">
+    <div class="stat">
+      <div class="stat-value" id="statTotal">0</div>
+      <div class="stat-label">Товаров найдено</div>
     </div>
-    
-    <table id="resultsTable" style="display: none;">
+    <div class="stat">
+      <div class="stat-value" id="statTime">0s</div>
+      <div class="stat-label">Время поиска</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value" id="statMarkets">0</div>
+      <div class="stat-label">Магазинов</div>
+    </div>
+  </div>
+
+  <div id="loadingState" class="loading" style="display: none;">
+    <div class="spinner"></div>
+    <p>Собираем цены с магазинов...</p>
+    <p style="font-size: 14px; margin-top: 10px;">Это может занять 10-30 секунд</p>
+  </div>
+
+  <div id="resultsContainer" class="results-container" style="display: none;">
+    <table>
       <thead>
         <tr>
           <th>Товар</th>
           <th>Магазин</th>
+          <th>Продавец</th>
           <th>Цена</th>
           <th>Доставка</th>
           <th>Итого</th>
@@ -101,9 +580,9 @@
       </thead>
       <tbody id="results"></tbody>
     </table>
-    
-    <div id="errorState" style="display: none;"></div>
   </div>
+
+  <div id="errorState" style="display: none;"></div>
 </div>
 
 <div class="footer">
@@ -111,30 +590,28 @@
 </div>
 
 <script>
-const API_URL = 'http://localhost:3000/api'; // URL вашего бэкенда
+// URL вашего бэкенда
+const API_URL = 'http://localhost:3000/api';
 
 function setSearch(text) {
   document.getElementById('productInput').value = text;
+  document.getElementById('productInput').focus();
 }
 
-function openAuthModal() {
-  alert('Модальное окно авторизации');
-}
-
-async function searchRealProducts() {
+async function searchProducts() {
   const query = document.getElementById('productInput').value.trim();
   const btn = document.getElementById('searchBtn');
   const loading = document.getElementById('loadingState');
-  const table = document.getElementById('resultsTable');
-  const tbody = document.getElementById('results');
+  const resultsContainer = document.getElementById('resultsContainer');
+  const resultsTable = document.getElementById('results');
   const errorState = document.getElementById('errorState');
+  const statsContainer = document.getElementById('statsContainer');
   
-  if (!query) {
-    alert('Введите название товара');
+  if (!query || query.length < 2) {
+    alert('Введите минимум 2 символа для поиска');
     return;
   }
   
-  // Получаем выбранные магазины
   const selectedMarkets = Array.from(
     document.querySelectorAll('.marketplace:checked')
   ).map(el => el.value);
@@ -148,36 +625,54 @@ async function searchRealProducts() {
   btn.disabled = true;
   btn.innerHTML = '⏳ Поиск...';
   loading.style.display = 'block';
-  table.style.display = 'none';
+  resultsContainer.style.display = 'none';
+  statsContainer.style.display = 'none';
   errorState.style.display = 'none';
-  tbody.innerHTML = '';
+  resultsTable.innerHTML = '';
+  
+  const startTime = performance.now();
   
   try {
-    // Параллельный запрос к нескольким парсерам
-    const promises = selectedMarkets.map(market => 
-      fetch(`${API_URL}/parse/${market}?query=${encodeURIComponent(query)}`)
-        .then(r => r.json())
-        .then(data => data.products.map(p => ({ ...p, marketplace: market })))
-        .catch(() => []) // Если один упал, продолжаем
+    const marketsParam = selectedMarkets.join(',');
+    const response = await fetch(
+      `${API_URL}/search?query=${encodeURIComponent(query)}&markets=${marketsParam}`,
+      {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json'
+        }
+      }
     );
     
-    const resultsArrays = await Promise.all(promises);
-    const allProducts = resultsArrays.flat();
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+    }
     
-    // Сортировка по цене
-    allProducts.sort((a, b) => {
-      const totalA = (a.price || 0) + (a.delivery || 0);
-      const totalB = (b.price || 0) + (b.delivery || 0);
-      return totalA - totalB;
-    });
+    const data = await response.json();
+    const duration = ((performance.now() - startTime) / 1000).toFixed(1);
     
     loading.style.display = 'none';
     
-    if (allProducts.length === 0) {
+    if (!data.success) {
+      throw new Error(data.error || 'Неизвестная ошибка');
+    }
+    
+    // Обновляем статистику
+    document.getElementById('statTotal').textContent = data.total || 0;
+    document.getElementById('statTime').textContent = data.duration || `${duration}s`;
+    document.getElementById('statMarkets').textContent = (data.markets || []).length;
+    statsContainer.style.display = 'flex';
+    
+    if (!data.results || data.results.length === 0) {
       errorState.innerHTML = `
-        <div class="error-message">
-          <p>😕 Ничего не найдено</p>
+        <div class="empty-state">
+          <div class="empty-state-icon">🔍</div>
+          <h3>Ничего не найдено</h3>
           <p>Попробуйте изменить запрос или выбрать другие магазины</p>
+          <p style="margin-top: 10px; font-size: 14px;">
+            Подсказка: используйте простые запросы на русском или английском<br>
+            Например: "iphone", "samsung", "macbook", "playstation"
+          </p>
         </div>
       `;
       errorState.style.display = 'block';
@@ -185,73 +680,100 @@ async function searchRealProducts() {
     }
     
     // Рендер результатов
-    allProducts.forEach((p, index) => {
+    data.results.forEach((p, index) => {
       const isBest = index === 0;
       const total = (p.price || 0) + (p.delivery || 0);
+      const marketClass = `market-${p.marketplace}`;
+      const marketName = {
+        kaspi: 'Kaspi',
+        ozon: 'Ozon',
+        wildberries: 'WB'
+      }[p.marketplace] || p.marketplace;
       
       const rowStyle = isBest 
-        ? 'background: linear-gradient(90deg, rgba(16, 185, 129, 0.15), transparent); border-left: 3px solid #10b981;' 
+        ? 'background: linear-gradient(90deg, rgba(16, 185, 129, 0.15), transparent); border-left: 4px solid #10b981;' 
         : '';
       
-      tbody.innerHTML += `
+      const priceClass = isBest ? 'best-price' : 'price';
+      
+      resultsTable.innerHTML += `
         <tr style="${rowStyle}">
-          <td style="padding: 16px; font-weight: 600;">
-            ${isBest ? '👑 ' : ''}${p.name}
+          <td>
+            <div class="product-name">
+              ${isBest ? '👑 ' : ''}${escapeHtml(p.name)}
+            </div>
           </td>
-          <td style="padding: 16px; text-transform: uppercase; font-size: 12px; font-weight: 700;">
-            <span style="background: ${getMarketColor(p.marketplace)}; color: white; padding: 4px 12px; border-radius: 20px;">
-              ${p.marketplace}
-            </span>
+          <td>
+            <span class="market-badge ${marketClass}">${marketName}</span>
           </td>
-          <td style="padding: 16px; font-weight: 600;">
-            ${p.price ? p.price.toLocaleString() + ' ₸' : '—'}
+          <td style="color: #94a3b8;">
+            ${escapeHtml(p.seller || '—')}
           </td>
-          <td style="padding: 16px; color: #94a3b8;">
-            ${p.delivery ? p.delivery.toLocaleString() + ' ₸' : 'Бесплатно'}
+          <td class="${priceClass}">
+            ${p.price ? p.price.toLocaleString('ru-RU') + ' ₸' : '—'}
           </td>
-          <td style="padding: 16px; ${isBest ? 'color: #10b981; font-weight: 800; font-size: 18px;' : ''}">
-            ${total ? total.toLocaleString() + ' ₸' : '—'}
-            ${isBest ? '<span style="background: #10b981; color: white; padding: 4px 10px; border-radius: 12px; font-size: 10px; margin-left: 8px;">ЛУЧШАЯ ЦЕНА</span>' : ''}
+          <td style="color: #94a3b8;">
+            ${p.delivery === 0 ? 'Бесплатно' : p.delivery ? p.delivery.toLocaleString('ru-RU') + ' ₸' : '—'}
           </td>
-          <td style="padding: 16px;">
-            <a href="${p.link}" target="_blank" class="buy-btn">Перейти →</a>
+          <td class="${priceClass}">
+            ${total ? total.toLocaleString('ru-RU') + ' ₸' : '—'}
+            ${isBest ? '<span class="best-badge">ЛУЧШАЯ ЦЕНА</span>' : ''}
+          </td>
+          <td>
+            <a href="${escapeHtml(p.link || '#')}" target="_blank" class="buy-btn" ${!p.link ? 'style="opacity:0.5;pointer-events:none;"' : ''}>
+              Перейти →
+            </a>
           </td>
         </tr>
       `;
     });
     
-    table.style.display = 'table';
+    resultsContainer.style.display = 'block';
+    
+    // Показываем ошибки парсинга если были
+    if (data.errors && data.errors.length > 0) {
+      console.warn('Ошибки парсинга:', data.errors);
+    }
     
   } catch (error) {
     loading.style.display = 'none';
+    statsContainer.style.display = 'none';
+    
     errorState.innerHTML = `
       <div class="error-message">
-        <p>⚠️ Ошибка соединения с сервером</p>
-        <p>${error.message}</p>
+        <h3>⚠️ Ошибка соединения</h3>
+        <p>${escapeHtml(error.message)}</p>
+        <p style="margin-top: 15px; font-size: 14px;">
+          Проверьте:<br>
+          1. Запущен ли бэкенд сервер (node server.js)<br>
+          2. Правильный ли URL API (${API_URL})<br>
+          3. Нет ли блокировки CORS
+        </p>
       </div>
     `;
     errorState.style.display = 'block';
+    
   } finally {
     btn.disabled = false;
     btn.innerHTML = '🔍 Найти лучшие цены';
   }
 }
 
-function getMarketColor(market) {
-  const colors = {
-    kaspi: '#f97316',
-    ozon: '#3b82f6',
-    wildberries: '#a855f7',
-    technodom: '#eab308'
-  };
-  return colors[market] || '#6366f1';
+function escapeHtml(text) {
+  if (!text) return '';
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
 }
 
 // Поиск по Enter
 document.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('productInput').addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') searchRealProducts();
-  });
+  const input = document.getElementById('productInput');
+  if (input) {
+    input.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') searchProducts();
+    });
+  }
 });
 </script>
 
