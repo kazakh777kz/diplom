@@ -35,7 +35,6 @@ class KaspiParser {
         timeout: 30000 
       });
 
-      // Ждем загрузки
       await this.waitForProducts(page);
 
       const products = await this.extractProducts(page);
