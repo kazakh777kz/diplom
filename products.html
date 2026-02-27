@@ -621,7 +621,6 @@ async function searchProducts() {
     return;
   }
   
-  // UI: начало загрузки
   btn.disabled = true;
   btn.innerHTML = '⏳ Поиск...';
   loading.style.display = 'block';
@@ -634,18 +633,23 @@ async function searchProducts() {
   
   try {
     const marketsParam = selectedMarkets.join(',');
-    const response = await fetch(
-      `${API_URL}/search?query=${encodeURIComponent(query)}&markets=${marketsParam}`,
-      {
-        method: 'GET',
-        headers: {
-          'Accept': 'application/json'
-        }
-      }
-    );
+    const url = `${API_URL}/search?query=${encodeURIComponent(query)}&markets=${marketsParam}`;
+    
+    console.log('Запрос:', url);
+    
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json'
+      },
+      mode: 'cors'
+    });
+    
+    console.log('Статус ответа:', response.status);
     
     if (!response.ok) {
-      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      const errorText = await response.text();
+      throw new Error(`HTTP ${response.status}: ${errorText || response.statusText}`);
     }
     
     const data = await response.json();
@@ -654,10 +658,9 @@ async function searchProducts() {
     loading.style.display = 'none';
     
     if (!data.success) {
-      throw new Error(data.error || 'Неизвестная ошибка');
+      throw new Error(data.error || 'Ошибка сервера');
     }
     
-    // Обновляем статистику
     document.getElementById('statTotal').textContent = data.total || 0;
     document.getElementById('statTime').textContent = data.duration || `${duration}s`;
     document.getElementById('statMarkets').textContent = (data.markets || []).length;
@@ -668,18 +671,13 @@ async function searchProducts() {
         <div class="empty-state">
           <div class="empty-state-icon">🔍</div>
           <h3>Ничего не найдено</h3>
-          <p>Попробуйте изменить запрос или выбрать другие магазины</p>
-          <p style="margin-top: 10px; font-size: 14px;">
-            Подсказка: используйте простые запросы на русском или английском<br>
-            Например: "iphone", "samsung", "macbook", "playstation"
-          </p>
+          <p>Попробуйте другой запрос</p>
         </div>
       `;
       errorState.style.display = 'block';
       return;
     }
     
-    // Рендер результатов
     data.results.forEach((p, index) => {
       const isBest = index === 0;
       const total = (p.price || 0) + (p.delivery || 0);
@@ -730,25 +728,26 @@ async function searchProducts() {
     
     resultsContainer.style.display = 'block';
     
-    // Показываем ошибки парсинга если были
-    if (data.errors && data.errors.length > 0) {
-      console.warn('Ошибки парсинга:', data.errors);
-    }
-    
   } catch (error) {
+    console.error('Ошибка:', error);
+    
     loading.style.display = 'none';
     statsContainer.style.display = 'none';
     
+    let message = error.message;
+    if (error.message.includes('Failed to fetch')) {
+      message = `
+        Не удалось подключиться к серверу.<br><br>
+        <b>Проверьте:</b><br>
+        1. Запущен ли сервер: <code>node server.js</code><br>
+        2. Правильный ли порт: <code>http://localhost:3000</code>
+      `;
+    }
+    
     errorState.innerHTML = `
       <div class="error-message">
-        <h3>⚠️ Ошибка соединения</h3>
-        <p>${escapeHtml(error.message)}</p>
-        <p style="margin-top: 15px; font-size: 14px;">
-          Проверьте:<br>
-          1. Запущен ли бэкенд сервер (node server.js)<br>
-          2. Правильный ли URL API (${API_URL})<br>
-          3. Нет ли блокировки CORS
-        </p>
+        <h3>⚠️ Ошибка</h3>
+        <p>${message}</p>
       </div>
     `;
     errorState.style.display = 'block';
@@ -766,7 +765,6 @@ function escapeHtml(text) {
   return div.innerHTML;
 }
 
-// Поиск по Enter
 document.addEventListener('DOMContentLoaded', () => {
   const input = document.getElementById('productInput');
   if (input) {
