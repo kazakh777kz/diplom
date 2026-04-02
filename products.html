@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Сравнение товаров — PriceCompare KZ</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300 ;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     * {
       box-sizing: border-box;
@@ -138,7 +138,6 @@
       transform: translateY(-2px);
     }
 
-    /* КНОПКА ВОЙТИ В ХЕДЕРЕ */
     .auth-btn {
       background: linear-gradient(135deg, #6366f1, #4f46e5);
       color: white;
@@ -156,7 +155,6 @@
       box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
     }
 
-    /* CONTAINER */
     .container {
       max-width: 1200px;
       margin: auto;
@@ -187,7 +185,6 @@
       border-radius: 2px;
     }
 
-    /* SEARCH SECTION */
     .search-section {
       background: var(--glass);
       backdrop-filter: blur(20px);
@@ -308,7 +305,34 @@
       box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
     }
 
-    /* RESULTS TABLE */
+    .category-filters {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+      padding: 15px;
+      background: rgba(30, 41, 59, 0.6);
+      border-radius: 12px;
+    }
+
+    .category-btn {
+      background: rgba(99, 102, 241, 0.2);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      color: #818cf8;
+      padding: 10px 20px;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .category-btn:hover, .category-btn.active {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      border-color: transparent;
+    }
+
     .results-container {
       background: var(--glass);
       backdrop-filter: blur(20px);
@@ -394,7 +418,6 @@
       color: white;
     }
 
-    /* FOOTER */
     .footer {
       background: rgba(15, 23, 42, 0.95);
       backdrop-filter: blur(20px);
@@ -405,7 +428,6 @@
       margin-top: 80px;
     }
 
-    /* SCROLLBAR */
     ::-webkit-scrollbar {
       width: 10px;
       height: 10px;
@@ -420,7 +442,6 @@
       border-radius: 5px;
     }
 
-    /* RESPONSIVE */
     @media (max-width: 768px) {
       .header-inner {
         flex-direction: column;
@@ -441,7 +462,7 @@
         padding: 20px;
       }
 
-      .filters {
+      .filters, .category-filters {
         justify-content: center;
       }
 
@@ -453,7 +474,6 @@
 </head>
 <body>
 
-<!-- HEADER с кнопкой Войти -->
 <div class="header">
   <div class="header-inner">
     <div class="logo">PriceCompare KZ</div>
@@ -465,7 +485,6 @@
         <a href="contacts.html">Контакты</a>
       </nav>
       
-      <!-- КНОПКА ВОЙТИ В ГЛАВНОМ МЕНЮ -->
       <button class="auth-btn" onclick="openAuthModal()">Войти</button>
     </div>
   </div>
@@ -476,17 +495,29 @@
   
   <div class="search-section">
     <div class="input-wrapper">
-      <input type="text" id="productInput" placeholder="Что ищем? (например: айфон, самсунг, макбук...)" autocomplete="off">
+      <input type="text" id="productInput" placeholder="Что ищем? (например: айфон, холодильник, стиральная машина...)" autocomplete="off">
     </div>
 
     <div class="search-hints">
-      <strong>Популярные запросы:</strong>
+      <strong>Быстрый поиск:</strong>
       <span class="hint-tag" onclick="setSearch('айфон')">📱 айфон</span>
       <span class="hint-tag" onclick="setSearch('самсунг')">📱 самсунг</span>
-      <span class="hint-tag" onclick="setSearch('сяоми')">📱 сяоми</span>
-      <span class="hint-tag" onclick="setSearch('макбук')">💻 макбук</span>
-      <span class="hint-tag" onclick="setSearch('пс5')">🎮 пс5</span>
-      <span class="hint-tag" onclick="setSearch('робот пылесос')">🤖 робот пылесос</span>
+      <span class="hint-tag" onclick="setSearch('холодильник')">❄️ холодильник</span>
+      <span class="hint-tag" onclick="setSearch('стиральная машина')">🧺 стиралка</span>
+      <span class="hint-tag" onclick="setSearch('робот пылесос')">🤖 пылесос</span>
+      <span class="hint-tag" onclick="setSearch('кофемашина')">☕ кофемашина</span>
+      <span class="hint-tag" onclick="setSearch('телевизор')">📺 тв</span>
+      <span class="hint-tag" onclick="setSearch('кондиционер')">❄️ кондиционер</span>
+    </div>
+
+    <div class="category-filters">
+      <button class="category-btn active" onclick="filterByCategory('all')">Все</button>
+      <button class="category-btn" onclick="filterByCategory('phone')">📱 Смартфоны</button>
+      <button class="category-btn" onclick="filterByCategory('laptop')">💻 Ноутбуки</button>
+      <button class="category-btn" onclick="filterByCategory('appliance')">🏠 Бытовая техника</button>
+      <button class="category-btn" onclick="filterByCategory('tv')">📺 ТВ</button>
+      <button class="category-btn" onclick="filterByCategory('audio')">🎧 Аудио</button>
+      <button class="category-btn" onclick="filterByCategory('gaming')">🎮 Игры</button>
     </div>
 
     <div class="filters">
@@ -524,64 +555,456 @@
 </div>
 
 <script>
+// ПОЛНАЯ БАЗА ДАННЫХ — все категории
 const productsDB = [
-  { name:"iPhone 15 Pro Max", nameRu:["айфон 15 про макс", "айфон 15 pro max", "айфон"], marketplace:"Kaspi", seller:"Apple Store KZ", price:780000, delivery:0, term:"1 день", url:"https://kaspi.kz " },
-  { name:"iPhone 15 Pro Max", nameRu:["айфон 15 про макс", "айфон 15 pro max", "айфон"], marketplace:"Wildberries", seller:"WB Apple", price:765000, delivery:2500, term:"3 дня", url:"https://wildberries.kz " },
-  { name:"iPhone 15 Pro Max", nameRu:["айфон 15 про макс", "айфон 15 pro max", "айфон"], marketplace:"Ozon", seller:"Ozon Apple", price:770000, delivery:3000, term:"4 дня", url:"https://ozon.kz " },
+  /* ================= SMARTPHONES ================= */
+  { name:"iPhone 15 Pro Max", category:"phone", nameRu:["айфон 15 про макс", "айфон 15 pro max", "айфон"], marketplace:"Kaspi", seller:"Apple Store KZ", price:780000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"iPhone 15 Pro Max", category:"phone", nameRu:["айфон 15 про макс", "айфон 15 pro max", "айфон"], marketplace:"Wildberries", seller:"WB Apple", price:765000, delivery:2500, term:"3 дня", url:"https://wildberries.kz" },
+  { name:"iPhone 15 Pro Max", category:"phone", nameRu:["айфон 15 про макс", "айфон 15 pro max", "айфон"], marketplace:"Ozon", seller:"Ozon Apple", price:770000, delivery:3000, term:"4 дня", url:"https://ozon.kz" },
   
-  { name:"iPhone 15 Pro", nameRu:["айфон 15 про", "айфон 15 pro", "айфон"], marketplace:"Kaspi", seller:"Kaspi Official", price:629000, delivery:0, term:"1 день", url:"https://kaspi.kz " },
-  { name:"iPhone 15 Pro", nameRu:["айфон 15 про", "айфон 15 pro", "айфон"], marketplace:"Wildberries", seller:"WB Store", price:615000, delivery:2000, term:"4 дня", url:"https://wildberries.kz " },
-  { name:"iPhone 15 Pro", nameRu:["айфон 15 про", "айфон 15 pro", "айфон"], marketplace:"Ozon", seller:"Ozon Seller", price:610000, delivery:3000, term:"5 дней", url:"https://ozon.kz " },
-  { name:"iPhone 15 Pro", nameRu:["айфон 15 про", "айфон 15 pro", "айфон"], marketplace:"Technodom", seller:"Technodom", price:635000, delivery:0, term:"Самовывоз", url:"https://technodom.kz " },
+  { name:"iPhone 15 Pro", category:"phone", nameRu:["айфон 15 про", "айфон 15 pro", "айфон"], marketplace:"Kaspi", seller:"Kaspi Official", price:629000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"iPhone 15 Pro", category:"phone", nameRu:["айфон 15 про", "айфон 15 pro", "айфон"], marketplace:"Wildberries", seller:"WB Store", price:615000, delivery:2000, term:"4 дня", url:"https://wildberries.kz" },
+  { name:"iPhone 15 Pro", category:"phone", nameRu:["айфон 15 про", "айфон 15 pro", "айфон"], marketplace:"Ozon", seller:"Ozon Seller", price:610000, delivery:3000, term:"5 дней", url:"https://ozon.kz" },
+  { name:"iPhone 15 Pro", category:"phone", nameRu:["айфон 15 про", "айфон 15 pro", "айфон"], marketplace:"Technodom", seller:"Technodom", price:635000, delivery:0, term:"Самовывоз", url:"https://technodom.kz" },
 
-  { name:"iPhone 15", nameRu:["айфон 15", "айфон"], marketplace:"Kaspi", seller:"Kaspi Store", price:485000, delivery:0, term:"1 день", url:"https://kaspi.kz " },
-  { name:"iPhone 15", nameRu:["айфон 15", "айфон"], marketplace:"Wildberries", seller:"WB Mobile", price:470000, delivery:2000, term:"3 дня", url:"https://wildberries.kz " },
-  { name:"iPhone 15", nameRu:["айфон 15", "айфон"], marketplace:"Ozon", seller:"Ozon Mobile", price:475000, delivery:2500, term:"4 дня", url:"https://ozon.kz " },
+  { name:"iPhone 15", category:"phone", nameRu:["айфон 15", "айфон"], marketplace:"Kaspi", seller:"Kaspi Store", price:485000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"iPhone 15", category:"phone", nameRu:["айфон 15", "айфон"], marketplace:"Wildberries", seller:"WB Mobile", price:470000, delivery:2000, term:"3 дня", url:"https://wildberries.kz" },
+  { name:"iPhone 15", category:"phone", nameRu:["айфон 15", "айфон"], marketplace:"Ozon", seller:"Ozon Mobile", price:475000, delivery:2500, term:"4 дня", url:"https://ozon.kz" },
 
-  { name:"iPhone 14", nameRu:["айфон 14", "айфон"], marketplace:"Kaspi", seller:"Kaspi Store", price:420000, delivery:4000, term:"1-2 дня", url:"https://kaspi.kz " },
-  { name:"iPhone 14", nameRu:["айфон 14", "айфон"], marketplace:"Technodom", seller:"Technodom", price:435000, delivery:0, term:"Самовывоз", url:"https://technodom.kz " },
-  { name:"iPhone 14", nameRu:["айфон 14", "айфон"], marketplace:"Wildberries", seller:"WB Official", price:410000, delivery:1500, term:"3 дня", url:"https://wildberries.kz " },
+  { name:"iPhone 14 Pro Max", category:"phone", nameRu:["айфон 14 про макс", "айфон 14 pro max", "айфон"], marketplace:"Kaspi", seller:"Apple Store", price:720000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"iPhone 14 Pro Max", category:"phone", nameRu:["айфон 14 про макс", "айфон 14 pro max", "айфон"], marketplace:"Ozon", seller:"Ozon", price:695000, delivery:3500, term:"5 дней", url:"https://ozon.kz" },
 
-  { name:"Samsung Galaxy S24 Ultra", nameRu:["самсунг с24 ультра", "самсунг s24 ultra", "самсунг"], marketplace:"Kaspi", seller:"Samsung Official", price:890000, delivery:0, term:"1 день", url:"https://kaspi.kz " },
-  { name:"Samsung Galaxy S24 Ultra", nameRu:["самсунг с24 ультра", "самсунг s24 ultra", "самсунг"], marketplace:"Ozon", seller:"Ozon", price:865000, delivery:4000, term:"5 дней", url:"https://ozon.kz " },
+  { name:"iPhone 14", category:"phone", nameRu:["айфон 14", "айфон"], marketplace:"Kaspi", seller:"Kaspi Store", price:420000, delivery:4000, term:"1-2 дня", url:"https://kaspi.kz" },
+  { name:"iPhone 14", category:"phone", nameRu:["айфон 14", "айфон"], marketplace:"Technodom", seller:"Technodom", price:435000, delivery:0, term:"Самовывоз", url:"https://technodom.kz" },
+  { name:"iPhone 14", category:"phone", nameRu:["айфон 14", "айфон"], marketplace:"Wildberries", seller:"WB Official", price:410000, delivery:1500, term:"3 дня", url:"https://wildberries.kz" },
 
-  { name:"Samsung Galaxy S24", nameRu:["самсунг с24", "самсунг s24", "самсунг"], marketplace:"Sulpak", seller:"Sulpak", price:485000, delivery:6000, term:"2-3 дня", url:"https://sulpak.kz " },
-  { name:"Samsung Galaxy S24", nameRu:["самсунг с24", "самсунг s24", "самсунг"], marketplace:"Ozon", seller:"Ozon Tech", price:478000, delivery:6500, term:"3-5 дней", url:"https://ozon.kz " },
-  { name:"Samsung Galaxy S24", nameRu:["самсунг с24", "самсунг s24", "самсунг"], marketplace:"Kaspi", seller:"Mobile Store", price:490000, delivery:0, term:"1 день", url:"https://kaspi.kz " },
+  { name:"iPhone 13", category:"phone", nameRu:["айфон 13", "айфон"], marketplace:"Kaspi", seller:"Apple Store", price:350000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"iPhone 13", category:"phone", nameRu:["айфон 13", "айфон"], marketplace:"Ozon", seller:"Ozon", price:335000, delivery:2000, term:"4 дня", url:"https://ozon.kz" },
 
-  { name:"Samsung Galaxy A55", nameRu:["самсунг а55", "самсунг a55", "самсунг"], marketplace:"Kaspi", seller:"Mobile Market", price:210000, delivery:3500, term:"1-2 дня", url:"https://kaspi.kz " },
-  { name:"Samsung Galaxy A55", nameRu:["самсунг а55", "самсунг a55", "самсунг"], marketplace:"Wildberries", seller:"WB Seller", price:205000, delivery:5000, term:"3-6 дней", url:"https://wildberries.kz " },
-  { name:"Samsung Galaxy A55", nameRu:["самсунг а55", "самсунг a55", "самсунг"], marketplace:"Ozon", seller:"Ozon Mobile", price:208000, delivery:4000, term:"4 дня", url:"https://ozon.kz " },
+  { name:"Samsung Galaxy S24 Ultra", category:"phone", nameRu:["самсунг с24 ультра", "самсунг s24 ultra", "самсунг"], marketplace:"Kaspi", seller:"Samsung Official", price:890000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"Samsung Galaxy S24 Ultra", category:"phone", nameRu:["самсунг с24 ультра", "самсунг s24 ultra", "самсунг"], marketplace:"Ozon", seller:"Ozon", price:865000, delivery:4000, term:"5 дней", url:"https://ozon.kz" },
 
-  { name:"Xiaomi 14", nameRu:["сяоми 14", "ксяоми 14", "сяоми"], marketplace:"Kaspi", seller:"Xiaomi Official", price:480000, delivery:0, term:"1 день", url:"https://kaspi.kz " },
-  { name:"Xiaomi 14", nameRu:["сяоми 14", "ксяоми 14", "сяоми"], marketplace:"Wildberries", seller:"WB Xiaomi", price:465000, delivery:2500, term:"4 дня", url:"https://wildberries.kz " },
+  { name:"Samsung Galaxy S24+", category:"phone", nameRu:["самсунг с24 плюс", "самсунг s24 plus", "самсунг"], marketplace:"Kaspi", seller:"Samsung Store", price:720000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"Samsung Galaxy S24+", category:"phone", nameRu:["самсунг с24 плюс", "самсунг s24 plus", "самсунг"], marketplace:"Technodom", seller:"Technodom", price:735000, delivery:0, term:"Самовывоз", url:"https://technodom.kz" },
 
-  { name:"Xiaomi 13", nameRu:["сяоми 13", "ксяоми 13", "сяоми"], marketplace:"Kaspi", seller:"Xiaomi Official", price:320000, delivery:4000, term:"1-3 дня", url:"https://kaspi.kz " },
-  { name:"Xiaomi 13", nameRu:["сяоми 13", "ксяоми 13", "сяоми"], marketplace:"Ozon", seller:"Ozon Xiaomi", price:315000, delivery:6000, term:"2-4 дня", url:"https://ozon.kz " },
+  { name:"Samsung Galaxy S24", category:"phone", nameRu:["самсунг с24", "самсунг s24", "самсунг"], marketplace:"Sulpak", seller:"Sulpak", price:485000, delivery:6000, term:"2-3 дня", url:"https://sulpak.kz" },
+  { name:"Samsung Galaxy S24", category:"phone", nameRu:["самсунг с24", "самсунг s24", "самсунг"], marketplace:"Ozon", seller:"Ozon Tech", price:478000, delivery:6500, term:"3-5 дней", url:"https://ozon.kz" },
+  { name:"Samsung Galaxy S24", category:"phone", nameRu:["самсунг с24", "самсунг s24", "самсунг"], marketplace:"Kaspi", seller:"Mobile Store", price:490000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
 
-  { name:"MacBook Air M2", nameRu:["макбук эйр м2", "macbook air m2", "макбук"], marketplace:"Kaspi", seller:"Apple Store", price:820000, delivery:0, term:"1 день", url:"https://kaspi.kz " },
-  { name:"MacBook Air M2", nameRu:["макбук эйр м2", "macbook air m2", "макбук"], marketplace:"Sulpak", seller:"Sulpak", price:835000, delivery:3000, term:"2 дня", url:"https://sulpak.kz " },
-  { name:"MacBook Air M2", nameRu:["макбук эйр м2", "macbook air m2", "макбук"], marketplace:"Ozon", seller:"Ozon Tech", price:810000, delivery:4000, term:"5 дней", url:"https://ozon.kz " },
+  { name:"Samsung Galaxy S23 Ultra", category:"phone", nameRu:["самсунг с23 ультра", "самсунг s23 ultra", "самсунг"], marketplace:"Kaspi", seller:"Samsung Store", price:750000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"Samsung Galaxy S23 Ultra", category:"phone", nameRu:["самсунг с23 ультра", "самсунг s23 ultra", "самсунг"], marketplace:"Wildberries", seller:"WB Samsung", price:720000, delivery:3000, term:"4 дня", url:"https://wildberries.kz" },
 
-  { name:"PlayStation 5 Slim", nameRu:["плейстейшн 5 слим", "playstation 5 slim", "пс5", "консоль"], marketplace:"Kaspi", seller:"Sony Official", price:320000, delivery:0, term:"1 день", url:"https://kaspi.kz " },
-  { name:"PlayStation 5 Slim", nameRu:["плейстейшн 5 слим", "playstation 5 slim", "пс5", "консоль"], marketplace:"Technodom", seller:"Technodom", price:330000, delivery:2000, term:"2 дня", url:"https://technodom.kz " },
-  { name:"PlayStation 5 Slim", nameRu:["плейстейшн 5 слим", "playstation 5 slim", "пс5", "консоль"], marketplace:"Ozon", seller:"Ozon Games", price:315000, delivery:3500, term:"4 дня", url:"https://ozon.kz " },
-  { name:"PlayStation 5 Slim", nameRu:["плейстейшн 5 слим", "playstation 5 slim", "пс5", "консоль"], marketplace:"Sulpak", seller:"Sulpak", price:325000, delivery:2500, term:"2 дня", url:"https://sulpak.kz " },
+  { name:"Samsung Galaxy S23", category:"phone", nameRu:["самсунг с23", "самсунг s23", "самсунг"], marketplace:"Kaspi", seller:"Samsung Store", price:540000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"Samsung Galaxy S23", category:"phone", nameRu:["самсунг с23", "самсунг s23", "самсунг"], marketplace:"Ozon", seller:"Ozon", price:535000, delivery:2500, term:"3 дня", url:"https://ozon.kz" },
+  { name:"Samsung Galaxy S23", category:"phone", nameRu:["самсунг с23", "самсунг s23", "самсунг"], marketplace:"Technodom", seller:"Technodom", price:548000, delivery:1500, term:"2 дня", url:"https://technodom.kz" },
 
-  { name:"Roborock S8 Pro Ultra", nameRu:["роборок с8 про ультра", "roborock s8 pro ultra", "робот пылесос", "пылесос"], marketplace:"Kaspi", seller:"Roborock Store", price:485000, delivery:0, term:"1 день", url:"https://kaspi.kz " },
-  { name:"Roborock S8 Pro Ultra", nameRu:["роборок с8 про ультра", "roborock s8 pro ultra", "робот пылесос", "пылесос"], marketplace:"Ozon", seller:"Ozon", price:465000, delivery:4000, term:"5 дней", url:"https://ozon.kz " },
+  { name:"Samsung Galaxy Z Fold 5", category:"phone", nameRu:["самсунг фолд 5", "самсунг fold 5", "самсунг"], marketplace:"Kaspi", seller:"Samsung Premium", price:1200000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"Samsung Galaxy Z Fold 5", category:"phone", nameRu:["самсунг фолд 5", "самсунг fold 5", "самсунг"], marketplace:"Ozon", seller:"Ozon Premium", price:1150000, delivery:5000, term:"5 дней", url:"https://ozon.kz" },
 
-  { name:"Xiaomi Robot Vacuum X20+", nameRu:["сяоми робот вакуум икс20 плюс", "xiaomi robot vacuum x20 plus", "робот пылесос", "пылесос"], marketplace:"Kaspi", seller:"Xiaomi", price:285000, delivery:0, term:"1 день", url:"https://kaspi.kz " },
-  { name:"Xiaomi Robot Vacuum X20+", nameRu:["сяоми робот вакуум икс20 плюс", "xiaomi robot vacuum x20 plus", "робот пылесос", "пылесос"], marketplace:"Ozon", seller:"Ozon", price:268000, delivery:2500, term:"4 дня", url:"https://ozon.kz " },
+  { name:"Samsung Galaxy Z Flip 5", category:"phone", nameRu:["самсунг флип 5", "самсунг flip 5", "самсунг"], marketplace:"Kaspi", seller:"Samsung Store", price:680000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"Samsung Galaxy Z Flip 5", category:"phone", nameRu:["самсунг флип 5", "самсунг flip 5", "самсунг"], marketplace:"Wildberries", seller:"WB Mobile", price:650000, delivery:2500, term:"4 дня", url:"https://wildberries.kz" },
 
-  { name:"AirPods Pro 2 USB-C", nameRu:["эрподс про 2 юсб си", "airpods pro 2 usb-c", "наушники"], marketplace:"Kaspi", seller:"Apple Official", price:145000, delivery:0, term:"1 день", url:"https://kaspi.kz " },
-  { name:"AirPods Pro 2 USB-C", nameRu:["эрподс про 2 юсб си", "airpods pro 2 usb-c", "наушники"], marketplace:"Wildberries", seller:"WB Audio", price:139000, delivery:1500, term:"3 дня", url:"https://wildberries.kz " },
-  { name:"AirPods Pro 2 USB-C", nameRu:["эрподс про 2 юсб си", "airpods pro 2 usb-c", "наушники"], marketplace:"Ozon", seller:"Ozon", price:142000, delivery:2000, term:"4 дня", url:"https://ozon.kz " },
+  { name:"Samsung Galaxy A55", category:"phone", nameRu:["самсунг а55", "самсунг a55", "самсунг"], marketplace:"Kaspi", seller:"Mobile Market", price:210000, delivery:3500, term:"1-2 дня", url:"https://kaspi.kz" },
+  { name:"Samsung Galaxy A55", category:"phone", nameRu:["самсунг а55", "самсунг a55", "самсунг"], marketplace:"Wildberries", seller:"WB Seller", price:205000, delivery:5000, term:"3-6 дней", url:"https://wildberries.kz" },
+  { name:"Samsung Galaxy A55", category:"phone", nameRu:["самсунг а55", "самсунг a55", "самсунг"], marketplace:"Ozon", seller:"Ozon Mobile", price:208000, delivery:4000, term:"4 дня", url:"https://ozon.kz" },
 
-  { name:"Dyson Supersonic", nameRu:["дайсон суперсоник", "dyson supersonic", "фен"], marketplace:"Kaspi", seller:"Dyson Store", price:285000, delivery:0, term:"1 день", url:"https://kaspi.kz " },
-  { name:"Dyson Supersonic", nameRu:["дайсон суперсоник", "dyson supersonic", "фен"], marketplace:"Ozon", seller:"Ozon", price:268000, delivery:2500, term:"4 дня", url:"https://ozon.kz " },
-  { name:"Dyson Supersonic", nameRu:["дайсон суперсоник", "dyson supersonic", "фен"], marketplace:"Technodom", seller:"Technodom", price:295000, delivery:0, term:"Самовывоз", url:"https://technodom.kz " },
+  { name:"Samsung Galaxy A54", category:"phone", nameRu:["самсунг а54", "самсунг a54", "самсунг"], marketplace:"Kaspi", seller:"Samsung Store", price:245000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"Samsung Galaxy A54", category:"phone", nameRu:["самсунг а54", "самсунг a54", "самсунг"], marketplace:"Wildberries", seller:"WB Mobile", price:238000, delivery:2000, term:"4 дня", url:"https://wildberries.kz" },
+
+  { name:"Samsung Galaxy A34", category:"phone", nameRu:["самсунг а34", "самсунг a34", "самсунг"], marketplace:"Kaspi", seller:"Samsung", price:175000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"Samsung Galaxy A34", category:"phone", nameRu:["самсунг а34", "самсунг a34", "самсунг"], marketplace:"Ozon", seller:"Ozon", price:168000, delivery:2500, term:"4 дня", url:"https://ozon.kz" },
+
+  { name:"Xiaomi 14 Ultra", category:"phone", nameRu:["сяоми 14 ультра", "ксяоми 14 ultra", "сяоми"], marketplace:"Kaspi", seller:"Xiaomi Store", price:650000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"Xiaomi 14 Ultra", category:"phone", nameRu:["сяоми 14 ультра", "ксяоми 14 ultra", "сяоми"], marketplace:"Ozon", seller:"Ozon", price:620000, delivery:4000, term:"5 дней", url:"https://ozon.kz" },
+
+  { name:"Xiaomi 14", category:"phone", nameRu:["сяоми 14", "ксяоми 14", "сяоми"], marketplace:"Kaspi", seller:"Xiaomi Official", price:480000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"Xiaomi 14", category:"phone", nameRu:["сяоми 14", "ксяоми 14", "сяоми"], marketplace:"Wildberries", seller:"WB Xiaomi", price:465000, delivery:2500, term:"4 дня", url:"https://wildberries.kz" },
+
+  { name:"Xiaomi 13 Pro", category:"phone", nameRu:["сяоми 13 про", "ксяоми 13 pro", "сяоми"], marketplace:"Kaspi", seller:"Xiaomi Official", price:420000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"Xiaomi 13 Pro", category:"phone", nameRu:["сяоми 13 про", "ксяоми 13 pro", "сяоми"], marketplace:"Ozon", seller:"Ozon", price:410000, delivery:3000, term:"5 дней", url:"https://ozon.kz" },
+
+  { name:"Xiaomi 13", category:"phone", nameRu:["сяоми 13", "ксяоми 13", "сяоми"], marketplace:"Kaspi", seller:"Xiaomi Official", price:320000, delivery:4000, term:"1-3 дня", url:"https://kaspi.kz" },
+  { name:"Xiaomi 13", category:"phone", nameRu:["сяоми 13", "ксяоми 13", "сяоми"], marketplace:"Ozon", seller:"Ozon Xiaomi", price:315000, delivery:6000, term:"2-4 дня", url:"https://ozon.kz" },
+
+  { name:"Xiaomi Redmi Note 13 Pro+", category:"phone", nameRu:["редми нот 13 про плюс", "redmi note 13 pro plus", "сяоми", "редми"], marketplace:"Kaspi", seller:"Xiaomi Store", price:185000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"Xiaomi Redmi Note 13 Pro+", category:"phone", nameRu:["редми нот 13 про плюс", "redmi note 13 pro plus", "сяоми", "редми"], marketplace:"Wildberries", seller:"WB", price:175000, delivery:2000, term:"3 дня", url:"https://wildberries.kz" },
+
+  { name:"Xiaomi Redmi Note 13 Pro", category:"phone", nameRu:["редми нот 13 про", "redmi note 13 pro", "сяоми", "редми"], marketplace:"Kaspi", seller:"Xiaomi", price:145000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"Xiaomi Redmi Note 13 Pro", category:"phone", nameRu:["редми нот 13 про", "redmi note 13 pro", "сяоми", "редми"], marketplace:"Ozon", seller:"Ozon", price:138000, delivery:2500, term:"4 дня", url:"https://ozon.kz" },
+
+  { name:"Xiaomi Redmi 13C", category:"phone", nameRu:["редми 13с", "redmi 13c", "сяоми", "редми"], marketplace:"Kaspi", seller:"Mobile Shop", price:75000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"Xiaomi Redmi 13C", category:"phone", nameRu:["редми 13с", "redmi 13c", "сяоми", "редми"], marketplace:"Wildberries", seller:"WB Budget", price:68000, delivery:1500, term:"3 дня", url:"https://wildberries.kz" },
+
+  { name:"Poco X6 Pro", category:"phone", nameRu:["поко х6 про", "poco x6 pro", "поко", "poco"], marketplace:"Kaspi", seller:"Poco Store", price:165000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"Poco X6 Pro", category:"phone", nameRu:["поко х6 про", "poco x6 pro", "поко", "poco"], marketplace:"Ozon", seller:"Ozon", price:158000, delivery:2500, term:"4 дня", url:"https://ozon.kz" },
+
+  { name:"Poco M6 Pro", category:"phone", nameRu:["поко м6 про", "poco m6 pro", "поко", "poco"], marketplace:"Kaspi", seller:"Poco", price:125000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"Poco M6 Pro", category:"phone", nameRu:["поко м6 про", "poco m6 pro", "поко", "poco"], marketplace:"Wildberries", seller:"WB", price:118000, delivery:2000, term:"3 дня", url:"https://wildberries.kz" },
+
+  { name:"Realme GT 5 Pro", category:"phone", nameRu:["рилми гт 5 про", "realme gt 5 pro", "рилми", "realme"], marketplace:"Kaspi", seller:"Realme Store", price:420000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"Realme GT 5 Pro", category:"phone", nameRu:["рилми гт 5 про", "realme gt 5 pro", "рилми", "realme"], marketplace:"Ozon", seller:"Ozon", price:405000, delivery:3000, term:"5 дней", url:"https://ozon.kz" },
+
+  { name:"Realme 12 Pro+", category:"phone", nameRu:["рилми 12 про плюс", "realme 12 pro plus", "рилми", "realme"], marketplace:"Kaspi", seller:"Realme", price:185000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"Realme 12 Pro+", category:"phone", nameRu:["рилми 12 про плюс", "realme 12 pro plus", "рилми", "realme"], marketplace:"Wildberries", seller:"WB", price:175000, delivery:2000, term:"3 дня", url:"https://wildberries.kz" },
+
+  { name:"OnePlus 12", category:"phone", nameRu:["ванплюс 12", "oneplus 12", "ванплюс"], marketplace:"Kaspi", seller:"OnePlus Store", price:580000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"OnePlus 12", category:"phone", nameRu:["ванплюс 12", "oneplus 12", "ванплюс"], marketplace:"Ozon", seller:"Ozon", price:560000, delivery:3500, term:"5 дней", url:"https://ozon.kz" },
+
+  { name:"OnePlus 11", category:"phone", nameRu:["ванплюс 11", "oneplus 11", "ванплюс"], marketplace:"Kaspi", seller:"OnePlus", price:420000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"OnePlus 11", category:"phone", nameRu:["ванплюс 11", "oneplus 11", "ванплюс"], marketplace:"Technodom", seller:"Technodom", price:435000, delivery:0, term:"Самовывоз", url:"https://technodom.kz" },
+
+  { name:"Google Pixel 8 Pro", category:"phone", nameRu:["пиксель 8 про", "google pixel 8 pro", "пиксель", "pixel"], marketplace:"Kaspi", seller:"Pixel Store", price:520000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"Google Pixel 8 Pro", category:"phone", nameRu:["пиксель 8 про", "google pixel 8 pro", "пиксель", "pixel"], marketplace:"Ozon", seller:"Ozon Import", price:495000, delivery:4000, term:"6 дней", url:"https://ozon.kz" },
+
+  { name:"Google Pixel 8", category:"phone", nameRu:["пиксель 8", "google pixel 8", "пиксель", "pixel"], marketplace:"Kaspi", seller:"Pixel", price:420000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"Google Pixel 8", category:"phone", nameRu:["пиксель 8", "google pixel 8", "пиксель", "pixel"], marketplace:"Wildberries", seller:"WB Import", price:395000, delivery:3000, term:"5 дней", url:"https://wildberries.kz" },
+
+  { name:"Honor Magic 6 Pro", category:"phone", nameRu:["хонор мэджик 6 про", "honor magic 6 pro", "хонор"], marketplace:"Kaspi", seller:"Honor Store", price:480000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"Honor Magic 6 Pro", category:"phone", nameRu:["хонор мэджик 6 про", "honor magic 6 pro", "хонор"], marketplace:"Ozon", seller:"Ozon", price:465000, delivery:3000, term:"4 дня", url:"https://ozon.kz" },
+
+  { name:"Honor 90", category:"phone", nameRu:["хонор 90", "honor 90", "хонор"], marketplace:"Kaspi", seller:"Honor", price:195000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"Honor 90", category:"phone", nameRu:["хонор 90", "honor 90", "хонор"], marketplace:"Wildberries", seller:"WB", price:185000, delivery:2000, term:"3 дня", url:"https://wildberries.kz" },
+
+  { name:"Nothing Phone 2", category:"phone", nameRu:["нафинг фон 2", "nothing phone 2", "нафинг"], marketplace:"Kaspi", seller:"Nothing Store", price:380000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"Nothing Phone 2", category:"phone", nameRu:["нафинг фон 2", "nothing phone 2", "нафинг"], marketplace:"Ozon", seller:"Ozon", price:365000, delivery:2500, term:"4 дня", url:"https://ozon.kz" },
+
+  /* ================= LAPTOPS ================= */
+  { name:"MacBook Pro 16 M3 Max", category:"laptop", nameRu:["макбук про 16 м3 макс", "macbook pro 16 m3 max", "макбук"], marketplace:"Kaspi", seller:"Apple Premium", price:1850000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"MacBook Pro 16 M3 Max", category:"laptop", nameRu:["макбук про 16 м3 макс", "macbook pro 16 m3 max", "макбук"], marketplace:"Ozon", seller:"Ozon Apple", price:1780000, delivery:8000, term:"6 дней", url:"https://ozon.kz" },
+
+  { name:"MacBook Pro 14 M3 Pro", category:"laptop", nameRu:["макбук про 14 м3 про", "macbook pro 14 m3 pro", "макбук"], marketplace:"Kaspi", seller:"Apple Store", price:1450000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"MacBook Pro 14 M3 Pro", category:"laptop", nameRu:["макбук про 14 м3 про", "macbook pro 14 m3 pro", "макбук"], marketplace:"Sulpak", seller:"Sulpak", price:1480000, delivery:3000, term:"2 дня", url:"https://sulpak.kz" },
+
+  { name:"MacBook Pro 14 M3", category:"laptop", nameRu:["макбук про 14 м3", "macbook pro 14 m3", "макбук"], marketplace:"Kaspi", seller:"Apple Store", price:1150000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"MacBook Pro 14 M3", category:"laptop", nameRu:["макбук про 14 м3", "macbook pro 14 m3", "макбук"], marketplace:"Ozon", seller:"Ozon Tech", price:1135000, delivery:5000, term:"6 дней", url:"https://ozon.kz" },
+
+  { name:"MacBook Air 15 M3", category:"laptop", nameRu:["макбук эйр 15 м3", "macbook air 15 m3", "макбук"], marketplace:"Kaspi", seller:"Apple Store", price:980000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"MacBook Air 15 M3", category:"laptop", nameRu:["макбук эйр 15 м3", "macbook air 15 m3", "макбук"], marketplace:"Technodom", seller:"Technodom", price:995000, delivery:0, term:"Самовывоз", url:"https://technodom.kz" },
+
+  { name:"MacBook Air 13 M3", category:"laptop", nameRu:["макбук эйр 13 м3", "macbook air 13 m3", "макбук"], marketplace:"Kaspi", seller:"Apple Store", price:880000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"MacBook Air 13 M3", category:"laptop", nameRu:["макбук эйр 13 м3", "macbook air 13 m3", "макбук"], marketplace:"Wildberries", seller:"WB Apple", price:865000, delivery:3000, term:"4 дня", url:"https://wildberries.kz" },
+
+  { name:"MacBook Air M2", category:"laptop", nameRu:["макбук эйр м2", "macbook air m2", "макбук"], marketplace:"Kaspi", seller:"Apple Store", price:820000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"MacBook Air M2", category:"laptop", nameRu:["макбук эйр м2", "macbook air m2", "макбук"], marketplace:"Sulpak", seller:"Sulpak", price:835000, delivery:3000, term:"2 дня", url:"https://sulpak.kz" },
+  { name:"MacBook Air M2", category:"laptop", nameRu:["макбук эйр м2", "macbook air m2", "макбук"], marketplace:"Ozon", seller:"Ozon Tech", price:810000, delivery:4000, term:"5 дней", url:"https://ozon.kz" },
+
+  { name:"ASUS ROG Zephyrus G14", category:"laptop", nameRu:["асус рог зефирус", "asus rog zephyrus g14", "асус"], marketplace:"Kaspi", seller:"ASUS Gaming", price:1200000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"ASUS ROG Zephyrus G14", category:"laptop", nameRu:["асус рог зефирус", "asus rog zephyrus g14", "асус"], marketplace:"Technodom", seller:"Technodom", price:1235000, delivery:0, term:"Самовывоз", url:"https://technodom.kz" },
+
+  { name:"ASUS ROG Strix G16", category:"laptop", nameRu:["асус рог стрикс", "asus rog strix g16", "асус"], marketplace:"Kaspi", seller:"ASUS Store", price:950000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"ASUS ROG Strix G16", category:"laptop", nameRu:["асус рог стрикс", "asus rog strix g16", "асус"], marketplace:"Ozon", seller:"Ozon Gaming", price:920000, delivery:5000, term:"5 дней", url:"https://ozon.kz" },
+
+  { name:"ASUS TUF Gaming F15", category:"laptop", nameRu:["асус туф гейминг", "asus tuf gaming f15", "асус"], marketplace:"Kaspi", seller:"ASUS Official", price:520000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"ASUS TUF Gaming F15", category:"laptop", nameRu:["асус туф гейминг", "asus tuf gaming f15", "асус"], marketplace:"Technodom", seller:"Technodom", price:535000, delivery:2000, term:"2 дня", url:"https://technodom.kz" },
+
+  { name:"ASUS VivoBook Pro 15", category:"laptop", nameRu:["асус вивобук про", "asus vivobook pro 15", "асус"], marketplace:"Kaspi", seller:"ASUS", price:485000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"ASUS VivoBook Pro 15", category:"laptop", nameRu:["асус вивобук про", "asus vivobook pro 15", "асус"], marketplace:"Wildberries", seller:"WB", price:465000, delivery:3000, term:"4 дня", url:"https://wildberries.kz" },
+
+  { name:"ASUS ZenBook 14", category:"laptop", nameRu:["асус зенбук", "asus zenbook 14", "асус"], marketplace:"Kaspi", seller:"ASUS Store", price:620000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"ASUS ZenBook 14", category:"laptop", nameRu:["асус зенбук", "asus zenbook 14", "асус"], marketplace:"Sulpak", seller:"Sulpak", price:635000, delivery:2000, term:"2 дня", url:"https://sulpak.kz" },
+
+  { name:"Lenovo Legion Pro 7", category:"laptop", nameRu:["леново легион про 7", "lenovo legion pro 7", "леново"], marketplace:"Kaspi", seller:"Lenovo Gaming", price:1350000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"Lenovo Legion Pro 7", category:"laptop", nameRu:["леново легион про 7", "lenovo legion pro 7", "леново"], marketplace:"Ozon", seller:"Ozon", price:1290000, delivery:6000, term:"5 дней", url:"https://ozon.kz" },
+
+  { name:"Lenovo Legion 5 Pro", category:"laptop", nameRu:["леново легион 5 про", "lenovo legion 5 pro", "леново"], marketplace:"Kaspi", seller:"Lenovo", price:890000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"Lenovo Legion 5 Pro", category:"laptop", nameRu:["леново легион 5 про", "lenovo legion 5 pro", "леново"], marketplace:"Technodom", seller:"Technodom", price:915000, delivery:0, term:"Самовывоз", url:"https://technodom.kz" },
+
+  { name:"Lenovo ThinkPad X1 Carbon", category:"laptop", nameRu:["леново тинкпад", "lenovo thinkpad x1 carbon", "леново"], marketplace:"Kaspi", seller:"Lenovo Business", price:1450000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"Lenovo ThinkPad X1 Carbon", category:"laptop", nameRu:["леново тинкпад", "lenovo thinkpad x1 carbon", "леново"], marketplace:"Ozon", seller:"Ozon", price:1380000, delivery:5000, term:"6 дней", url:"https://ozon.kz" },
+
+  { name:"Lenovo IdeaPad Gaming 3", category:"laptop", nameRu:["леново идеапад гейминг", "lenovo ideapad gaming 3", "леново"], marketplace:"Kaspi", seller:"Lenovo", price:420000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"Lenovo IdeaPad Gaming 3", category:"laptop", nameRu:["леново идеапад гейминг", "lenovo ideapad gaming 3", "леново"], marketplace:"Wildberries", seller:"WB", price:395000, delivery:3000, term:"4 дня", url:"https://wildberries.kz" },
+
+  { name:"HP Omen 16", category:"laptop", nameRu:["хп омен 16", "hp omen 16", "хп"], marketplace:"Kaspi", seller:"HP Gaming", price:980000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"HP Omen 16", category:"laptop", nameRu:["хп омен 16", "hp omen 16", "хп"], marketplace:"Ozon", seller:"Ozon", price:945000, delivery:5000, term:"5 дней", url:"https://ozon.kz" },
+
+  { name:"HP Victus 16", category:"laptop", nameRu:["хп виктус 16", "hp victus 16", "хп"], marketplace:"Kaspi", seller:"HP Store", price:520000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"HP Victus 16", category:"laptop", nameRu:["хп виктус 16", "hp victus 16", "хп"], marketplace:"Technodom", seller:"Technodom", price:535000, delivery:0, term:"Самовывоз", url:"https://technodom.kz" },
+
+  { name:"HP Pavilion 15", category:"laptop", nameRu:["хп павилион 15", "hp pavilion 15", "хп"], marketplace:"Kaspi", seller:"HP Store", price:390000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"HP Pavilion 15", category:"laptop", nameRu:["хп павилион 15", "hp pavilion 15", "хп"], marketplace:"Ozon", seller:"Ozon", price:380000, delivery:3000, term:"4 дня", url:"https://ozon.kz" },
+
+  { name:"HP Spectre x360", category:"laptop", nameRu:["хп спектре", "hp spectre x360", "хп"], marketplace:"Kaspi", seller:"HP Premium", price:850000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"HP Spectre x360", category:"laptop", nameRu:["хп спектре", "hp spectre x360", "хп"], marketplace:"Sulpak", seller:"Sulpak", price:875000, delivery:2000, term:"2 дня", url:"https://sulpak.kz" },
+
+  { name:"Dell XPS 15", category:"laptop", nameRu:["делл хпс 15", "dell xps 15", "делл"], marketplace:"Kaspi", seller:"Dell Store", price:1250000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"Dell XPS 15", category:"laptop", nameRu:["делл хпс 15", "dell xps 15", "делл"], marketplace:"Ozon", seller:"Ozon", price:1190000, delivery:6000, term:"6 дней", url:"https://ozon.kz" },
+
+  { name:"Dell Alienware m16", category:"laptop", nameRu:["делл алинваре", "dell alienware m16", "делл"], marketplace:"Kaspi", seller:"Dell Gaming", price:1650000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"Dell Alienware m16", category:"laptop", nameRu:["делл алинваре", "dell alienware m16", "делл"], marketplace:"Technodom", seller:"Technodom", price:1690000, delivery:0, term:"Самовывоз", url:"https://technodom.kz" },
+
+  { name:"Dell Inspiron 16", category:"laptop", nameRu:["делл инспирон 16", "dell inspiron 16", "делл"], marketplace:"Kaspi", seller:"Dell", price:420000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"Dell Inspiron 16", category:"laptop", nameRu:["делл инспирон 16", "dell inspiron 16", "делл"], marketplace:"Wildberries", seller:"WB", price:395000, delivery:3000, term:"4 дня", url:"https://wildberries.kz" },
+
+  { name:"MSI Raider GE78", category:"laptop", nameRu:["мси райдер", "msi raider ge78", "мси"], marketplace:"Kaspi", seller:"MSI Gaming", price:1850000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"MSI Raider GE78", category:"laptop", nameRu:["мси райдер", "msi raider ge78", "мси"], marketplace:"Ozon", seller:"Ozon", price:1790000, delivery:7000, term:"6 дней", url:"https://ozon.kz" },
+
+  { name:"MSI Katana 15", category:"laptop", nameRu:["мси катана 15", "msi katana 15", "мси"], marketplace:"Kaspi", seller:"MSI Store", price:580000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"MSI Katana 15", category:"laptop", nameRu:["мси катана 15", "msi katana 15", "мси"], marketplace:"Technodom", seller:"Technodom", price:595000, delivery:0, term:"Самовывоз", url:"https://technodom.kz" },
+
+  { name:"Acer Predator Helios 16", category:"laptop", nameRu:["асер предатор", "acer predator helios 16", "асер"], marketplace:"Kaspi", seller:"Acer Gaming", price:1150000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"Acer Predator Helios 16", category:"laptop", nameRu:["асер предатор", "acer predator helios 16", "асер"], marketplace:"Ozon", seller:"Ozon", price:1100000, delivery:5000, term:"5 дней", url:"https://ozon.kz" },
+
+  { name:"Acer Nitro 5", category:"laptop", nameRu:["асер нитро 5", "acer nitro 5", "асер"], marketplace:"Kaspi", seller:"Acer Store", price:480000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"Acer Nitro 5", category:"laptop", nameRu:["асер нитро 5", "acer nitro 5", "асер"], marketplace:"Wildberries", seller:"WB", price:455000, delivery:3000, term:"4 дня", url:"https://wildberries.kz" },
+
+  { name:"Razer Blade 16", category:"laptop", nameRu:["рейзер блейд 16", "razer blade 16", "рейзер"], marketplace:"Kaspi", seller:"Razer Store", price:2100000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"Razer Blade 16", category:"laptop", nameRu:["рейзер блейд 16", "razer blade 16", "рейзер"], marketplace:"Ozon", seller:"Ozon Import", price:1990000, delivery:8000, term:"7 дней", url:"https://ozon.kz" },
+
+  /* ================= HOME APPLIANCES ================= */
+  // Robot Vacuum
+  { name:"Roborock S8 Pro Ultra", category:"appliance", nameRu:["роборок с8 про ультра", "roborock s8 pro ultra", "робот пылесос", "пылесос"], marketplace:"Kaspi", seller:"Roborock Store", price:485000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"Roborock S8 Pro Ultra", category:"appliance", nameRu:["роборок с8 про ультра", "roborock s8 pro ultra", "робот пылесос", "пылесос"], marketplace:"Ozon", seller:"Ozon", price:465000, delivery:4000, term:"5 дней", url:"https://ozon.kz" },
+
+  { name:"Roborock Q Revo", category:"appliance", nameRu:["роборок ку рево", "roborock q revo", "робот пылесос", "пылесос"], marketplace:"Kaspi", seller:"Roborock", price:385000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"Roborock Q Revo", category:"appliance", nameRu:["роборок ку рево", "roborock q revo", "робот пылесос", "пылесос"], marketplace:"Wildberries", seller:"WB", price:365000, delivery:3000, term:"4 дня", url:"https://wildberries.kz" },
+
+  { name:"Xiaomi Robot Vacuum X20+", category:"appliance", nameRu:["сяоми робот вакуум икс20 плюс", "xiaomi robot vacuum x20 plus", "робот пылесос", "пылесос"], marketplace:"Kaspi", seller:"Xiaomi", price:285000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"Xiaomi Robot Vacuum X20+", category:"appliance", nameRu:["сяоми робот вакуум икс20 плюс", "xiaomi robot vacuum x20 plus", "робот пылесос", "пылесос"], marketplace:"Ozon", seller:"Ozon", price:268000, delivery:2500, term:"4 дня", url:"https://ozon.kz" },
+
+  { name:"Dreame L20 Ultra", category:"appliance", nameRu:["дрим л20 ультра", "dreame l20 ultra", "робот пылесос", "пылесос"], marketplace:"Kaspi", seller:"Dreame Store", price:420000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"Dreame L20 Ultra", category:"appliance", nameRu:["дрим л20 ультра", "dreame l20 ultra", "робот пылесос", "пылесос"], marketplace:"Technodom", seller:"Technodom", price:435000, delivery:0, term:"Самовывоз", url:"https://technodom.kz" },
+
+  // Washing Machine
+  { name:"LG AI DD F4V9", category:"appliance", nameRu:["лж ай ди ди ф4в9", "lg ai dd f4v9", "стиральная машина", "стиралка"], marketplace:"Kaspi", seller:"LG Store", price:485000, delivery:0, term:"1-2 дня", url:"https://kaspi.kz" },
+  { name:"LG AI DD F4V9", category:"appliance", nameRu:["лж ай ди ди ф4в9", "lg ai dd f4v9", "стиральная машина", "стиралка"], marketplace:"Sulpak", seller:"Sulpak", price:465000, delivery:3000, term:"2 дня", url:"https://sulpak.kz" },
+
+  { name:"Samsung AI EcoBubble", category:"appliance", nameRu:["самсунг ай экобабл", "samsung ai ecobubble", "стиральная машина", "стиралка"], marketplace:"Kaspi", seller:"Samsung", price:385000, delivery:0, term:"1-2 дня", url:"https://kaspi.kz" },
+  { name:"Samsung AI EcoBubble", category:"appliance", nameRu:["самсунг ай экобабл", "samsung ai ecobubble", "стиральная машина", "стиралка"], marketplace:"Ozon", seller:"Ozon", price:365000, delivery:4000, term:"4 дня", url:"https://ozon.kz" },
+
+  { name:"Bosch Serie 6", category:"appliance", nameRu:["бош серие 6", "bosch serie 6", "стиральная машина", "стиралка"], marketplace:"Kaspi", seller:"Bosch", price:420000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"Bosch Serie 6", category:"appliance", nameRu:["бош серие 6", "bosch serie 6", "стиральная машина", "стиралка"], marketplace:"Technodom", seller:"Technodom", price:435000, delivery:0, term:"Самовывоз", url:"https://technodom.kz" },
+
+  { name:"Indesit BWE 81282", category:"appliance", nameRu:["индезит", "indesit", "стиральная машина", "стиралка"], marketplace:"Kaspi", seller:"Indesit", price:185000, delivery:0, term:"1-2 дня", url:"https://kaspi.kz" },
+  { name:"Indesit BWE 81282", category:"appliance", nameRu:["индезит", "indesit", "стиральная машина", "стиралка"], marketplace:"Wildberries", seller:"WB", price:168000, delivery:2500, term:"4 дня", url:"https://wildberries.kz" },
+
+  // Refrigerator
+  { name:"LG InstaView Door-in-Door", category:"appliance", nameRu:["лж инставью", "lg instaview", "холодильник"], marketplace:"Kaspi", seller:"LG Premium", price:1250000, delivery:0, term:"1-2 дня", url:"https://kaspi.kz" },
+  { name:"LG InstaView Door-in-Door", category:"appliance", nameRu:["лж инставью", "lg instaview", "холодильник"], marketplace:"Technodom", seller:"Technodom", price:1290000, delivery:5000, term:"2 дня", url:"https://technodom.kz" },
+
+  { name:"Samsung Bespoke", category:"appliance", nameRu:["самсунг беспок", "samsung bespoke", "холодильник"], marketplace:"Kaspi", seller:"Samsung", price:980000, delivery:0, term:"1-2 дня", url:"https://kaspi.kz" },
+  { name:"Samsung Bespoke", category:"appliance", nameRu:["самсунг беспок", "samsung bespoke", "холодильник"], marketplace:"Wildberries", seller:"WB", price:945000, delivery:5000, term:"4 дня", url:"https://wildberries.kz" },
+
+  { name:"Bosch KGN39VI35", category:"appliance", nameRu:["бош кгн39ви35", "bosch kgn39vi35", "холодильник"], marketplace:"Kaspi", seller:"Bosch", price:720000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"Bosch KGN39VI35", category:"appliance", nameRu:["бош кгн39ви35", "bosch kgn39vi35", "холодильник"], marketplace:"Ozon", seller:"Ozon", price:685000, delivery:4000, term:"5 дней", url:"https://ozon.kz" },
+
+  { name:"Atlant ХМ 4421", category:"appliance", nameRu:["атлант", "atlant", "холодильник"], marketplace:"Kaspi", seller:"Atlant", price:285000, delivery:0, term:"1-2 дня", url:"https://kaspi.kz" },
+  { name:"Atlant ХМ 4421", category:"appliance", nameRu:["атлант", "atlant", "холодильник"], marketplace:"Sulpak", seller:"Sulpak", price:265000, delivery:2000, term:"2 дня", url:"https://sulpak.kz" },
+
+  { name:"Indesit ITF 118 W", category:"appliance", nameRu:["индезит", "indesit", "холодильник"], marketplace:"Kaspi", seller:"Indesit", price:165000, delivery:0, term:"1-2 дня", url:"https://kaspi.kz" },
+  { name:"Indesit ITF 118 W", category:"appliance", nameRu:["индезит", "indesit", "холодильник"], marketplace:"Wildberries", seller:"WB", price:148000, delivery:2500, term:"4 дня", url:"https://wildberries.kz" },
+
+  // Air Conditioner
+  { name:"LG DUAL Inverter", category:"appliance", nameRu:["лж дуал инвертер", "lg dual inverter", "кондиционер"], marketplace:"Kaspi", seller:"LG Climate", price:285000, delivery:0, term:"1-2 дня", url:"https://kaspi.kz" },
+  { name:"LG DUAL Inverter", category:"appliance", nameRu:["лж дуал инвертер", "lg dual inverter", "кондиционер"], marketplace:"Sulpak", seller:"Sulpak", price:275000, delivery:2000, term:"2 дня", url:"https://sulpak.kz" },
+
+  { name:"Samsung WindFree", category:"appliance", nameRu:["самсунг виндфри", "samsung windfree", "кондиционер"], marketplace:"Kaspi", seller:"Samsung", price:320000, delivery:0, term:"1-2 дня", url:"https://kaspi.kz" },
+  { name:"Samsung WindFree", category:"appliance", nameRu:["самсунг виндфри", "samsung windfree", "кондиционер"], marketplace:"Ozon", seller:"Ozon", price:305000, delivery:3000, term:"4 дня", url:"https://ozon.kz" },
+
+  { name:"Haier HSU-12HNF203", category:"appliance", nameRu:["хайер", "haier", "кондиционер"], marketplace:"Kaspi", seller:"Haier", price:185000, delivery:0, term:"1-2 дня", url:"https://kaspi.kz" },
+  { name:"Haier HSU-12HNF203", category:"appliance", nameRu:["хайер", "haier", "кондиционер"], marketplace:"Technodom", seller:"Technodom", price:175000, delivery:0, term:"Самовывоз", url:"https://technodom.kz" },
+
+  { name:"Midea Blanc", category:"appliance", nameRu:["мидеа", "midea", "кондиционер"], marketplace:"Kaspi", seller:"Midea", price:145000, delivery:0, term:"1-2 дня", url:"https://kaspi.kz" },
+  { name:"Midea Blanc", category:"appliance", nameRu:["мидеа", "midea", "кондиционер"], marketplace:"Wildberries", seller:"WB", price:128000, delivery:2000, term:"4 дня", url:"https://wildberries.kz" },
+
+  // Dishwasher
+  { name:"Bosch SMS4HVI31E", category:"appliance", nameRu:["бош смс4хви31е", "bosch sms4hvi31e", "посудомойка", "посудомоечная машина"], marketplace:"Kaspi", seller:"Bosch", price:385000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"Bosch SMS4HVI31E", category:"appliance", nameRu:["бош смс4хви31е", "bosch sms4hvi31e", "посудомойка", "посудомоечная машина"], marketplace:"Ozon", seller:"Ozon", price:365000, delivery:4000, term:"5 дней", url:"https://ozon.kz" },
+
+  { name:"Samsung DW60R7040FS", category:"appliance", nameRu:["самсунг дв60р7040фс", "samsung dw60r7040fs", "посудомойка", "посудомоечная машина"], marketplace:"Kaspi", seller:"Samsung", price:320000, delivery:0, term:"1-2 дня", url:"https://kaspi.kz" },
+  { name:"Samsung DW60R7040FS", category:"appliance", nameRu:["самсунг дв60р7040фс", "samsung dw60r7040fs", "посудомойка", "посудомоечная машина"], marketplace:"Sulpak", seller:"Sulpak", price:305000, delivery:2500, term:"2 дня", url:"https://sulpak.kz" },
+
+  // Microwave
+  { name:"Samsung Bespoke Microwave", category:"appliance", nameRu:["самсунг беспок микроволновка", "samsung bespoke microwave", "микроволновка", "микроволновая печь"], marketplace:"Kaspi", seller:"Samsung", price:125000, delivery:0, term:"1-2 дня", url:"https://kaspi.kz" },
+  { name:"Samsung Bespoke Microwave", category:"appliance", nameRu:["самсунг беспок микроволновка", "samsung bespoke microwave", "микроволновка", "микроволновая печь"], marketplace:"Wildberries", seller:"WB", price:115000, delivery:2000, term:"4 дня", url:"https://wildberries.kz" },
+
+  { name:"LG NeoChef", category:"appliance", nameRu:["лж неошеф", "lg neochef", "микроволновка", "микроволновая печь"], marketplace:"Kaspi", seller:"LG", price:95000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"LG NeoChef", category:"appliance", nameRu:["лж неошеф", "lg neochef", "микроволновка", "микроволновая печь"], marketplace:"Technodom", seller:"Technodom", price:88000, delivery:0, term:"Самовывоз", url:"https://technodom.kz" },
+
+  { name:"BBK 20MWS-770S", category:"appliance", nameRu:["ббк", "bbk", "микроволновка", "микроволновая печь"], marketplace:"Kaspi", seller:"BBK", price:25000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"BBK 20MWS-770S", category:"appliance", nameRu:["ббк", "bbk", "микроволновка", "микроволновая печь"], marketplace:"Ozon", seller:"Ozon", price:22000, delivery:1000, term:"3 дня", url:"https://ozon.kz" },
+
+  // Vacuum Cleaner
+  { name:"Dyson V15 Detect", category:"appliance", nameRu:["дайсон в15 детект", "dyson v15 detect", "пылесос", "вертикальный пылесос"], marketplace:"Kaspi", seller:"Dyson", price:385000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"Dyson V15 Detect", category:"appliance", nameRu:["дайсон в15 детект", "dyson v15 detect", "пылесос", "вертикальный пылесос"], marketplace:"Ozon", seller:"Ozon", price:365000, delivery:3000, term:"4 дня", url:"https://ozon.kz" },
+
+  { name:"Tefal Air Force", category:"appliance", nameRu:["тефаль эйр форс", "tefal air force", "пылесос", "вертикальный пылесос"], marketplace:"Kaspi", seller:"Tefal", price:125000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"Tefal Air Force", category:"appliance", nameRu:["тефаль эйр форс", "tefal air force", "пылесос", "вертикальный пылесос"], marketplace:"Wildberries", seller:"WB", price:115000, delivery:1500, term:"3 дня", url:"https://wildberries.kz" },
+
+  { name:"Xiaomi Mi Vacuum Cleaner G10", category:"appliance", nameRu:["сяоми ми вакуум клинер", "xiaomi mi vacuum cleaner", "пылесос", "вертикальный пылесос"], marketplace:"Kaspi", seller:"Xiaomi", price:85000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"Xiaomi Mi Vacuum Cleaner G10", category:"appliance", nameRu:["сяоми ми вакуум клинер", "xiaomi mi vacuum cleaner", "пылесос", "вертикальный пылесос"], marketplace:"Sulpak", seller:"Sulpak", price:82000, delivery:1500, term:"2 дня", url:"https://sulpak.kz" },
+
+  // Iron
+  { name:"Tefal FV9845", category:"appliance", nameRu:["тефаль фв9845", "tefal fv9845", "утюг"], marketplace:"Kaspi", seller:"Tefal", price:45000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"Tefal FV9845", category:"appliance", nameRu:["тефаль фв9845", "tefal fv9845", "утюг"], marketplace:"Ozon", seller:"Ozon", price:42000, delivery:1000, term:"3 дня", url:"https://ozon.kz" },
+
+  { name:"Philips Azur Elite", category:"appliance", nameRu:["филипс азур элит", "philips azur elite", "утюг"], marketplace:"Kaspi", seller:"Philips", price:55000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"Philips Azur Elite", category:"appliance", nameRu:["филипс азур элит", "philips azur elite", "утюг"], marketplace:"Technodom", seller:"Technodom", price:58000, delivery:0, term:"Самовывоз", url:"https://technodom.kz" },
+
+  // Multicooker
+  { name:"Redmond SkyCooker", category:"appliance", nameRu:["редмонд скайкукер", "redmond skycooker", "мультиварка"], marketplace:"Kaspi", seller:"Redmond", price:45000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"Redmond SkyCooker", category:"appliance", nameRu:["редмонд скайкукер", "redmond skycooker", "мультиварка"], marketplace:"Ozon", seller:"Ozon", price:38000, delivery:1500, term:"3 дня", url:"https://ozon.kz" },
+
+  { name:"Polaris PMC 0523", category:"appliance", nameRu:["поларис пмц 0523", "polaris pmc 0523", "мультиварка"], marketplace:"Kaspi", seller:"Polaris", price:35000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"Polaris PMC 0523", category:"appliance", nameRu:["поларис пмц 0523", "polaris pmc 0523", "мультиварка"], marketplace:"Wildberries", seller:"WB", price:32000, delivery:1000, term:"3 дня", url:"https://wildberries.kz" },
+
+  // Blender
+  { name:"Vitamix A3500", category:"appliance", nameRu:["витамикс а3500", "vitamix a3500", "блендер"], marketplace:"Kaspi", seller:"Vitamix Store", price:285000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"Vitamix A3500", category:"appliance", nameRu:["витамикс а3500", "vitamix a3500", "блендер"], marketplace:"Ozon", seller:"Ozon", price:265000, delivery:3000, term:"6 дней", url:"https://ozon.kz" },
+
+  { name:"Bosch VitaBoost", category:"appliance", nameRu:["бош витабуст", "bosch vitaboost", "блендер"], marketplace:"Kaspi", seller:"Bosch", price:85000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"Bosch VitaBoost", category:"appliance", nameRu:["бош витабуст", "bosch vitaboost", "блендер"], marketplace:"Sulpak", seller:"Sulpak", price:82000, delivery:1500, term:"2 дня", url:"https://sulpak.kz" },
+
+  { name:"Xiaomi Mi Blender", category:"appliance", nameRu:["сяоми ми блендер", "xiaomi mi blender", "блендер"], marketplace:"Kaspi", seller:"Xiaomi", price:25000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"Xiaomi Mi Blender", category:"appliance", nameRu:["сяоми ми блендер", "xiaomi mi blender", "блендер"], marketplace:"Wildberries", seller:"WB", price:22000, delivery:1000, term:"3 дня", url:"https://wildberries.kz" },
+
+  // Coffee Machine
+  { name:"DeLonghi La Specialista", category:"appliance", nameRu:["делонги ла специалиста", "delonghi la specialista", "кофемашина"], marketplace:"Kaspi", seller:"DeLonghi Store", price:385000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"DeLonghi La Specialista", category:"appliance", nameRu:["делонги ла специалиста", "delonghi la specialista", "кофемашина"], marketplace:"Ozon", seller:"Ozon", price:365000, delivery:3000, term:"5 дней", url:"https://ozon.kz" },
+
+  { name:"Philips LatteGo 5400", category:"appliance", nameRu:["филипс латте го 5400", "philips lattego 5400", "кофемашина"], marketplace:"Kaspi", seller:"Philips", price:285000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"Philips LatteGo 5400", category:"appliance", nameRu:["филипс латте го 5400", "philips lattego 5400", "кофемашина"], marketplace:"Technodom", seller:"Technodom", price:295000, delivery:0, term:"Самовывоз", url:"https://technodom.kz" },
+
+  { name:"Jura E8", category:"appliance", nameRu:["йура е8", "jura e8", "кофемашина"], marketplace:"Kaspi", seller:"Jura Store", price:685000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"Jura E8", category:"appliance", nameRu:["йура е8", "jura e8", "кофемашина"], marketplace:"Wildberries", seller:"WB", price:645000, delivery:4000, term:"5 дней", url:"https://wildberries.kz" },
+
+  { name:"Krups Essential", category:"appliance", nameRu:["крупс эссеншиал", "krups essential", "кофемашина"], marketplace:"Kaspi", seller:"Krups", price:125000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"Krups Essential", category:"appliance", nameRu:["крупс эссеншиал", "krups essential", "кофемашина"], marketplace:"Ozon", seller:"Ozon", price:115000, delivery:1500, term:"4 дня", url:"https://ozon.kz" },
+
+  // Kettle
+  { name:"Xiaomi Mi Smart Kettle", category:"appliance", nameRu:["сяоми ми смарт кетл", "xiaomi mi smart kettle", "чайник", "электрочайник"], marketplace:"Kaspi", seller:"Xiaomi", price:15000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"Xiaomi Mi Smart Kettle", category:"appliance", nameRu:["сяоми ми смарт кетл", "xiaomi mi smart kettle", "чайник", "электрочайник"], marketplace:"Wildberries", seller:"WB", price:12000, delivery:1000, term:"3 дня", url:"https://wildberries.kz" },
+
+  { name:"Tefal KO8518", category:"appliance", nameRu:["тефаль ко8518", "tefal ko8518", "чайник", "электрочайник"], marketplace:"Kaspi", seller:"Tefal", price:35000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"Tefal KO8518", category:"appliance", nameRu:["тефаль ко8518", "tefal ko8518", "чайник", "электрочайник"], marketplace:"Sulpak", seller:"Sulpak", price:32000, delivery:1000, term:"2 дня", url:"https://sulpak.kz" },
+
+  /* ================= TV ================= */
+  { name:"Samsung QE85QN900D 8K", category:"tv", nameRu:["самсунг 85 ку900д", "samsung qe85qn900d", "телевизор", "тв"], marketplace:"Kaspi", seller:"Samsung Premium", price:3850000, delivery:0, term:"1-2 дня", url:"https://kaspi.kz" },
+  { name:"Samsung QE85QN900D 8K", category:"tv", nameRu:["самсунг 85 ку900д", "samsung qe85qn900d", "телевизор", "тв"], marketplace:"Technodom", seller:"Technodom", price:3900000, delivery:5000, term:"2 дня", url:"https://technodom.kz" },
+
+  { name:"Samsung QE77S95D OLED", category:"tv", nameRu:["самсунг 77 с95д", "samsung qe77s95d", "телевизор", "тв"], marketplace:"Kaspi", seller:"Samsung Store", price:1850000, delivery:0, term:"1-2 дня", url:"https://kaspi.kz" },
+  { name:"Samsung QE77S95D OLED", category:"tv", nameRu:["самсунг 77 с95д", "samsung qe77s95d", "телевизор", "тв"], marketplace:"Sulpak", seller:"Sulpak", price:1790000, delivery:4000, term:"2 дня", url:"https://sulpak.kz" },
+
+  { name:"Samsung QE65QN90D", category:"tv", nameRu:["самсунг 65 кн90д", "samsung qe65qn90d", "телевизор", "тв"], marketplace:"Kaspi", seller:"Samsung", price:980000, delivery:0, term:"1-2 дня", url:"https://kaspi.kz" },
+  { name:"Samsung QE65QN90D", category:"tv", nameRu:["самсунг 65 кн90д", "samsung qe65qn90d", "телевизор", "тв"], marketplace:"Ozon", seller:"Ozon", price:945000, delivery:5000, term:"4 дня", url:"https://ozon.kz" },
+
+  { name:"Samsung UE55CU8000", category:"tv", nameRu:["самсунг 55 цу8000", "samsung ue55cu8000", "телевизор", "тв"], marketplace:"Kaspi", seller:"Samsung", price:385000, delivery:0, term:"1-2 дня", url:"https://kaspi.kz" },
+  { name:"Samsung UE55CU8000", category:"tv", nameRu:["самсунг 55 цу8000", "samsung ue55cu8000", "телевизор", "тв"], marketplace:"Wildberries", seller:"WB", price:365000, delivery:3000, term:"4 дня", url:"https://wildberries.kz" },
+
+  { name:"LG OLED83C4", category:"tv", nameRu:["лж олед 83 ц4", "lg oled83c4", "телевизор", "тв"], marketplace:"Kaspi", seller:"LG Premium", price:2450000, delivery:0, term:"1-2 дня", url:"https://kaspi.kz" },
+  { name:"LG OLED83C4", category:"tv", nameRu:["лж олед 83 ц4", "lg oled83c4", "телевизор", "тв"], marketplace:"Technodom", seller:"Technodom", price:2490000, delivery:5000, term:"2 дня", url:"https://technodom.kz" },
+
+  { name:"LG OLED65C4", category:"tv", nameRu:["лж олед 65 ц4", "lg oled65c4", "телевизор", "тв"], marketplace:"Kaspi", seller:"LG Store", price:980000, delivery:0, term:"1-2 дня", url:"https://kaspi.kz" },
+  { name:"LG OLED65C4", category:"tv", nameRu:["лж олед 65 ц4", "lg oled65c4", "телевизор", "тв"], marketplace:"Ozon", seller:"Ozon", price:945000, delivery:4000, term:"4 дня", url:"https://ozon.kz" },
+
+  { name:"LG 55UR8100", category:"tv", nameRu:["лж 55 ур8100", "lg 55ur8100", "телевизор", "тв"], marketplace:"Kaspi", seller:"LG", price:385000, delivery:0, term:"1-2 дня", url:"https://kaspi.kz" },
+  { name:"LG 55UR8100", category:"tv", nameRu:["лж 55 ур8100", "lg 55ur8100", "телевизор", "тв"], marketplace:"Sulpak", seller:"Sulpak", price:375000, delivery:2500, term:"2 дня", url:"https://sulpak.kz" },
+
+  { name:"Sony XR-85X95L", category:"tv", nameRu:["сони 85 икс95л", "sony xr-85x95l", "телевизор", "тв"], marketplace:"Kaspi", seller:"Sony Premium", price:1850000, delivery:0, term:"1-2 дня", url:"https://kaspi.kz" },
+  { name:"Sony XR-85X95L", category:"tv", nameRu:["сони 85 икс95л", "sony xr-85x95l", "телевизор", "тв"], marketplace:"Ozon", seller:"Ozon", price:1790000, delivery:6000, term:"5 дней", url:"https://ozon.kz" },
+
+  { name:"Sony XR-65A80L OLED", category:"tv", nameRu:["сони 65 а80л", "sony xr-65a80l", "телевизор", "тв"], marketplace:"Kaspi", seller:"Sony Store", price:980000, delivery:0, term:"1-2 дня", url:"https://kaspi.kz" },
+  { name:"Sony XR-65A80L OLED", category:"tv", nameRu:["сони 65 а80л", "sony xr-65a80l", "телевизор", "тв"], marketplace:"Technodom", seller:"Technodom", price:995000, delivery:4000, term:"2 дня", url:"https://technodom.kz" },
+
+  { name:"Xiaomi TV A Pro 65", category:"tv", nameRu:["сяоми тв а про 65", "xiaomi tv a pro 65", "телевизор", "тв"], marketplace:"Kaspi", seller:"Xiaomi Store", price:285000, delivery:0, term:"1-2 дня", url:"https://kaspi.kz" },
+  { name:"Xiaomi TV A Pro 65", category:"tv", nameRu:["сяоми тв а про 65", "xiaomi tv a pro 65", "телевизор", "тв"], marketplace:"Wildberries", seller:"WB", price:268000, delivery:3000, term:"4 дня", url:"https://wildberries.kz" },
+
+  { name:"Xiaomi TV A Pro 55", category:"tv", nameRu:["сяоми тв а про 55", "xiaomi tv a pro 55", "телевизор", "тв"], marketplace:"Kaspi", seller:"Xiaomi", price:195000, delivery:0, term:"1-2 дня", url:"https://kaspi.kz" },
+  { name:"Xiaomi TV A Pro 55", category:"tv", nameRu:["сяоми тв а про 55", "xiaomi tv a pro 55", "телевизор", "тв"], marketplace:"Ozon", seller:"Ozon", price:185000, delivery:2500, term:"4 дня", url:"https://ozon.kz" },
+
+  /* ================= AUDIO ================= */
+  { name:"AirPods Pro 2 USB-C", category:"audio", nameRu:["эрподс про 2 юсб си", "airpods pro 2 usb-c", "наушники"], marketplace:"Kaspi", seller:"Apple Official", price:145000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"AirPods Pro 2 USB-C", category:"audio", nameRu:["эрподс про 2 юсб си", "airpods pro 2 usb-c", "наушники"], marketplace:"Wildberries", seller:"WB Audio", price:139000, delivery:1500, term:"3 дня", url:"https://wildberries.kz" },
+  { name:"AirPods Pro 2 USB-C", category:"audio", nameRu:["эрподс про 2 юсб си", "airpods pro 2 usb-c", "наушники"], marketplace:"Ozon", seller:"Ozon", price:142000, delivery:2000, term:"4 дня", url:"https://ozon.kz" },
+
+  { name:"AirPods 3", category:"audio", nameRu:["эрподс 3", "airpods 3", "наушники"], marketplace:"Kaspi", seller:"Apple Store", price:98000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"AirPods 3", category:"audio", nameRu:["эрподс 3", "airpods 3", "наушники"], marketplace:"Ozon", seller:"Ozon", price:92000, delivery:1500, term:"3 дня", url:"https://ozon.kz" },
+
+  { name:"AirPods Max", category:"audio", nameRu:["эрподс макс", "airpods max", "наушники"], marketplace:"Kaspi", seller:"Apple", price:385000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"AirPods Max", category:"audio", nameRu:["эрподс макс", "airpods max", "наушники"], marketplace:"Technodom", seller:"Technodom", price:395000, delivery:0, term:"Самовывоз", url:"https://technodom.kz" },
+
+  { name:"Sony WH-1000XM5", category:"audio", nameRu:["сони вх1000хм5", "sony wh-1000xm5", "наушники"], marketplace:"Kaspi", seller:"Sony Official", price:215000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"Sony WH-1000XM5", category:"audio", nameRu:["сони вх1000хм5", "sony wh-1000xm5", "наушники"], marketplace:"Ozon", seller:"Ozon Audio", price:208000, delivery:2500, term:"4 дня", url:"https://ozon.kz" },
+  { name:"Sony WH-1000XM5", category:"audio", nameRu:["сони вх1000хм5", "sony wh-1000xm5", "наушники"], marketplace:"Wildberries", seller:"WB", price:205000, delivery:2000, term:"3 дня", url:"https://wildberries.kz" },
+
+  { name:"Sony WH-1000XM4", category:"audio", nameRu:["сони вх1000хм4", "sony wh-1000xm4", "наушники"], marketplace:"Kaspi", seller:"Sony", price:165000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"Sony WH-1000XM4", category:"audio", nameRu:["сони вх1000хм4", "sony wh-1000xm4", "наушники"], marketplace:"Sulpak", seller:"Sulpak", price:158000, delivery:1500, term:"2 дня", url:"https://sulpak.kz" },
+
+  { name:"Sony WF-1000XM5", category:"audio", nameRu:["сони вф1000хм5", "sony wf-1000xm5", "наушники"], marketplace:"Kaspi", seller:"Sony Store", price:145000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"Sony WF-1000XM5", category:"audio", nameRu:["сони вф1000хм5", "sony wf-1000xm5", "наушники"], marketplace:"Ozon", seller:"Ozon", price:138000, delivery:2000, term:"4 дня", url:"https://ozon.kz" },
+
+  { name:"Samsung Galaxy Buds3 Pro", category:"audio", nameRu:["самсунг галакси бадс 3 про", "samsung galaxy buds3 pro", "наушники"], marketplace:"Kaspi", seller:"Samsung Audio", price:125000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"Samsung Galaxy Buds3 Pro", category:"audio", nameRu:["самсунг галакси бадс 3 про", "samsung galaxy buds3 pro", "наушники"], marketplace:"Wildberries", seller:"WB", price:118000, delivery:1500, term:"3 дня", url:"https://wildberries.kz" },
+
+  { name:"Samsung Galaxy Buds2 Pro", category:"audio", nameRu:["самсунг галакси бадс 2 про", "samsung galaxy buds2 pro", "наушники"], marketplace:"Kaspi", seller:"Samsung", price:85000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"Samsung Galaxy Buds2 Pro", category:"audio", nameRu:["самсунг галакси бадс 2 про", "samsung galaxy buds2 pro", "наушники"], marketplace:"Ozon", seller:"Ozon", price:78000, delivery:1500, term:"3 дня", url:"https://ozon.kz" },
+
+  { name:"JBL Tour One M2", category:"audio", nameRu:["джибиэль тур ван м2", "jbl tour one m2", "наушники"], marketplace:"Kaspi", seller:"JBL Store", price:125000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"JBL Tour One M2", category:"audio", nameRu:["джибиэль тур ван м2", "jbl tour one m2", "наушники"], marketplace:"Ozon", seller:"Ozon", price:118000, delivery:2000, term:"4 дня", url:"https://ozon.kz" },
+
+  { name:"JBL Live Pro 2", category:"audio", nameRu:["джибиэль лайв про 2", "jbl live pro 2", "наушники"], marketplace:"Kaspi", seller:"JBL", price:75000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"JBL Live Pro 2", category:"audio", nameRu:["джибиэль лайв про 2", "jbl live pro 2", "наушники"], marketplace:"Wildberries", seller:"WB", price:68000, delivery:1500, term:"3 дня", url:"https://wildberries.kz" },
+
+  { name:"JBL Charge 5", category:"audio", nameRu:["джибиэль чардж 5", "jbl charge 5", "колонка"], marketplace:"Kaspi", seller:"JBL Audio", price:65000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"JBL Charge 5", category:"audio", nameRu:["джибиэль чардж 5", "jbl charge 5", "колонка"], marketplace:"Technodom", seller:"Technodom", price:68000, delivery:0, term:"Самовывоз", url:"https://technodom.kz" },
+
+  { name:"JBL Flip 6", category:"audio", nameRu:["джибиэль флип 6", "jbl flip 6", "колонка"], marketplace:"Kaspi", seller:"JBL", price:45000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"JBL Flip 6", category:"audio", nameRu:["джибиэль флип 6", "jbl flip 6", "колонка"], marketplace:"Ozon", seller:"Ozon", price:42000, delivery:1500, term:"3 дня", url:"https://ozon.kz" },
+
+  { name:"Marshall Major IV", category:"audio", nameRu:["маршал мэйджор 4", "marshall major iv", "наушники"], marketplace:"Kaspi", seller:"Marshall Store", price:95000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"Marshall Major IV", category:"audio", nameRu:["маршал мэйджор 4", "marshall major iv", "наушники"], marketplace:"Ozon", seller:"Ozon", price:88000, delivery:2000, term:"4 дня", url:"https://ozon.kz" },
+
+  { name:"Marshall Emberton II", category:"audio", nameRu:["маршал эмбертон 2", "marshall emberton ii", "колонка"], marketplace:"Kaspi", seller:"Marshall", price:75000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"Marshall Emberton II", category:"audio", nameRu:["маршал эмбертон 2", "marshall emberton ii", "колонка"], marketplace:"Wildberries", seller:"WB", price:72000, delivery:1500, term:"3 дня", url:"https://wildberries.kz" },
+
+  { name:"Bose QuietComfort Ultra", category:"audio", nameRu:["боуз куайеткомфорт ультра", "bose quietcomfort ultra", "наушники"], marketplace:"Kaspi", seller:"Bose Store", price:245000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"Bose QuietComfort Ultra", category:"audio", nameRu:["боуз куайеткомфорт ультра", "bose quietcomfort ultra", "наушники"], marketplace:"Ozon", seller:"Ozon", price:235000, delivery:3000, term:"5 дней", url:"https://ozon.kz" },
+
+  { name:"Sennheiser Momentum 4", category:"audio", nameRu:["зенхайзер моментум 4", "sennheiser momentum 4", "наушники"], marketplace:"Kaspi", seller:"Sennheiser", price:195000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"Sennheiser Momentum 4", category:"audio", nameRu:["зенхайзер моментум 4", "sennheiser momentum 4", "наушники"], marketplace:"Technodom", seller:"Technodom", price:188000, delivery:0, term:"Самовывоз", url:"https://technodom.kz" },
+
+  /* ================= GAMING ================= */
+  { name:"PlayStation 5 Slim", category:"gaming", nameRu:["плейстейшн 5 слим", "playstation 5 slim", "пс5", "консоль"], marketplace:"Kaspi", seller:"Sony Official", price:320000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"PlayStation 5 Slim", category:"gaming", nameRu:["плейстейшн 5 слим", "playstation 5 slim", "пс5", "консоль"], marketplace:"Technodom", seller:"Technodom", price:330000, delivery:2000, term:"2 дня", url:"https://technodom.kz" },
+  { name:"PlayStation 5 Slim", category:"gaming", nameRu:["плейстейшн 5 слим", "playstation 5 slim", "пс5", "консоль"], marketplace:"Ozon", seller:"Ozon Games", price:315000, delivery:3500, term:"4 дня", url:"https://ozon.kz" },
+  { name:"PlayStation 5 Slim", category:"gaming", nameRu:["плейстейшн 5 слим", "playstation 5 slim", "пс5", "консоль"], marketplace:"Sulpak", seller:"Sulpak", price:325000, delivery:2500, term:"2 дня", url:"https://sulpak.kz" },
+
+  { name:"PlayStation 5 Digital", category:"gaming", nameRu:["плейстейшн 5 цифровая", "playstation 5 digital", "пс5", "консоль"], marketplace:"Kaspi", seller:"Sony", price:280000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"PlayStation 5 Digital", category:"gaming", nameRu:["плейстейшн 5 цифровая", "playstation 5 digital", "пс5", "консоль"], marketplace:"Wildberries", seller:"WB Games", price:265000, delivery:2500, term:"4 дня", url:"https://wildberries.kz" },
+
+  { name:"PlayStation VR2", category:"gaming", nameRu:["плейстейшн вр2", "playstation vr2", "вр", "очки"], marketplace:"Kaspi", seller:"Sony", price:385000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"PlayStation VR2", category:"gaming", nameRu:["плейстейшн вр2", "playstation vr2", "вр", "очки"], marketplace:"Ozon", seller:"Ozon", price:365000, delivery:3000, term:"5 дней", url:"https://ozon.kz" },
+
+  { name:"Xbox Series X", category:"gaming", nameRu:["иксбокс сериес икс", "xbox series x", "иксбокс"], marketplace:"Kaspi", seller:"Microsoft Store", price:310000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"Xbox Series X", category:"gaming", nameRu:["иксбокс сериес икс", "xbox series x", "иксбокс"], marketplace:"Ozon", seller:"Ozon Games", price:305000, delivery:3000, term:"4 дня", url:"https://ozon.kz" },
+  { name:"Xbox Series X", category:"gaming", nameRu:["иксбокс сериес икс", "xbox series x", "иксбокс"], marketplace:"Technodom", seller:"Technodom", price:320000, delivery:0, term:"Самовывоз", url:"https://technodom.kz" },
+
+  { name:"Xbox Series S", category:"gaming", nameRu:["иксбокс сериес эс", "xbox series s", "иксбокс"], marketplace:"Kaspi", seller:"Microsoft", price:185000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"Xbox Series S", category:"gaming", nameRu:["иксбокс сериес эс", "xbox series s", "иксбокс"], marketplace:"Wildberries", seller:"WB", price:175000, delivery:2000, term:"3 дня", url:"https://wildberries.kz" },
+
+  { name:"Nintendo Switch OLED", category:"gaming", nameRu:["нинтендо свитч олед", "nintendo switch oled", "нинтендо"], marketplace:"Kaspi", seller:"Nintendo Store", price:245000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"Nintendo Switch OLED", category:"gaming", nameRu:["нинтендо свитч олед", "nintendo switch oled", "нинтендо"], marketplace:"Ozon", seller:"Ozon Import", price:235000, delivery:3000, term:"6 дней", url:"https://ozon.kz" },
+
+  { name:"Nintendo Switch Lite", category:"gaming", nameRu:["нинтендо свитч лайт", "nintendo switch lite", "нинтендо"], marketplace:"Kaspi", seller:"Nintendo", price:165000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"Nintendo Switch Lite", category:"gaming", nameRu:["нинтендо свитч лайт", "nintendo switch lite", "нинтендо"], marketplace:"Wildberries", seller:"WB Import", price:155000, delivery:2500, term:"5 дней", url:"https://wildberries.kz" },
+
+  { name:"Steam Deck OLED 1TB", category:"gaming", nameRu:["стим дек олед", "steam deck oled", "стим дек"], marketplace:"Kaspi", seller:"Steam Store", price:485000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"Steam Deck OLED 1TB", category:"gaming", nameRu:["стим дек олед", "steam deck oled", "стим дек"], marketplace:"Ozon", seller:"Ozon Import", price:465000, delivery:4000, term:"7 дней", url:"https://ozon.kz" },
+
+  { name:"Steam Deck LCD 512GB", category:"gaming", nameRu:["стим дек лсд", "steam deck lcd", "стим дек"], marketplace:"Kaspi", seller:"Steam", price:385000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"Steam Deck LCD 512GB", category:"gaming", nameRu:["стим дек лсд", "steam deck lcd", "стим дек"], marketplace:"Technodom", seller:"Technodom", price:395000, delivery:0, term:"Самовывоз", url:"https://technodom.kz" },
+
+  { name:"ASUS ROG Ally X", category:"gaming", nameRu:["асус рог элли икс", "asus rog ally x", "портативка"], marketplace:"Kaspi", seller:"ASUS Gaming", price:520000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"ASUS ROG Ally X", category:"gaming", nameRu:["асус рог элли икс", "asus rog ally x", "портативка"], marketplace:"Ozon", seller:"Ozon", price:495000, delivery:4000, term:"6 дней", url:"https://ozon.kz" },
+
+  { name:"DualSense Edge", category:"gaming", nameRu:["дуалсенс эдж", "dualsense edge", "геймпад"], marketplace:"Kaspi", seller:"Sony", price:95000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"DualSense Edge", category:"gaming", nameRu:["дуалсенс эдж", "dualsense edge", "геймпад"], marketplace:"Wildberries", seller:"WB", price:88000, delivery:1500, term:"3 дня", url:"https://wildberries.kz" },
+
+  { name:"Xbox Elite Controller 2", category:"gaming", nameRu:["иксбокс элит контроллер", "xbox elite controller", "геймпад"], marketplace:"Kaspi", seller:"Microsoft", price:85000, delivery:0, term:"1 день", url:"https://kaspi.kz" },
+  { name:"Xbox Elite Controller 2", category:"gaming", nameRu:["иксбокс элит контроллер", "xbox elite controller", "геймпад"], marketplace:"Ozon", seller:"Ozon", price:78000, delivery:2000, term:"4 дня", url:"https://ozon.kz" }
 ];
+
+let currentCategory = 'all';
 
 function normalize(text) {
   return text.toLowerCase()
@@ -592,10 +1015,27 @@ function normalize(text) {
 
 function setSearch(text) {
   document.getElementById('productInput').value = text;
+  searchProducts();
 }
 
 function openAuthModal() {
   alert('Модальное окно авторизации будет здесь');
+}
+
+function filterByCategory(category) {
+  currentCategory = category;
+  
+  // Обновляем активную кнопку
+  document.querySelectorAll('.category-btn').forEach(btn => {
+    btn.classList.remove('active');
+  });
+  event.target.classList.add('active');
+  
+  // Если есть текст в поиске, перезапускаем поиск
+  const query = document.getElementById("productInput").value.trim();
+  if (query) {
+    searchProducts();
+  }
 }
 
 function searchProducts() {
@@ -613,7 +1053,13 @@ function searchProducts() {
     document.querySelectorAll(".marketplace:checked")
   ).map(el => el.value);
 
-  const filtered = productsDB.filter(p => {
+  let filtered = productsDB.filter(p => {
+    // Фильтр по категории
+    if (currentCategory !== 'all' && p.category !== currentCategory) {
+      return false;
+    }
+    
+    // Поиск по названию
     const nameEn = normalize(p.name);
     const nameRu = p.nameRu.join(' ');
     return (nameEn.includes(query) || normalize(nameRu).includes(query)) && 
@@ -624,7 +1070,7 @@ function searchProducts() {
     tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:40px;color:#64748b;">
       <div style="font-size: 48px; margin-bottom: 16px;">🔍</div>
       Ничего не найдено по запросу "${rawQuery}"<br>
-      <small style="color: #94a3b8;">Попробуйте: айфон, самсунг, макбук, пс5, робот пылесос</small>
+      <small style="color: #94a3b8;">Попробуйте: айфон, самсунг, холодильник, стиральная машина, робот пылесос, кофемашина, тв</small>
     </td></tr>`;
     return;
   }
