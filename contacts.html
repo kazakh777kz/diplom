@@ -2,9 +2,7 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Контакты — PriceCompare KZ</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/main.css">
   <style>
     .contact-section {
@@ -14,7 +12,7 @@
       margin-top: 40px;
     }
     
-    .contact-info, .contact-form {
+    .contact-info {
       background: rgba(15, 23, 42, 0.95);
       backdrop-filter: blur(20px);
       padding: 40px;
@@ -23,7 +21,7 @@
       box-shadow: var(--shadow);
     }
     
-    .contact-info h3, .contact-form h3 {
+    .contact-info h3 {
       color: white;
       font-size: 28px;
       margin-bottom: 30px;
@@ -78,6 +76,28 @@
       text-decoration: none;
     }
     
+    .info-item a:hover {
+      color: #818cf8;
+    }
+    
+    .contact-form {
+      background: rgba(15, 23, 42, 0.95);
+      backdrop-filter: blur(20px);
+      padding: 40px;
+      border-radius: 32px;
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      box-shadow: var(--shadow);
+    }
+    
+    .contact-form h3 {
+      color: white;
+      font-size: 28px;
+      margin-bottom: 30px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    
     .form-group {
       margin-bottom: 24px;
     }
@@ -103,11 +123,17 @@
       transition: all 0.3s ease;
     }
     
+    .form-group input::placeholder,
+    .form-group textarea::placeholder {
+      color: #64748b;
+    }
+    
     .form-group input:focus,
     .form-group textarea:focus {
       outline: none;
       border-color: var(--primary);
       box-shadow: 0 0 20px rgba(99, 102, 241, 0.2);
+      background: rgba(30, 41, 59, 1);
     }
     
     .form-group textarea {
@@ -126,11 +152,37 @@
       font-size: 16px;
       cursor: pointer;
       transition: all 0.3s ease;
+      box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
+      position: relative;
+      overflow: hidden;
     }
     
     .submit-btn:hover {
       transform: translateY(-2px);
       box-shadow: 0 20px 40px rgba(16, 185, 129, 0.4);
+    }
+    
+    .submit-btn:disabled {
+      background: #475569;
+      cursor: not-allowed;
+      transform: none;
+    }
+    
+    .success-message {
+      display: none;
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(5, 150, 105, 0.1));
+      border: 1px solid var(--success);
+      color: #6ee7b7;
+      padding: 20px;
+      border-radius: 12px;
+      margin-top: 20px;
+      text-align: center;
+      animation: slideIn 0.5s ease;
+    }
+    
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
     
     .social-links {
@@ -155,7 +207,8 @@
     
     .social-links a:hover {
       background: linear-gradient(135deg, var(--primary), var(--secondary));
-      transform: translateY(-5px);
+      transform: translateY(-5px) rotate(10deg);
+      border-color: transparent;
     }
     
     @media (max-width: 968px) {
@@ -187,4 +240,104 @@
       
       <div class="info-item">
         <div class="icon">👥</div>
-        <div
+        <div>
+          <strong>Команда</strong>
+          <span>Саин Аида, Сагырбаев Тимур, Зияутдинов Камильжан</span>
+        </div>
+      </div>
+      
+      <div class="info-item">
+        <div class="icon">📧</div>
+        <div>
+          <strong>Email</strong>
+          <a href="mailto:22232414@turan-edu.kz">22232414@turan-edu.kz</a>
+        </div>
+      </div>
+      
+      <div class="info-item">
+        <div class="icon">📍</div>
+        <div>
+          <strong>Адрес</strong>
+          <span>Сатпаева 16а, Алматы, Казахстан</span>
+        </div>
+      </div>
+      
+      <div class="info-item">
+        <div class="icon">📱</div>
+        <div>
+          <strong>Телефон</strong>
+          <a href="tel:+77001234567">+7 (700) 123-45-67</a>
+        </div>
+      </div>
+      
+      <div class="social-links">
+        <a href="#" title="Instagram">📷</a>
+        <a href="#" title="Telegram">✈️</a>
+        <a href="#" title="WhatsApp">💬</a>
+      </div>
+    </div>
+    
+    <div class="contact-form">
+      <h3>Обратная связь</h3>
+      <form id="feedbackForm" onsubmit="submitFeedback(event)">
+        <div class="form-group">
+          <label for="name">Ваше имя *</label>
+          <input type="text" id="name" name="name" required placeholder="Как к вам обращаться?">
+        </div>
+        
+        <div class="form-group">
+          <label for="email">Email *</label>
+          <input type="email" id="email" name="email" required placeholder="example@mail.com">
+        </div>
+        
+        <div class="form-group">
+          <label for="subject">Тема</label>
+          <input type="text" id="subject" name="subject" placeholder="О чём хотите поговорить?">
+        </div>
+        
+        <div class="form-group">
+          <label for="message">Сообщение *</label>
+          <textarea id="message" name="message" required placeholder="Расскажите подробнее..."></textarea>
+        </div>
+        
+        <button type="submit" class="submit-btn" id="submitBtn">
+          ✈️ Отправить сообщение
+        </button>
+        
+        <div class="success-message" id="successMessage">
+          ✅ Спасибо! Мы получили ваше сообщение и ответим в ближайшее время!
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <p>© 2026 PriceCompare KZ — создано с ❤️ в Алматы</p>
+</div>
+
+<script>
+function submitFeedback(event) {
+  event.preventDefault();
+  
+  const btn = document.getElementById('submitBtn');
+  const successMsg = document.getElementById('successMessage');
+  
+  btn.disabled = true;
+  btn.innerHTML = '⏳ Отправка...';
+  
+  setTimeout(() => {
+    successMsg.style.display = 'block';
+    document.getElementById('feedbackForm').reset();
+    btn.disabled = false;
+    btn.innerHTML = '✈️ Отправить сообщение';
+    
+    setTimeout(() => {
+      successMsg.style.display = 'none';
+    }, 5000);
+  }, 1500);
+}
+</script>
+
+</body>
+</html>
