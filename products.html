@@ -2,12 +2,15 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Сравнение товаров — PriceCompare KZ</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300 ;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
     :root {
       --primary: #6366f1;
       --primary-dark: #4f46e5;
@@ -23,7 +26,7 @@
     }
 
     body {
-      font-family: 'Inter', system-ui, sans-serif;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
       background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #1e1b4b 100%);
       background-attachment: fixed;
       color: #e2e8f0;
@@ -34,10 +37,14 @@
     body::before {
       content: '';
       position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
       background: 
         radial-gradient(circle at 20% 80%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(236, 72, 153, 0.15) 0%, transparent 50%);
+        radial-gradient(circle at 80% 20%, rgba(236, 72, 153, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(6, 182, 212, 0.1) 0%, transparent 50%);
       z-index: -1;
       animation: pulse 15s ease-in-out infinite;
     }
@@ -47,6 +54,7 @@
       50% { opacity: 0.8; transform: scale(1.1); }
     }
 
+    /* HEADER */
     .header {
       background: rgba(15, 23, 42, 0.95);
       backdrop-filter: blur(20px);
@@ -130,6 +138,7 @@
       transform: translateY(-2px);
     }
 
+    /* КНОПКА ВОЙТИ В ХЕДЕРЕ */
     .auth-btn {
       background: linear-gradient(135deg, #6366f1, #4f46e5);
       color: white;
@@ -147,6 +156,7 @@
       box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
     }
 
+    /* CONTAINER */
     .container {
       max-width: 1200px;
       margin: auto;
@@ -177,6 +187,7 @@
       border-radius: 2px;
     }
 
+    /* SEARCH SECTION */
     .search-section {
       background: var(--glass);
       backdrop-filter: blur(20px);
@@ -184,6 +195,12 @@
       border-radius: 24px;
       border: 1px solid rgba(99, 102, 241, 0.2);
       margin-bottom: 40px;
+      animation: float 6s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
     }
 
     .input-wrapper {
@@ -286,36 +303,12 @@
       transition: all 0.3s ease;
     }
 
-    .search-btn:hover:not(:disabled) {
+    .search-btn:hover {
       transform: translateY(-2px);
       box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
     }
 
-    .search-btn:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
-
-    .loading {
-      text-align: center;
-      padding: 60px 20px;
-      color: #94a3b8;
-    }
-
-    .spinner {
-      width: 50px;
-      height: 50px;
-      border: 4px solid rgba(99, 102, 241, 0.3);
-      border-top-color: var(--primary);
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-      margin: 0 auto 20px;
-    }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-
+    /* RESULTS TABLE */
     .results-container {
       background: var(--glass);
       backdrop-filter: blur(20px);
@@ -328,7 +321,7 @@
     table {
       width: 100%;
       border-collapse: collapse;
-      min-width: 900px;
+      min-width: 800px;
     }
 
     thead {
@@ -340,7 +333,7 @@
       text-align: left;
       color: #94a3b8;
       font-weight: 600;
-      font-size: 13px;
+      font-size: 14px;
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
@@ -353,47 +346,6 @@
 
     tr:hover {
       background: rgba(99, 102, 241, 0.05);
-    }
-
-    .product-name {
-      font-weight: 600;
-      color: #e2e8f0;
-    }
-
-    .market-badge {
-      display: inline-block;
-      padding: 6px 14px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: 700;
-      text-transform: uppercase;
-    }
-
-    .market-kaspi { background: #f97316; color: white; }
-    .market-ozon { background: #3b82f6; color: white; }
-    .market-wildberries { background: #a855f7; color: white; }
-
-    .price {
-      font-weight: 700;
-      font-size: 16px;
-    }
-
-    .best-price {
-      color: #10b981;
-      font-weight: 800;
-      font-size: 18px;
-    }
-
-    .best-badge {
-      display: inline-block;
-      background: #10b981;
-      color: white;
-      padding: 4px 10px;
-      border-radius: 12px;
-      font-size: 10px;
-      font-weight: 700;
-      text-transform: uppercase;
-      margin-left: 8px;
     }
 
     .buy-btn {
@@ -417,54 +369,32 @@
       box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
     }
 
-    .error-message {
-      background: rgba(239, 68, 68, 0.1);
-      border: 1px solid #ef4444;
-      color: #fca5a5;
-      padding: 30px;
-      border-radius: 16px;
-      text-align: center;
-      margin: 20px;
-    }
-
-    .empty-state {
-      text-align: center;
-      padding: 60px 20px;
-      color: #64748b;
-    }
-
-    .empty-state-icon {
-      font-size: 64px;
-      margin-bottom: 20px;
-    }
-
-    .stats {
+    .action-btns {
       display: flex;
-      gap: 20px;
-      justify-content: center;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
+      gap: 8px;
     }
 
-    .stat {
-      background: rgba(30, 41, 59, 0.8);
-      padding: 12px 24px;
-      border-radius: 12px;
-      text-align: center;
+    .fav-btn {
+      background: rgba(236, 72, 153, 0.2);
+      border: 1px solid rgba(236, 72, 153, 0.3);
+      color: #ec4899;
+      padding: 10px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-size: 16px;
     }
 
-    .stat-value {
-      font-size: 24px;
-      font-weight: 800;
-      color: var(--primary);
+    .fav-btn:hover {
+      background: rgba(236, 72, 153, 0.3);
     }
 
-    .stat-label {
-      font-size: 12px;
-      color: #94a3b8;
-      text-transform: uppercase;
+    .fav-btn.active {
+      background: #ec4899;
+      color: white;
     }
 
+    /* FOOTER */
     .footer {
       background: rgba(15, 23, 42, 0.95);
       backdrop-filter: blur(20px);
@@ -475,6 +405,7 @@
       margin-top: 80px;
     }
 
+    /* SCROLLBAR */
     ::-webkit-scrollbar {
       width: 10px;
       height: 10px;
@@ -489,83 +420,87 @@
       border-radius: 5px;
     }
 
+    /* RESPONSIVE */
     @media (max-width: 768px) {
-      .header-inner { flex-direction: column; gap: 20px; }
-      .nav-section { flex-direction: column; gap: 20px; }
-      nav { flex-wrap: wrap; justify-content: center; }
-      .search-section { padding: 20px; }
-      .filters { justify-content: center; }
-      h2 { font-size: 28px; }
+      .header-inner {
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .nav-section {
+        flex-direction: column;
+        gap: 20px;
+      }
+      
+      nav {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .search-section {
+        padding: 20px;
+      }
+
+      .filters {
+        justify-content: center;
+      }
+
+      h2 {
+        font-size: 28px;
+      }
     }
   </style>
 </head>
 <body>
 
+<!-- HEADER с кнопкой Войти -->
 <div class="header">
   <div class="header-inner">
     <div class="logo">PriceCompare KZ</div>
+    
     <div class="nav-section">
       <nav>
         <a href="index.html">Главная</a>
         <a href="products.html">Сравнение</a>
         <a href="contacts.html">Контакты</a>
       </nav>
-      <button class="auth-btn" onclick="alert('Авторизация в разработке')">Войти</button>
+      
+      <!-- КНОПКА ВОЙТИ В ГЛАВНОМ МЕНЮ -->
+      <button class="auth-btn" onclick="openAuthModal()">Войти</button>
     </div>
   </div>
 </div>
 
 <div class="container">
-  <h2>🔍 Поиск по всем магазинам</h2>
+  <h2>🔍 Найди лучшую цену</h2>
   
   <div class="search-section">
     <div class="input-wrapper">
-      <input type="text" id="productInput" placeholder="Что ищем? (например: iPhone 15 Pro, Samsung Galaxy, MacBook...)" autocomplete="off">
+      <input type="text" id="productInput" placeholder="Что ищем? (например: айфон, самсунг, макбук...)" autocomplete="off">
     </div>
 
     <div class="search-hints">
       <strong>Популярные запросы:</strong>
-      <span class="hint-tag" onclick="setSearch('iPhone 15 Pro')">📱 iPhone</span>
-      <span class="hint-tag" onclick="setSearch('Samsung Galaxy S24')">📱 Samsung</span>
-      <span class="hint-tag" onclick="setSearch('Xiaomi 14')">📱 Xiaomi</span>
-      <span class="hint-tag" onclick="setSearch('MacBook Air')">💻 MacBook</span>
-      <span class="hint-tag" onclick="setSearch('PlayStation 5')">🎮 PS5</span>
-      <span class="hint-tag" onclick="setSearch('AirPods Pro')">🎧 AirPods</span>
+      <span class="hint-tag" onclick="setSearch('айфон')">📱 айфон</span>
+      <span class="hint-tag" onclick="setSearch('самсунг')">📱 самсунг</span>
+      <span class="hint-tag" onclick="setSearch('сяоми')">📱 сяоми</span>
+      <span class="hint-tag" onclick="setSearch('макбук')">💻 макбук</span>
+      <span class="hint-tag" onclick="setSearch('пс5')">🎮 пс5</span>
+      <span class="hint-tag" onclick="setSearch('робот пылесос')">🤖 робот пылесос</span>
     </div>
 
     <div class="filters">
-      <label><input type="checkbox" class="marketplace" value="kaspi" checked> 🟠 Kaspi</label>
-      <label><input type="checkbox" class="marketplace" value="ozon" checked> 🔵 Ozon</label>
-      <label><input type="checkbox" class="marketplace" value="wildberries" checked> 🟣 Wildberries</label>
+      <label><input type="checkbox" class="marketplace" value="Kaspi" checked> 🟠 Kaspi</label>
+      <label><input type="checkbox" class="marketplace" value="Wildberries" checked> 🟣 Wildberries</label>
+      <label><input type="checkbox" class="marketplace" value="Ozon" checked> 🔵 Ozon</label>
+      <label><input type="checkbox" class="marketplace" value="Technodom" checked> 🟡 Technodom</label>
+      <label><input type="checkbox" class="marketplace" value="Sulpak" checked> 🟢 Sulpak</label>
     </div>
 
-    <button class="search-btn" onclick="searchProducts()" id="searchBtn">
-      🔍 Найти лучшие цены
-    </button>
+    <button class="search-btn" onclick="searchProducts()">Начать поиск</button>
   </div>
 
-  <div id="statsContainer" class="stats" style="display: none;">
-    <div class="stat">
-      <div class="stat-value" id="statTotal">0</div>
-      <div class="stat-label">Товаров найдено</div>
-    </div>
-    <div class="stat">
-      <div class="stat-value" id="statTime">0s</div>
-      <div class="stat-label">Время поиска</div>
-    </div>
-    <div class="stat">
-      <div class="stat-value" id="statMarkets">0</div>
-      <div class="stat-label">Магазинов</div>
-    </div>
-  </div>
-
-  <div id="loadingState" class="loading" style="display: none;">
-    <div class="spinner"></div>
-    <p>Собираем цены с магазинов...</p>
-    <p style="font-size: 14px; margin-top: 10px;">Это может занять 10-30 секунд</p>
-  </div>
-
-  <div id="resultsContainer" class="results-container" style="display: none;">
+  <div class="results-container">
     <table>
       <thead>
         <tr>
@@ -574,6 +509,7 @@
           <th>Продавец</th>
           <th>Цена</th>
           <th>Доставка</th>
+          <th>Срок</th>
           <th>Итого</th>
           <th>Действия</th>
         </tr>
@@ -581,192 +517,159 @@
       <tbody id="results"></tbody>
     </table>
   </div>
-
-  <div id="errorState" style="display: none;"></div>
 </div>
 
 <div class="footer">
-  <p>© 2026 PriceCompare KZ — реальный парсинг цен</p>
+  <p>© 2026 PriceCompare KZ — дипломный проект</p>
 </div>
 
 <script>
-// URL вашего бэкенда
-const API_URL = 'http://localhost:3000/api';
+const productsDB = [
+  { name:"iPhone 15 Pro Max", nameRu:["айфон 15 про макс", "айфон 15 pro max", "айфон"], marketplace:"Kaspi", seller:"Apple Store KZ", price:780000, delivery:0, term:"1 день", url:"https://kaspi.kz " },
+  { name:"iPhone 15 Pro Max", nameRu:["айфон 15 про макс", "айфон 15 pro max", "айфон"], marketplace:"Wildberries", seller:"WB Apple", price:765000, delivery:2500, term:"3 дня", url:"https://wildberries.kz " },
+  { name:"iPhone 15 Pro Max", nameRu:["айфон 15 про макс", "айфон 15 pro max", "айфон"], marketplace:"Ozon", seller:"Ozon Apple", price:770000, delivery:3000, term:"4 дня", url:"https://ozon.kz " },
+  
+  { name:"iPhone 15 Pro", nameRu:["айфон 15 про", "айфон 15 pro", "айфон"], marketplace:"Kaspi", seller:"Kaspi Official", price:629000, delivery:0, term:"1 день", url:"https://kaspi.kz " },
+  { name:"iPhone 15 Pro", nameRu:["айфон 15 про", "айфон 15 pro", "айфон"], marketplace:"Wildberries", seller:"WB Store", price:615000, delivery:2000, term:"4 дня", url:"https://wildberries.kz " },
+  { name:"iPhone 15 Pro", nameRu:["айфон 15 про", "айфон 15 pro", "айфон"], marketplace:"Ozon", seller:"Ozon Seller", price:610000, delivery:3000, term:"5 дней", url:"https://ozon.kz " },
+  { name:"iPhone 15 Pro", nameRu:["айфон 15 про", "айфон 15 pro", "айфон"], marketplace:"Technodom", seller:"Technodom", price:635000, delivery:0, term:"Самовывоз", url:"https://technodom.kz " },
+
+  { name:"iPhone 15", nameRu:["айфон 15", "айфон"], marketplace:"Kaspi", seller:"Kaspi Store", price:485000, delivery:0, term:"1 день", url:"https://kaspi.kz " },
+  { name:"iPhone 15", nameRu:["айфон 15", "айфон"], marketplace:"Wildberries", seller:"WB Mobile", price:470000, delivery:2000, term:"3 дня", url:"https://wildberries.kz " },
+  { name:"iPhone 15", nameRu:["айфон 15", "айфон"], marketplace:"Ozon", seller:"Ozon Mobile", price:475000, delivery:2500, term:"4 дня", url:"https://ozon.kz " },
+
+  { name:"iPhone 14", nameRu:["айфон 14", "айфон"], marketplace:"Kaspi", seller:"Kaspi Store", price:420000, delivery:4000, term:"1-2 дня", url:"https://kaspi.kz " },
+  { name:"iPhone 14", nameRu:["айфон 14", "айфон"], marketplace:"Technodom", seller:"Technodom", price:435000, delivery:0, term:"Самовывоз", url:"https://technodom.kz " },
+  { name:"iPhone 14", nameRu:["айфон 14", "айфон"], marketplace:"Wildberries", seller:"WB Official", price:410000, delivery:1500, term:"3 дня", url:"https://wildberries.kz " },
+
+  { name:"Samsung Galaxy S24 Ultra", nameRu:["самсунг с24 ультра", "самсунг s24 ultra", "самсунг"], marketplace:"Kaspi", seller:"Samsung Official", price:890000, delivery:0, term:"1 день", url:"https://kaspi.kz " },
+  { name:"Samsung Galaxy S24 Ultra", nameRu:["самсунг с24 ультра", "самсунг s24 ultra", "самсунг"], marketplace:"Ozon", seller:"Ozon", price:865000, delivery:4000, term:"5 дней", url:"https://ozon.kz " },
+
+  { name:"Samsung Galaxy S24", nameRu:["самсунг с24", "самсунг s24", "самсунг"], marketplace:"Sulpak", seller:"Sulpak", price:485000, delivery:6000, term:"2-3 дня", url:"https://sulpak.kz " },
+  { name:"Samsung Galaxy S24", nameRu:["самсунг с24", "самсунг s24", "самсунг"], marketplace:"Ozon", seller:"Ozon Tech", price:478000, delivery:6500, term:"3-5 дней", url:"https://ozon.kz " },
+  { name:"Samsung Galaxy S24", nameRu:["самсунг с24", "самсунг s24", "самсунг"], marketplace:"Kaspi", seller:"Mobile Store", price:490000, delivery:0, term:"1 день", url:"https://kaspi.kz " },
+
+  { name:"Samsung Galaxy A55", nameRu:["самсунг а55", "самсунг a55", "самсунг"], marketplace:"Kaspi", seller:"Mobile Market", price:210000, delivery:3500, term:"1-2 дня", url:"https://kaspi.kz " },
+  { name:"Samsung Galaxy A55", nameRu:["самсунг а55", "самсунг a55", "самсунг"], marketplace:"Wildberries", seller:"WB Seller", price:205000, delivery:5000, term:"3-6 дней", url:"https://wildberries.kz " },
+  { name:"Samsung Galaxy A55", nameRu:["самсунг а55", "самсунг a55", "самсунг"], marketplace:"Ozon", seller:"Ozon Mobile", price:208000, delivery:4000, term:"4 дня", url:"https://ozon.kz " },
+
+  { name:"Xiaomi 14", nameRu:["сяоми 14", "ксяоми 14", "сяоми"], marketplace:"Kaspi", seller:"Xiaomi Official", price:480000, delivery:0, term:"1 день", url:"https://kaspi.kz " },
+  { name:"Xiaomi 14", nameRu:["сяоми 14", "ксяоми 14", "сяоми"], marketplace:"Wildberries", seller:"WB Xiaomi", price:465000, delivery:2500, term:"4 дня", url:"https://wildberries.kz " },
+
+  { name:"Xiaomi 13", nameRu:["сяоми 13", "ксяоми 13", "сяоми"], marketplace:"Kaspi", seller:"Xiaomi Official", price:320000, delivery:4000, term:"1-3 дня", url:"https://kaspi.kz " },
+  { name:"Xiaomi 13", nameRu:["сяоми 13", "ксяоми 13", "сяоми"], marketplace:"Ozon", seller:"Ozon Xiaomi", price:315000, delivery:6000, term:"2-4 дня", url:"https://ozon.kz " },
+
+  { name:"MacBook Air M2", nameRu:["макбук эйр м2", "macbook air m2", "макбук"], marketplace:"Kaspi", seller:"Apple Store", price:820000, delivery:0, term:"1 день", url:"https://kaspi.kz " },
+  { name:"MacBook Air M2", nameRu:["макбук эйр м2", "macbook air m2", "макбук"], marketplace:"Sulpak", seller:"Sulpak", price:835000, delivery:3000, term:"2 дня", url:"https://sulpak.kz " },
+  { name:"MacBook Air M2", nameRu:["макбук эйр м2", "macbook air m2", "макбук"], marketplace:"Ozon", seller:"Ozon Tech", price:810000, delivery:4000, term:"5 дней", url:"https://ozon.kz " },
+
+  { name:"PlayStation 5 Slim", nameRu:["плейстейшн 5 слим", "playstation 5 slim", "пс5", "консоль"], marketplace:"Kaspi", seller:"Sony Official", price:320000, delivery:0, term:"1 день", url:"https://kaspi.kz " },
+  { name:"PlayStation 5 Slim", nameRu:["плейстейшн 5 слим", "playstation 5 slim", "пс5", "консоль"], marketplace:"Technodom", seller:"Technodom", price:330000, delivery:2000, term:"2 дня", url:"https://technodom.kz " },
+  { name:"PlayStation 5 Slim", nameRu:["плейстейшн 5 слим", "playstation 5 slim", "пс5", "консоль"], marketplace:"Ozon", seller:"Ozon Games", price:315000, delivery:3500, term:"4 дня", url:"https://ozon.kz " },
+  { name:"PlayStation 5 Slim", nameRu:["плейстейшн 5 слим", "playstation 5 slim", "пс5", "консоль"], marketplace:"Sulpak", seller:"Sulpak", price:325000, delivery:2500, term:"2 дня", url:"https://sulpak.kz " },
+
+  { name:"Roborock S8 Pro Ultra", nameRu:["роборок с8 про ультра", "roborock s8 pro ultra", "робот пылесос", "пылесос"], marketplace:"Kaspi", seller:"Roborock Store", price:485000, delivery:0, term:"1 день", url:"https://kaspi.kz " },
+  { name:"Roborock S8 Pro Ultra", nameRu:["роборок с8 про ультра", "roborock s8 pro ultra", "робот пылесос", "пылесос"], marketplace:"Ozon", seller:"Ozon", price:465000, delivery:4000, term:"5 дней", url:"https://ozon.kz " },
+
+  { name:"Xiaomi Robot Vacuum X20+", nameRu:["сяоми робот вакуум икс20 плюс", "xiaomi robot vacuum x20 plus", "робот пылесос", "пылесос"], marketplace:"Kaspi", seller:"Xiaomi", price:285000, delivery:0, term:"1 день", url:"https://kaspi.kz " },
+  { name:"Xiaomi Robot Vacuum X20+", nameRu:["сяоми робот вакуум икс20 плюс", "xiaomi robot vacuum x20 plus", "робот пылесос", "пылесос"], marketplace:"Ozon", seller:"Ozon", price:268000, delivery:2500, term:"4 дня", url:"https://ozon.kz " },
+
+  { name:"AirPods Pro 2 USB-C", nameRu:["эрподс про 2 юсб си", "airpods pro 2 usb-c", "наушники"], marketplace:"Kaspi", seller:"Apple Official", price:145000, delivery:0, term:"1 день", url:"https://kaspi.kz " },
+  { name:"AirPods Pro 2 USB-C", nameRu:["эрподс про 2 юсб си", "airpods pro 2 usb-c", "наушники"], marketplace:"Wildberries", seller:"WB Audio", price:139000, delivery:1500, term:"3 дня", url:"https://wildberries.kz " },
+  { name:"AirPods Pro 2 USB-C", nameRu:["эрподс про 2 юсб си", "airpods pro 2 usb-c", "наушники"], marketplace:"Ozon", seller:"Ozon", price:142000, delivery:2000, term:"4 дня", url:"https://ozon.kz " },
+
+  { name:"Dyson Supersonic", nameRu:["дайсон суперсоник", "dyson supersonic", "фен"], marketplace:"Kaspi", seller:"Dyson Store", price:285000, delivery:0, term:"1 день", url:"https://kaspi.kz " },
+  { name:"Dyson Supersonic", nameRu:["дайсон суперсоник", "dyson supersonic", "фен"], marketplace:"Ozon", seller:"Ozon", price:268000, delivery:2500, term:"4 дня", url:"https://ozon.kz " },
+  { name:"Dyson Supersonic", nameRu:["дайсон суперсоник", "dyson supersonic", "фен"], marketplace:"Technodom", seller:"Technodom", price:295000, delivery:0, term:"Самовывоз", url:"https://technodom.kz " },
+];
+
+function normalize(text) {
+  return text.toLowerCase()
+    .replace(/ё/g, "е")
+    .replace(/[ъь]/g, "")
+    .trim();
+}
 
 function setSearch(text) {
   document.getElementById('productInput').value = text;
-  document.getElementById('productInput').focus();
 }
 
-async function searchProducts() {
-  const query = document.getElementById('productInput').value.trim();
-  const btn = document.getElementById('searchBtn');
-  const loading = document.getElementById('loadingState');
-  const resultsContainer = document.getElementById('resultsContainer');
-  const resultsTable = document.getElementById('results');
-  const errorState = document.getElementById('errorState');
-  const statsContainer = document.getElementById('statsContainer');
-  
-  if (!query || query.length < 2) {
-    alert('Введите минимум 2 символа для поиска');
+function openAuthModal() {
+  alert('Модальное окно авторизации будет здесь');
+}
+
+function searchProducts() {
+  const rawQuery = document.getElementById("productInput").value.trim();
+  const query = normalize(rawQuery);
+  const tbody = document.getElementById("results");
+  tbody.innerHTML = "";
+
+  if (!query) {
+    alert("Введите название товара");
     return;
   }
-  
+
   const selectedMarkets = Array.from(
-    document.querySelectorAll('.marketplace:checked')
+    document.querySelectorAll(".marketplace:checked")
   ).map(el => el.value);
-  
-  if (selectedMarkets.length === 0) {
-    alert('Выберите хотя бы один магазин');
+
+  const filtered = productsDB.filter(p => {
+    const nameEn = normalize(p.name);
+    const nameRu = p.nameRu.join(' ');
+    return (nameEn.includes(query) || normalize(nameRu).includes(query)) && 
+           selectedMarkets.includes(p.marketplace);
+  });
+
+  if (filtered.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:40px;color:#64748b;">
+      <div style="font-size: 48px; margin-bottom: 16px;">🔍</div>
+      Ничего не найдено по запросу "${rawQuery}"<br>
+      <small style="color: #94a3b8;">Попробуйте: айфон, самсунг, макбук, пс5, робот пылесос</small>
+    </td></tr>`;
     return;
   }
-  
-  btn.disabled = true;
-  btn.innerHTML = '⏳ Поиск...';
-  loading.style.display = 'block';
-  resultsContainer.style.display = 'none';
-  statsContainer.style.display = 'none';
-  errorState.style.display = 'none';
-  resultsTable.innerHTML = '';
-  
-  const startTime = performance.now();
-  
-  try {
-    const marketsParam = selectedMarkets.join(',');
-    const url = `${API_URL}/search?query=${encodeURIComponent(query)}&markets=${marketsParam}`;
+
+  filtered.sort((a, b) => (a.price + a.delivery) - (b.price + b.delivery));
+
+  filtered.forEach((p, index) => {
+    const total = p.price + p.delivery;
+    const isBestPrice = index === 0;
     
-    console.log('Запрос:', url);
-    
-    const response = await fetch(url, {
-      method: 'GET',
-      headers: {
-        'Accept': 'application/json'
-      },
-      mode: 'cors'
-    });
-    
-    console.log('Статус ответа:', response.status);
-    
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(`HTTP ${response.status}: ${errorText || response.statusText}`);
-    }
-    
-    const data = await response.json();
-    const duration = ((performance.now() - startTime) / 1000).toFixed(1);
-    
-    loading.style.display = 'none';
-    
-    if (!data.success) {
-      throw new Error(data.error || 'Ошибка сервера');
-    }
-    
-    document.getElementById('statTotal').textContent = data.total || 0;
-    document.getElementById('statTime').textContent = data.duration || `${duration}s`;
-    document.getElementById('statMarkets').textContent = (data.markets || []).length;
-    statsContainer.style.display = 'flex';
-    
-    if (!data.results || data.results.length === 0) {
-      errorState.innerHTML = `
-        <div class="empty-state">
-          <div class="empty-state-icon">🔍</div>
-          <h3>Ничего не найдено</h3>
-          <p>Попробуйте другой запрос</p>
-        </div>
-      `;
-      errorState.style.display = 'block';
-      return;
-    }
-    
-    data.results.forEach((p, index) => {
-      const isBest = index === 0;
-      const total = (p.price || 0) + (p.delivery || 0);
-      const marketClass = `market-${p.marketplace}`;
-      const marketName = {
-        kaspi: 'Kaspi',
-        ozon: 'Ozon',
-        wildberries: 'WB'
-      }[p.marketplace] || p.marketplace;
-      
-      const rowStyle = isBest 
-        ? 'background: linear-gradient(90deg, rgba(16, 185, 129, 0.15), transparent); border-left: 4px solid #10b981;' 
-        : '';
-      
-      const priceClass = isBest ? 'best-price' : 'price';
-      
-      resultsTable.innerHTML += `
-        <tr style="${rowStyle}">
-          <td>
-            <div class="product-name">
-              ${isBest ? '👑 ' : ''}${escapeHtml(p.name)}
-            </div>
-          </td>
-          <td>
-            <span class="market-badge ${marketClass}">${marketName}</span>
-          </td>
-          <td style="color: #94a3b8;">
-            ${escapeHtml(p.seller || '—')}
-          </td>
-          <td class="${priceClass}">
-            ${p.price ? p.price.toLocaleString('ru-RU') + ' ₸' : '—'}
-          </td>
-          <td style="color: #94a3b8;">
-            ${p.delivery === 0 ? 'Бесплатно' : p.delivery ? p.delivery.toLocaleString('ru-RU') + ' ₸' : '—'}
-          </td>
-          <td class="${priceClass}">
-            ${total ? total.toLocaleString('ru-RU') + ' ₸' : '—'}
-            ${isBest ? '<span class="best-badge">ЛУЧШАЯ ЦЕНА</span>' : ''}
-          </td>
-          <td>
-            <a href="${escapeHtml(p.link || '#')}" target="_blank" class="buy-btn" ${!p.link ? 'style="opacity:0.5;pointer-events:none;"' : ''}>
-              Перейти →
-            </a>
-          </td>
-        </tr>
-      `;
-    });
-    
-    resultsContainer.style.display = 'block';
-    
-  } catch (error) {
-    console.error('Ошибка:', error);
-    
-    loading.style.display = 'none';
-    statsContainer.style.display = 'none';
-    
-    let message = error.message;
-    if (error.message.includes('Failed to fetch')) {
-      message = `
-        Не удалось подключиться к серверу.<br><br>
-        <b>Проверьте:</b><br>
-        1. Запущен ли сервер: <code>node server.js</code><br>
-        2. Правильный ли порт: <code>http://localhost:3000</code>
-      `;
-    }
-    
-    errorState.innerHTML = `
-      <div class="error-message">
-        <h3>⚠️ Ошибка</h3>
-        <p>${message}</p>
-      </div>
+    const rowStyle = isBestPrice ? 'background: linear-gradient(90deg, rgba(16, 185, 129, 0.15), transparent); border-left: 3px solid #10b981;' : '';
+    const priceStyle = isBestPrice ? 'color: #10b981; font-weight: 800;' : 'color: #e2e8f0;';
+
+    tbody.innerHTML += `
+      <tr style="${rowStyle}">
+        <td style="padding: 16px; color: #e2e8f0; border-bottom: 1px solid rgba(99, 102, 241, 0.1); font-weight: 600;">
+          ${isBestPrice ? '👑 ' : ''}${p.name}
+        </td>
+        <td style="padding: 16px; color: #94a3b8; border-bottom: 1px solid rgba(99, 102, 241, 0.1);">${p.marketplace}</td>
+        <td style="padding: 16px; color: #94a3b8; border-bottom: 1px solid rgba(99, 102, 241, 0.1);">${p.seller}</td>
+        <td style="padding: 16px; color: #e2e8f0; border-bottom: 1px solid rgba(99, 102, 241, 0.1); font-weight: 600;">${p.price.toLocaleString()} ₸</td>
+        <td style="padding: 16px; color: #94a3b8; border-bottom: 1px solid rgba(99, 102, 241, 0.1);">${p.delivery === 0 ? 'Бесплатно' : p.delivery.toLocaleString() + ' ₸'}</td>
+        <td style="padding: 16px; color: #94a3b8; border-bottom: 1px solid rgba(99, 102, 241, 0.1);">${p.term}</td>
+        <td style="padding: 16px; ${priceStyle}; border-bottom: 1px solid rgba(99, 102, 241, 0.1); font-size: 16px;">
+          ${total.toLocaleString()} ₸
+          ${isBestPrice ? '<span style="background: #10b981; color: white; padding: 4px 10px; border-radius: 12px; font-size: 10px; font-weight: 700; text-transform: uppercase; margin-left: 8px; display: inline-block;">ЛУЧШАЯ ЦЕНА</span>' : ''}
+        </td>
+        <td style="padding: 16px; border-bottom: 1px solid rgba(99, 102, 241, 0.1);">
+          <div class="action-btns">
+            <button class="fav-btn" onclick="toggleFavorite('${p.name}', '${p.marketplace}')" title="В избранное">♥</button>
+            <a href="${p.url}" target="_blank" class="buy-btn">Купить →</a>
+          </div>
+        </td>
+      </tr>
     `;
-    errorState.style.display = 'block';
-    
-  } finally {
-    btn.disabled = false;
-    btn.innerHTML = '🔍 Найти лучшие цены';
-  }
+  });
 }
 
-function escapeHtml(text) {
-  if (!text) return '';
-  const div = document.createElement('div');
-  div.textContent = text;
-  return div.innerHTML;
+function toggleFavorite(name, marketplace) {
+  alert('Функция избранного требует авторизации');
 }
 
+// Поиск по нажатию Enter
 document.addEventListener('DOMContentLoaded', () => {
-  const input = document.getElementById('productInput');
+  const input = document.getElementById("productInput");
   if (input) {
     input.addEventListener('keypress', (e) => {
       if (e.key === 'Enter') searchProducts();
